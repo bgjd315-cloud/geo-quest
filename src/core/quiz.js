@@ -304,9 +304,11 @@
         }
       }
       if (later.length) { queue.splice(idx + 1, 0, ...later); return; }
+      const c = q.concepts[0];
+      // 歷史（opts.cardFirst）：答錯先看館藏卡
+      if (opts.cardFirst && c) queue.splice(idx + 1, 0, { kind: 'card', concept: c });
       // 通論題答錯：隔幾題後換同概念的另一題
       // 優先找同一關的題目；找不到再找其他一般關卡（不從魔王關抓）
-      const c = q.concepts[0];
       const cand = shuffle(live.filter(x => x.concepts.includes(c) && !used.has(x.id) && !/-boss$/.test(x.level)));
       const alt = cand.find(x => x.level === q.level) || cand[0];
       if (alt) { used.add(alt.id); queue.splice(Math.min(queue.length, idx + 3), 0, { kind: 'q', q: alt, tag: '錯題回收' }); }
@@ -322,7 +324,7 @@
       next.textContent = idx === queue.length - 1 ? (mode === 'sim' ? '交卷' : '完成') : '下一題';
       stage.scrollTop = 0; window.scrollTo(0, 0);
       if (item.kind === 'card') {
-        stage.innerHTML = `<div class="remedy"><img class="bird" src="${opts.guide || window.Data.img('bird_hint')}" alt=""><p>先看一下這張原理卡，再試一題。</p></div>${card(item.concept)}`;
+        stage.innerHTML = `<div class="remedy"><img class="bird" src="${opts.guide || window.Data.img('bird_hint')}" alt=""><p>${esc(opts.cardIntro || '先看一下這張原理卡，再試一題。')}</p></div>${card(item.concept)}`;
         next.disabled = false;
         return;
       }

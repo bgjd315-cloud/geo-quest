@@ -99,7 +99,7 @@
     app().innerHTML = `<div class="page play"><div class="banner"><img src="${H().img(WINGS[era.line])}" alt=""><h2>${esc(era.name)}</h2><span class="mode">${mode === 'sim' ? '模擬模式・計時，交卷後看解析' : '練習模式・不計時，即時解析'}</span></div><div class="runbox"></div></div>`;
     window.Quiz.run(app().querySelector('.runbox'), {
       pool: H().liveOfEra(eraId), mode, size: 10,
-      track: window.Store.H, live: H().live(), guide: H().img('aban_hint'), card: cardHTML,
+      track: window.Store.H, live: H().live(), guide: H().img('aban_hint'), card: cardHTML, cardFirst: true, cardIntro: '阿斑找到這份檔案的館藏卡，先讀一下，再整理一份。',
       onQuit: () => { location.hash = '#/h/wing/' + line.id; },
       onEnd: sum => { window.Store.H.finishLevel(eraId, sum.got, sum.total || 1, mode); views.result(sum, line); }
     });
