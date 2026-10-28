@@ -28,7 +28,7 @@
   function openViewer(src, alt) {
     const box = document.createElement('div');
     box.className = 'x-viewer';
-    box.innerHTML = `<div class="x-vbar"><button class="x-vz" data-z="-1" aria-label="縮小">－</button><button class="x-vz" data-z="0">原尺寸</button><button class="x-vz" data-z="1" aria-label="放大">＋</button><button class="x-vclose" aria-label="關閉">關閉 ×</button></div>
+    box.innerHTML = `<div class="x-vbar"><button class="x-vz" data-z="-1" aria-label="縮小">－</button><button class="x-vz" data-z="0">整張</button><button class="x-vz" data-z="1" aria-label="放大">＋</button><button class="x-vclose" aria-label="關閉">關閉 ×</button></div>
       <div class="x-vscroll"><img src="${esc(src)}" alt="${esc(alt || '')}"></div>`;
     document.body.appendChild(box);
     document.body.classList.add('x-noscroll');
@@ -45,6 +45,8 @@
     const close = () => { box.remove(); document.body.classList.remove('x-noscroll'); document.removeEventListener('keydown', onKey); };
     const onKey = e => { if (e.key === 'Escape') close(); };
     document.addEventListener('keydown', onKey);
+    // 手機上一打開就放大到字看得清楚（約 2.2 倍），從左上角開始讀
+    if (sc.clientWidth < 600) { z = 2.2; im.style.width = '220%'; sc.scrollLeft = 0; sc.scrollTop = 0; }
     box.querySelector('.x-vclose').onclick = close;
     box.querySelectorAll('.x-vz').forEach(b => b.onclick = () => setZ(b.dataset.z === '0' ? 1 : z * (b.dataset.z === '1' ? 1.5 : 1 / 1.5)));
     sc.addEventListener('wheel', e => { if (!e.ctrlKey && !e.metaKey && z === 1 && e.deltaY > 0) return; e.preventDefault(); setZ(z * (e.deltaY < 0 ? 1.2 : 1 / 1.2), e.clientX, e.clientY); }, { passive: false });
