@@ -1,0 +1,338 @@
+{
+ "version": "v2（115/10/28 家長確認）",
+ "source": "階段0_確認清單.md",
+ "units": [
+  {
+   "id": "map",
+   "name": "地圖與位置",
+   "concepts": [
+    {
+     "id": "map-direction",
+     "name": "方位與相對位置描述"
+    },
+    {
+     "id": "map-grid",
+     "name": "網格座標定位"
+    },
+    {
+     "id": "map-elements",
+     "name": "地圖要素"
+    },
+    {
+     "id": "map-scale",
+     "name": "比例尺"
+    },
+    {
+     "id": "map-latlon",
+     "name": "經緯度與半球"
+    },
+    {
+     "id": "map-timezone",
+     "name": "時區與時差"
+    },
+    {
+     "id": "map-season",
+     "name": "太陽直射與季節、五帶"
+    },
+    {
+     "id": "map-polar",
+     "name": "永晝與永夜"
+    },
+    {
+     "id": "map-abs-rel",
+     "name": "絕對位置與相對位置"
+    },
+    {
+     "id": "map-landsea",
+     "name": "海陸分布"
+    },
+    {
+     "id": "map-contour",
+     "name": "等高線地形圖"
+    },
+    {
+     "id": "map-profile",
+     "name": "地形剖面圖"
+    },
+    {
+     "id": "map-thematic",
+     "name": "主題地圖判讀"
+    },
+    {
+     "id": "map-projection",
+     "name": "地圖投影"
+    }
+   ]
+  },
+  {
+   "id": "landform",
+   "name": "地形與海岸",
+   "concepts": [
+    {
+     "id": "land-endo",
+     "name": "內營力與板塊"
+    },
+    {
+     "id": "land-exo",
+     "name": "外營力"
+    },
+    {
+     "id": "land-5types",
+     "name": "五大地形"
+    },
+    {
+     "id": "land-tw",
+     "name": "臺灣地形特徵"
+    },
+    {
+     "id": "land-use",
+     "name": "土地利用與土石流"
+    },
+    {
+     "id": "land-fluvial",
+     "name": "河流沖積地形"
+    },
+    {
+     "id": "land-coast",
+     "name": "臺灣海岸類型"
+    },
+    {
+     "id": "land-coast-world",
+     "name": "谷灣、峽灣與陡直海岸"
+    },
+    {
+     "id": "land-island",
+     "name": "島嶼類型"
+    },
+    {
+     "id": "land-sea-zone",
+     "name": "領海與經濟海域"
+    },
+    {
+     "id": "land-glacial",
+     "name": "冰河地形"
+    },
+    {
+     "id": "land-rift",
+     "name": "斷層與裂谷"
+    },
+    {
+     "id": "land-old",
+     "name": "古老陸塊與高原"
+    },
+    {
+     "id": "land-other",
+     "name": "石灰岩與黃土地形"
+    }
+   ]
+  },
+  {
+   "id": "climate",
+   "name": "天氣與氣候",
+   "concepts": [
+    {
+     "id": "wx-weather-climate",
+     "name": "天氣與氣候"
+    },
+    {
+     "id": "wx-pressure-wind",
+     "name": "氣壓與風"
+    },
+    {
+     "id": "wx-map",
+     "name": "天氣圖與鋒面"
+    },
+    {
+     "id": "clim-rain-type",
+     "name": "降水類型"
+    },
+    {
+     "id": "clim-lat",
+     "name": "緯度與氣溫"
+    },
+    {
+     "id": "clim-alt",
+     "name": "高度與氣溫"
+    },
+    {
+     "id": "clim-sea",
+     "name": "距海遠近與年溫差"
+    },
+    {
+     "id": "clim-current",
+     "name": "洋流"
+    },
+    {
+     "id": "clim-monsoon",
+     "name": "季風"
+    },
+    {
+     "id": "clim-orographic",
+     "name": "迎風坡與背風坡"
+    },
+    {
+     "id": "clim-pressure-belt",
+     "name": "行星風系"
+    },
+    {
+     "id": "clim-hazard",
+     "name": "氣象災害"
+    },
+    {
+     "id": "clim-chart",
+     "name": "溫雨圖判讀"
+    },
+    {
+     "id": "clim-isoline",
+     "name": "等溫線與降水分布圖"
+    },
+    {
+     "id": "clim-type",
+     "name": "氣候類型"
+    },
+    {
+     "id": "clim-change",
+     "name": "全球氣候變遷"
+    }
+   ]
+  },
+  {
+   "id": "hydro",
+   "name": "水文",
+   "concepts": [
+    {
+     "id": "hydro-cycle",
+     "name": "水循環"
+    },
+    {
+     "id": "hydro-basin",
+     "name": "水系、流域與分水嶺"
+    },
+    {
+     "id": "hydro-tw-river",
+     "name": "臺灣河川特性"
+    },
+    {
+     "id": "hydro-resource",
+     "name": "水資源與水庫"
+    },
+    {
+     "id": "hydro-ground",
+     "name": "地下水與地層下陷"
+    },
+    {
+     "id": "hydro-river-world",
+     "name": "河川、水運與氾濫"
+    },
+    {
+     "id": "hydro-dry",
+     "name": "乾燥區水資源"
+    },
+    {
+     "id": "hydro-dam",
+     "name": "水壩與水資源紛爭"
+    }
+   ]
+  },
+  {
+   "id": "pop",
+   "name": "人口",
+   "concepts": [
+    {
+     "id": "pop-growth",
+     "name": "人口成長"
+    },
+    {
+     "id": "pop-transition",
+     "name": "人口成長階段"
+    },
+    {
+     "id": "pop-migration",
+     "name": "人口遷移"
+    },
+    {
+     "id": "pop-density",
+     "name": "人口分布與密度"
+    },
+    {
+     "id": "pop-structure",
+     "name": "人口組成"
+    },
+    {
+     "id": "pop-pyramid",
+     "name": "人口金字塔"
+    },
+    {
+     "id": "pop-aging",
+     "name": "少子化與高齡化"
+    },
+    {
+     "id": "pop-capacity",
+     "name": "環境負載力"
+    },
+    {
+     "id": "pop-culture",
+     "name": "族群、宗教與文化"
+    }
+   ]
+  },
+  {
+   "id": "industry",
+   "name": "聚落與產業",
+   "concepts": [
+    {
+     "id": "ind-sectors",
+     "name": "三級產業"
+    },
+    {
+     "id": "agri-cond",
+     "name": "農業發展條件"
+    },
+    {
+     "id": "agri-type",
+     "name": "農業類型"
+    },
+    {
+     "id": "fish",
+     "name": "漁業"
+    },
+    {
+     "id": "ind-location",
+     "name": "工業區位"
+    },
+    {
+     "id": "ind-type",
+     "name": "工業類型"
+    },
+    {
+     "id": "ind-shift",
+     "name": "產業外移與全球分工"
+    },
+    {
+     "id": "resource",
+     "name": "礦產與能源"
+    },
+    {
+     "id": "trade",
+     "name": "國際貿易與區域組織"
+    },
+    {
+     "id": "colonial-econ",
+     "name": "殖民地式經濟與公平貿易"
+    },
+    {
+     "id": "settlement",
+     "name": "聚落與都市化"
+    },
+    {
+     "id": "transport",
+     "name": "交通與運輸"
+    },
+    {
+     "id": "region-diff",
+     "name": "區域發展差異"
+    }
+   ]
+  }
+ ]
+}

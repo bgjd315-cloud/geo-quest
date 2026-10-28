@@ -1,0 +1,1494 @@
+{
+ "unit": "天氣與氣候",
+ "questions": [
+  {
+   "id": "clim-001",
+   "unit": "天氣與氣候",
+   "level": "climate-1",
+   "region": "通論",
+   "concepts": [
+    "wx-weather-climate"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 天氣與氣候",
+   "stem": "下列哪一句描述的是「氣候」，而不是「天氣」？",
+   "options": [
+    "今天下午臺北有雷陣雨",
+    "明天強烈冷氣團南下，北部低溫 10℃",
+    "高雄夏季多雨、冬季乾燥",
+    "這週末颱風可能接近東部海面"
+   ],
+   "answer": 2,
+   "explain": "天氣是短時間的大氣狀況，例如今天、明天、這週。氣候是長時間的平均狀況，「夏季多雨、冬季乾燥」是一年又一年反覆出現的特徵。"
+  },
+  {
+   "id": "clim-002",
+   "unit": "天氣與氣候",
+   "level": "climate-1",
+   "region": "通論",
+   "concepts": [
+    "wx-weather-climate"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 天氣與氣候；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "中央氣象署把 1991 到 2020 年、共 30 年的每月氣溫和降水量平均起來，公布成「平年值」。這些數字主要用來描述一個地方的什麼？",
+   "options": [
+    "當天的天氣",
+    "下週的天氣預報",
+    "長期的氣候特徵",
+    "颱風的路徑"
+   ],
+   "answer": 2,
+   "explain": "氣候是一地長時間大氣狀況的平均，通常用 30 年的資料來計算。溫雨圖畫的就是這種長期平均值。"
+  },
+  {
+   "id": "clim-003",
+   "unit": "天氣與氣候",
+   "level": "climate-1",
+   "region": "通論",
+   "concepts": [
+    "wx-pressure-wind"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 氣壓（受海拔高度影響）",
+   "stem": "同一時間，玉山山頂和山腳的平地相比，山頂的氣壓如何？為什麼？",
+   "options": [
+    "比較高，因為離太陽比較近",
+    "比較低，因為海拔高、上方的空氣比較少",
+    "一樣，因為在同一座山",
+    "比較高，因為山頂比較冷"
+   ],
+   "answer": 1,
+   "explain": "氣壓是上方空氣壓下來的力量。海拔愈高，頭頂上的空氣愈少，氣壓就愈低。"
+  },
+  {
+   "id": "clim-004",
+   "unit": "天氣與氣候",
+   "level": "climate-1",
+   "region": "通論",
+   "concepts": [
+    "wx-pressure-wind"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 氣壓高低與空氣流動",
+   "stem": "甲地氣壓是 1020 百帕，乙地氣壓是 1005 百帕。兩地之間的風，會怎麼吹？",
+   "figure": {
+    "type": "diagram",
+    "id": "pressure",
+    "opts": {
+     "a": "甲",
+     "b": "乙",
+     "c": "？"
+    }
+   },
+   "options": [
+    "由甲吹向乙",
+    "由乙吹向甲",
+    "不會有風",
+    "繞著甲地打轉"
+   ],
+   "answer": 0,
+   "explain": "風是空氣由氣壓高的地方流向氣壓低的地方。甲地 1020 百帕比乙地 1005 百帕高，所以風由甲吹向乙。"
+  },
+  {
+   "id": "clim-005",
+   "unit": "天氣與氣候",
+   "level": "climate-1",
+   "region": "通論",
+   "concepts": [
+    "wx-pressure-wind"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 風（氣壓差與風速）",
+   "stem": "兩地的氣壓差變得愈來愈大時，兩地之間的風會有什麼變化？",
+   "options": [
+    "風速變小",
+    "風速變大",
+    "風向一定相反",
+    "不會改變"
+   ],
+   "answer": 1,
+   "explain": "兩地間氣壓差愈大，空氣流動得愈快，風速就愈大。"
+  },
+  {
+   "id": "clim-006",
+   "unit": "天氣與氣候",
+   "level": "climate-1",
+   "region": "通論",
+   "concepts": [
+    "wx-pressure-wind"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 氣壓（受氣溫影響）",
+   "stem": "在平地上，一般來說氣溫比較高的地方，氣壓會比較高還是比較低？",
+   "options": [
+    "比較高，因為熱空氣比較重",
+    "比較低，因為空氣受熱上升",
+    "一定和氣溫無關",
+    "比較高，因為水氣比較多"
+   ],
+   "answer": 1,
+   "explain": "空氣受熱會膨脹上升，地面附近的氣壓就變低；所以氣溫愈高，氣壓愈低。"
+  },
+  {
+   "id": "clim-007",
+   "unit": "天氣與氣候",
+   "level": "climate-1",
+   "region": "通論",
+   "concepts": [
+    "wx-map"
+   ],
+   "type": "click",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 地理工具箱：地面天氣圖符號（冷鋒、暖鋒、滯留鋒）",
+   "stem": "觀測坪收到一張天氣圖的符號說明。請點出代表「冷鋒」的符號。",
+   "figure": {
+    "type": "diagram",
+    "id": "fronts",
+    "pick": true,
+    "opts": {
+     "order": [
+      "warm",
+      "stat",
+      "cold",
+      "low"
+     ]
+    }
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 2,
+   "explain": "冷鋒用一串三角形表示；暖鋒是一串半圓形；三角形和半圓形交錯出現的是滯留鋒；「低」是低氣壓中心。",
+   "check": {
+    "kind": "fronts",
+    "order": [
+     "warm",
+     "stat",
+     "cold",
+     "low"
+    ],
+    "want": "cold"
+   }
+  },
+  {
+   "id": "clim-008",
+   "unit": "天氣與氣候",
+   "level": "climate-1",
+   "region": "臺灣",
+   "concepts": [
+    "wx-map",
+    "clim-rain-type"
+   ],
+   "type": "click",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 鋒面雨（梅雨）與地面天氣圖",
+   "stem": "每年 5、6 月梅雨季，臺灣附近的天氣圖上常出現一條停留很久的鋒面。請點出它的符號。",
+   "figure": {
+    "type": "diagram",
+    "id": "fronts",
+    "pick": true,
+    "opts": {
+     "order": [
+      "stat",
+      "low",
+      "warm",
+      "cold"
+     ]
+    }
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 0,
+   "explain": "梅雨鋒面是冷、暖空氣勢力相當、停在原地的滯留鋒，符號是三角形和半圓形交錯。它造成雨時長、範圍大的鋒面雨。",
+   "check": {
+    "kind": "fronts",
+    "order": [
+     "stat",
+     "low",
+     "warm",
+     "cold"
+    ],
+    "want": "stat"
+   }
+  },
+  {
+   "id": "clim-009",
+   "unit": "天氣與氣候",
+   "level": "climate-2",
+   "region": "通論",
+   "concepts": [
+    "clim-rain-type"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 降水類型（對流雨）",
+   "stem": "夏天晴朗的午後，常突然下起一陣大雷雨，不久就停了。這種雨屬於哪一種降水類型？",
+   "figure": {
+    "type": "diagram",
+    "id": "raintypes"
+   },
+   "options": [
+    "對流雨",
+    "鋒面雨",
+    "地形雨",
+    "颱風雨"
+   ],
+   "answer": 0,
+   "explain": "地面在午後被曬得很熱，空氣受熱上升、冷卻凝結成雨，這是對流雨。特色是雨時短、範圍小、雨勢大。"
+  },
+  {
+   "id": "clim-010",
+   "unit": "天氣與氣候",
+   "level": "climate-2",
+   "region": "通論",
+   "concepts": [
+    "clim-rain-type"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 降水類型（鋒面雨）",
+   "stem": "冷、暖空氣相遇，暖空氣沿著交界面爬升而下雨，雨時長、範圍大。這種雨叫做什麼？",
+   "options": [
+    "對流雨",
+    "鋒面雨",
+    "地形雨",
+    "人造雨"
+   ],
+   "answer": 1,
+   "explain": "冷暖空氣的交界面叫鋒面，暖空氣沿鋒面上升凝結成雨，就是鋒面雨，梅雨就是典型例子。"
+  },
+  {
+   "id": "clim-011",
+   "unit": "天氣與氣候",
+   "level": "climate-2",
+   "region": "通論",
+   "concepts": [
+    "clim-orographic",
+    "clim-rain-type"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 地形雨、迎風坡與背風坡",
+   "stem": "潮溼的風從左邊吹向一座山。甲、乙兩側，哪一側的降水比較多？",
+   "figure": {
+    "type": "diagram",
+    "id": "orographic",
+    "opts": {
+     "a": "甲",
+     "b": "乙"
+    }
+   },
+   "options": [
+    "甲",
+    "乙"
+   ],
+   "answer": 0,
+   "explain": "甲側面對吹來的風，是迎風坡：空氣沿山坡上升、冷卻凝結，降下地形雨。翻過山後空氣下沉變乾熱，乙側是背風坡，比較少雨。"
+  },
+  {
+   "id": "clim-012",
+   "unit": "天氣與氣候",
+   "level": "climate-2",
+   "region": "通論",
+   "concepts": [
+    "clim-rain-type"
+   ],
+   "type": "match",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 三種降水類型",
+   "stem": "請把降水類型和例子配對。",
+   "left": [
+    "對流雨",
+    "鋒面雨",
+    "地形雨"
+   ],
+   "right": [
+    "五、六月的梅雨",
+    "東北季風吹到宜蘭山區下的雨",
+    "夏季午後雷陣雨"
+   ],
+   "answer": [
+    2,
+    0,
+    1
+   ],
+   "explain": "午後雷陣雨是地面受熱造成的對流雨；梅雨是鋒面滯留造成的鋒面雨；季風碰到山沿坡上升造成的是地形雨。"
+  },
+  {
+   "id": "clim-013",
+   "unit": "天氣與氣候",
+   "level": "climate-2",
+   "region": "臺灣",
+   "concepts": [
+    "clim-monsoon"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 臺灣的氣候（冬季東北季風、夏季西南季風）",
+   "stem": "臺灣冬季和夏季，分別盛行哪一個方向的季風？",
+   "options": [
+    "冬季西南季風、夏季東北季風",
+    "冬季東北季風、夏季西南季風",
+    "冬季東南季風、夏季西北季風",
+    "全年都吹東北季風"
+   ],
+   "answer": 1,
+   "explain": "冬季風從寒冷的大陸往海洋吹，在臺灣是東北季風；夏季風從海洋往陸地吹，在臺灣是西南季風。"
+  },
+  {
+   "id": "clim-014",
+   "unit": "天氣與氣候",
+   "level": "climate-2",
+   "region": "臺灣",
+   "concepts": [
+    "clim-monsoon",
+    "clim-orographic"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 臺灣的降水（北部、東北部冬季面迎東北季風）；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "觀察甲地的溫雨圖：冬季（10 月到隔年 3 月）的降水，反而比夏季還多。甲地最可能位在臺灣哪裡？",
+   "figure": {
+    "type": "climograph",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "station": "基隆",
+    "label": "甲地",
+    "hideTotals": true
+   },
+   "options": [
+    "西南部沿海平原",
+    "北部或東北部沿海",
+    "澎湖群島",
+    "中部平原"
+   ],
+   "answer": 1,
+   "explain": "這是基隆的資料：降水最多在 11 月，最少在 7 月。北部、東北部冬季面對東北季風，是迎風面，所以冬季多雨。西南部、澎湖冬季則在背風側，很乾燥。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "values": [
+     {
+      "station": "基隆",
+      "prop": "wettest",
+      "eq": 11
+     },
+     {
+      "station": "基隆",
+      "prop": "driest",
+      "eq": 7
+     }
+    ]
+   }
+  },
+  {
+   "id": "clim-015",
+   "unit": "天氣與氣候",
+   "level": "climate-2",
+   "region": "臺灣",
+   "concepts": [
+    "clim-monsoon",
+    "clim-orographic"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 臺灣的降水（冬季西南部及澎湖乾燥少雨）",
+   "stem": "冬季時，臺灣西南部和澎湖都比較乾燥少雨，主要原因是什麼？",
+   "options": [
+    "位在東北季風的背風側，水氣在北部、東北部山區已經降下",
+    "緯度比較低",
+    "冬季颱風比較多",
+    "受到黑潮帶來的暖空氣影響"
+   ],
+   "answer": 0,
+   "explain": "東北季風先在北部、東北部的迎風坡降下大量雨水，吹到西南部時已經比較乾燥，加上這裡位在背風側，所以冬季乾燥。"
+  },
+  {
+   "id": "clim-016",
+   "unit": "天氣與氣候",
+   "level": "climate-2",
+   "region": "臺灣",
+   "concepts": [
+    "clim-chart",
+    "clim-monsoon"
+   ],
+   "type": "chain",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 氣候圖判讀、季風；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "紀錄本上有兩張被吹散的溫雨圖，分別是基隆（甲）和高雄（乙）。",
+   "figure": {
+    "type": "climographs",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "stations": [
+     {
+      "station": "基隆",
+      "label": "甲：基隆"
+     },
+     {
+      "station": "高雄",
+      "label": "乙：高雄"
+     }
+    ]
+   },
+   "parts": [
+    {
+     "stem": "甲地降水量最多的是哪一個月？",
+     "options": [
+      "3 月",
+      "5 月",
+      "7 月",
+      "11 月"
+     ],
+     "answer": 3,
+     "explain": "基隆的長條在 11 月最高，冬季東北季風帶來大量降水。",
+     "concepts": [
+      "clim-chart"
+     ],
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/tw-cwa-1991-2020.json",
+      "values": [
+       {
+        "station": "基隆",
+        "prop": "wettest",
+        "eq": 11
+       }
+      ]
+     }
+    },
+    {
+     "stem": "乙地的降水集中在哪個季節？",
+     "options": [
+      "夏季",
+      "冬季",
+      "全年平均",
+      "春季"
+     ],
+     "answer": 0,
+     "explain": "高雄 5 到 9 月的降水約占全年近九成，1 月只有 19.1 mm，是夏雨冬乾。",
+     "concepts": [
+      "clim-chart"
+     ],
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/tw-cwa-1991-2020.json",
+      "values": [
+       {
+        "station": "高雄",
+        "prop": "summerShare",
+        "gt": 0.85
+       },
+       {
+        "station": "高雄",
+        "prop": "janPrecip",
+        "eq": 19.1
+       }
+      ]
+     }
+    },
+    {
+     "stem": "兩地降水季節不同，主要原因是什麼？",
+     "options": [
+      "兩地的緯度相差很多",
+      "冬、夏季風的風向不同，兩地各自位在不同季節的迎風面",
+      "兩地的海拔高度差很多",
+      "乙地比較靠近赤道，全年對流旺盛"
+     ],
+     "answer": 1,
+     "explain": "冬季東北季風讓基隆成為迎風面而多雨；夏季西南季風讓高雄成為迎風面而多雨。季風風向加上地形，決定了降水的季節。",
+     "concepts": [
+      "clim-monsoon"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "clim-017",
+   "unit": "天氣與氣候",
+   "level": "climate-2",
+   "region": "臺灣",
+   "concepts": [
+    "clim-monsoon"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 臺灣的降水（夏季西南季風，南部降水集中）",
+   "stem": "夏季西南季風吹向臺灣時，哪一個地區的降水特別集中，形成明顯的雨季？",
+   "options": [
+    "北部",
+    "東北部",
+    "南部",
+    "澎湖"
+   ],
+   "answer": 2,
+   "explain": "夏季西南季風帶來海洋水氣，南部位在迎風面，降水集中在夏季，形成夏雨冬乾的特色。"
+  },
+  {
+   "id": "clim-039",
+   "unit": "天氣與氣候",
+   "level": "climate-2",
+   "region": "通論",
+   "concepts": [
+    "clim-monsoon"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課、2上第1課 季風（冬季風由陸地吹向海洋，夏季風由海洋吹向陸地）",
+   "stem": "季風的風向會隨季節改變。一般來說，夏季的季風是怎麼吹的？",
+   "figure": {
+    "type": "diagram",
+    "id": "monsoon",
+    "opts": {
+     "island": "島",
+     "a": "冬季",
+     "b": "夏季"
+    }
+   },
+   "options": [
+    "由海洋吹向陸地，帶來比較多的水氣",
+    "由陸地吹向海洋，比較乾冷",
+    "由高山吹向平地",
+    "全年風向都不變"
+   ],
+   "answer": 0,
+   "explain": "夏季陸地比海洋熱、氣壓較低，風由海洋吹向陸地，帶來潮溼的水氣；冬季反過來，由寒冷的陸地吹向海洋。"
+  },
+  {
+   "id": "clim-018",
+   "unit": "天氣與氣候",
+   "level": "climate-3",
+   "region": "臺灣",
+   "concepts": [
+    "clim-chart"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 氣候圖判讀；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "下面四張溫雨圖的刻度都相同。哪一地的年降水量最多？",
+   "figure": {
+    "type": "climographs",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "hideTotals": true,
+    "stations": [
+     {
+      "station": "臺北",
+      "label": "甲"
+     },
+     {
+      "station": "臺南",
+      "label": "乙"
+     },
+     {
+      "station": "蘇澳",
+      "label": "丙"
+     },
+     {
+      "station": "澎湖",
+      "label": "丁"
+     }
+    ]
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 2,
+   "explain": "比較長條的高度和數量：丙地（蘇澳）秋冬季的長條特別高，年降水量約 4,435 mm，是四地中最多的；丁地（澎湖）最少，約 1,031 mm。",
+   "check": {
+    "kind": "climate-rank",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "prop": "precipTotal",
+    "pick": "max",
+    "stations": [
+     "臺北",
+     "臺南",
+     "蘇澳",
+     "澎湖"
+    ]
+   }
+  },
+  {
+   "id": "clim-019",
+   "unit": "天氣與氣候",
+   "level": "climate-3",
+   "region": "通論",
+   "concepts": [
+    "clim-chart"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 氣候圖判讀（年溫差、年降水量、年均溫）",
+   "stem": "從溫雨圖計算「年溫差」，方法是什麼？",
+   "options": [
+    "12 個月均溫加總後除以 12",
+    "最暖月均溫減去最冷月均溫",
+    "12 個月降水量加總",
+    "7 月降水量減去 1 月降水量"
+   ],
+   "answer": 1,
+   "explain": "年溫差＝最暖月均溫－最冷月均溫。12 個月均溫平均是年均溫；12 個月降水量加總是年降水量。"
+  },
+  {
+   "id": "clim-020",
+   "unit": "天氣與氣候",
+   "level": "climate-3",
+   "region": "臺灣",
+   "concepts": [
+    "clim-lat"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 臺灣的氣溫（夏季全臺平地高溫，冬季南部較北部溫暖）；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "比較臺北和恆春的溫雨圖，下列敘述何者正確？",
+   "figure": {
+    "type": "climographs",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "stations": [
+     {
+      "station": "臺北"
+     },
+     {
+      "station": "恆春"
+     }
+    ]
+   },
+   "options": [
+    "恆春每個月都比臺北熱很多",
+    "1 月恆春比臺北溫暖許多，7 月兩地氣溫差不多",
+    "臺北的年溫差比恆春小",
+    "兩地 1 月的氣溫幾乎一樣"
+   ],
+   "answer": 1,
+   "explain": "1 月臺北約 16.4℃、恆春約 21.1℃，相差將近 5℃；7 月臺北約 29.9℃、恆春約 28.7℃，差不多。所以冬季南北溫差大、夏季小，臺北的年溫差也比恆春大。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "values": [
+     {
+      "station": "臺北",
+      "prop": "janTemp",
+      "eq": 16.4
+     },
+     {
+      "station": "恆春",
+      "prop": "janTemp",
+      "eq": 21.1
+     },
+     {
+      "station": "臺北",
+      "prop": "julTemp",
+      "eq": 29.9
+     },
+     {
+      "station": "恆春",
+      "prop": "julTemp",
+      "eq": 28.7
+     }
+    ]
+   }
+  },
+  {
+   "id": "clim-021",
+   "unit": "天氣與氣候",
+   "level": "climate-3",
+   "region": "通論",
+   "concepts": [
+    "clim-lat"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課、第5課 緯度與氣溫",
+   "stem": "為什麼一般來說，緯度愈低的地方氣溫愈高？",
+   "options": [
+    "離海洋比較近",
+    "太陽照射的角度比較大，同樣面積得到的熱量比較多",
+    "地勢比較低",
+    "白天比較長"
+   ],
+   "answer": 1,
+   "explain": "低緯度地區太陽光比較接近直射，同樣大小的地面得到的熱量比較多，所以比較熱。"
+  },
+  {
+   "id": "clim-022",
+   "unit": "天氣與氣候",
+   "level": "climate-3",
+   "region": "臺灣",
+   "concepts": [
+    "clim-alt"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 地勢愈高氣溫愈低；資料：中央氣象署氣候平年值 1991–2020、測站座標",
+   "stem": "圖中三個測站的緯度都在北緯 23.5 度附近，年均溫卻差很多。主要原因是什麼？",
+   "figure": {
+    "type": "tw-stations",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "basemap": "basemap/taiwan-ne10m.json",
+    "stations": [
+     {
+      "station": "嘉義",
+      "show": "tempAvg",
+      "dx": -8
+     },
+     {
+      "station": "阿里山",
+      "show": "tempAvg",
+      "dx": 0,
+      "dy": -14
+     },
+     {
+      "station": "玉山",
+      "show": "tempAvg",
+      "dx": 0,
+      "dy": 18
+     }
+    ]
+   },
+   "options": [
+    "海拔高度不同",
+    "距離海洋遠近不同",
+    "季風風向不同",
+    "洋流不同"
+   ],
+   "answer": 0,
+   "explain": "嘉義測站在平地（海拔約 27 公尺），年均溫 23.6℃；阿里山約 2,413 公尺、11.4℃；玉山約 3,845 公尺、只有 4.4℃。緯度相近，差別在高度：地勢愈高，氣溫愈低。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "values": [
+     {
+      "station": "嘉義",
+      "prop": "tempAvg",
+      "eq": 23.6
+     },
+     {
+      "station": "阿里山",
+      "prop": "tempAvg",
+      "eq": 11.4
+     },
+     {
+      "station": "玉山",
+      "prop": "tempAvg",
+      "eq": 4.4
+     }
+    ]
+   }
+  },
+  {
+   "id": "clim-023",
+   "unit": "天氣與氣候",
+   "level": "climate-3",
+   "region": "通論",
+   "concepts": [
+    "clim-alt"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 地勢愈高氣溫愈低",
+   "stem": "兩座測站緯度相同，甲站海拔 50 公尺、乙站海拔 2,500 公尺。下列推論何者最合理？",
+   "options": [
+    "乙站的年均溫比甲站高",
+    "乙站的年均溫比甲站低很多",
+    "兩站年均溫應該一樣",
+    "乙站一定比甲站多雨"
+   ],
+   "answer": 1,
+   "explain": "緯度相同時，海拔愈高氣溫愈低。乙站高了將近 2,500 公尺，年均溫會低很多（例如阿里山比嘉義低了 12℃ 左右）。"
+  },
+  {
+   "id": "clim-024",
+   "unit": "天氣與氣候",
+   "level": "climate-3",
+   "region": "通論",
+   "concepts": [
+    "clim-chart"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 3上附錄「地球南北大不同」（月均溫曲線開口向上為南半球）",
+   "stem": "某地溫雨圖上，最暖月出現在 1 月、最冷月出現在 7 月，氣溫曲線呈「開口向上」的形狀。這個地方最可能位在哪裡？",
+   "options": [
+    "北半球",
+    "南半球",
+    "赤道上",
+    "北極圈內"
+   ],
+   "answer": 1,
+   "explain": "南、北半球季節相反。1 月是南半球的夏季，最暖月在 1 月、曲線開口向上，就是南半球。"
+  },
+  {
+   "id": "clim-025",
+   "unit": "天氣與氣候",
+   "level": "climate-3",
+   "region": "臺灣",
+   "concepts": [
+    "clim-alt",
+    "clim-chart"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 地勢與氣溫、氣候圖判讀；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "甲地的溫雨圖全年月均溫都在 10℃ 以下，連 7 月也只有約 8℃，降水集中在夏季。甲地最可能是哪一個測站？",
+   "figure": {
+    "type": "climograph",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "station": "玉山",
+    "label": "甲地",
+    "hideTotals": true
+   },
+   "options": [
+    "恆春",
+    "臺北",
+    "玉山",
+    "澎湖"
+   ],
+   "answer": 2,
+   "explain": "全年都這麼冷，在臺灣只有高山才有可能。玉山測站海拔約 3,845 公尺，7 月均溫約 8℃、1 月約 －0.5℃。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "values": [
+     {
+      "station": "玉山",
+      "prop": "julTemp",
+      "eq": 8
+     },
+     {
+      "station": "玉山",
+      "prop": "janTemp",
+      "eq": -0.5
+     }
+    ]
+   }
+  },
+  {
+   "id": "clim-026",
+   "unit": "天氣與氣候",
+   "level": "climate-4",
+   "region": "臺灣",
+   "concepts": [
+    "clim-isoline",
+    "clim-lat",
+    "clim-alt"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 臺灣一月等溫線（冬季南暖北冷、山區低溫）；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "圖中標出各測站 1 月的平均氣溫。從這些數字可以看出什麼？",
+   "figure": {
+    "type": "tw-stations",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "basemap": "basemap/taiwan-ne10m.json",
+    "stations": [
+     {
+      "station": "臺北",
+      "show": "janTemp"
+     },
+     {
+      "station": "臺中",
+      "show": "janTemp",
+      "dx": -8
+     },
+     {
+      "station": "高雄",
+      "show": "janTemp",
+      "dx": -8
+     },
+     {
+      "station": "恆春",
+      "show": "janTemp"
+     },
+     {
+      "station": "花蓮",
+      "show": "janTemp"
+     },
+     {
+      "station": "阿里山",
+      "show": "janTemp",
+      "dx": -8
+     }
+    ]
+   },
+   "options": [
+    "平地由北往南愈來愈暖，山區比平地冷",
+    "東部一定比西部冷",
+    "全臺 1 月氣溫都差不多",
+    "北部比南部溫暖"
+   ],
+   "answer": 0,
+   "explain": "臺北 16.4℃、臺中 17.0℃、高雄 19.7℃、恆春 21.1℃：平地由北往南愈暖（緯度）。阿里山只有 6.5℃，比同緯度的平地冷很多（高度）。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "values": [
+     {
+      "station": "臺北",
+      "prop": "janTemp",
+      "eq": 16.4
+     },
+     {
+      "station": "臺中",
+      "prop": "janTemp",
+      "eq": 17
+     },
+     {
+      "station": "高雄",
+      "prop": "janTemp",
+      "eq": 19.7
+     },
+     {
+      "station": "恆春",
+      "prop": "janTemp",
+      "eq": 21.1
+     },
+     {
+      "station": "阿里山",
+      "prop": "janTemp",
+      "eq": 6.5
+     }
+    ]
+   }
+  },
+  {
+   "id": "clim-027",
+   "unit": "天氣與氣候",
+   "level": "climate-4",
+   "region": "臺灣",
+   "concepts": [
+    "clim-isoline",
+    "clim-orographic"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 臺灣年降水量分布；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "圖中標出各測站的年降水量。哪一地最少？最可能的原因是什麼？",
+   "figure": {
+    "type": "tw-stations",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "basemap": "basemap/taiwan-ne10m.json",
+    "stations": [
+     {
+      "station": "基隆",
+      "show": "precipTotal"
+     },
+     {
+      "station": "臺中",
+      "show": "precipTotal",
+      "dx": -8
+     },
+     {
+      "station": "澎湖",
+      "show": "precipTotal",
+      "dx": 0,
+      "dy": -14
+     },
+     {
+      "station": "高雄",
+      "show": "precipTotal",
+      "dx": -8
+     },
+     {
+      "station": "臺東",
+      "show": "precipTotal"
+     }
+    ]
+   },
+   "options": [
+    "基隆：冬季東北季風太強",
+    "澎湖：島上地勢低平，缺少高山攔截水氣",
+    "臺東：位在東部，颱風很少",
+    "高雄：緯度最低"
+   ],
+   "answer": 1,
+   "explain": "澎湖年降水量約 1,031 mm，是圖中最少的。澎湖地勢低平，季風吹過時沒有高山讓空氣上升形成地形雨。基隆約 3,590 mm 最多。",
+   "check": {
+    "kind": "climate-rank",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "prop": "precipTotal",
+    "pick": "min",
+    "stations": [
+     "基隆",
+     "澎湖",
+     "臺東",
+     "高雄"
+    ]
+   }
+  },
+  {
+   "id": "clim-028",
+   "unit": "天氣與氣候",
+   "level": "climate-4",
+   "region": "臺灣",
+   "concepts": [
+    "clim-hazard"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 氣象災害（西南部冬季至隔年春季易乾旱）；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "臺南 1 月的平均降水量只有約 20.7 mm。臺灣西南部容易在冬季到隔年春季發生乾旱，主要原因是什麼？",
+   "options": [
+    "這段時間降水少，又位在東北季風的背風側",
+    "這段時間颱風最多",
+    "這段時間氣溫最高、蒸發最旺盛",
+    "西南部的河川最長"
+   ],
+   "answer": 0,
+   "explain": "西南部的降水集中在夏季，冬春季位在東北季風背風側、降水很少。如果前一年雨季下的雨不夠，就容易缺水。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "values": [
+     {
+      "station": "臺南",
+      "prop": "janPrecip",
+      "eq": 20.7
+     }
+    ]
+   }
+  },
+  {
+   "id": "clim-029",
+   "unit": "天氣與氣候",
+   "level": "climate-4",
+   "region": "臺灣",
+   "concepts": [
+    "clim-hazard"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 氣象災害（寒害）",
+   "stem": "冬季強烈冷氣團南下、氣溫驟降時，最容易造成哪一種災害？",
+   "options": [
+    "旱災",
+    "寒害，例如農作物和養殖魚類凍傷",
+    "土石流",
+    "海水倒灌"
+   ],
+   "answer": 1,
+   "explain": "低溫會凍傷農作物，也會讓魚塭裡的養殖魚類凍死，這就是寒害。"
+  },
+  {
+   "id": "clim-030",
+   "unit": "天氣與氣候",
+   "level": "climate-4",
+   "region": "臺灣",
+   "concepts": [
+    "clim-hazard"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 核心問題：颱風對生活的影響、如果沒有颱風臺灣會怎樣",
+   "stem": "颱風常帶來強風豪雨，但如果某年夏天完全沒有颱風，臺灣最可能面臨什麼問題？",
+   "options": [
+    "冬季會變得更冷",
+    "水庫的水源補充不足，隔年容易缺水",
+    "地震會變多",
+    "梅雨會提早來"
+   ],
+   "answer": 1,
+   "explain": "颱風帶來大量降水，是夏季補充水庫的重要水源。少了颱風，雨水不夠，後面的乾季就容易缺水。"
+  },
+  {
+   "id": "clim-031",
+   "unit": "天氣與氣候",
+   "level": "climate-4",
+   "region": "通論",
+   "concepts": [
+    "clim-current"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第2課 洋流（暖流、涼流）",
+   "stem": "由低緯度往高緯度流動的洋流，通常稱為什麼？",
+   "options": [
+    "暖流",
+    "涼流",
+    "寒流",
+    "沿岸流"
+   ],
+   "answer": 0,
+   "explain": "從低緯度溫暖海域流向高緯度的洋流，水溫比流經地區高，是暖流；反過來由高緯度流向低緯度的是涼流或寒流。"
+  },
+  {
+   "id": "clim-032",
+   "unit": "天氣與氣候",
+   "level": "climate-4",
+   "region": "臺灣",
+   "concepts": [
+    "clim-current"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第2課 洋流示意圖（黑潮）",
+   "stem": "臺灣東部海域有一股由南往北流的暖流，它叫做什麼？",
+   "options": [
+    "黑潮",
+    "親潮",
+    "中國沿岸流",
+    "加利福尼亞涼流"
+   ],
+   "answer": 0,
+   "explain": "黑潮是由低緯度往北流的暖流，流經臺灣東側；冬季臺灣海峽則有較冷的中國沿岸流南下。"
+  },
+  {
+   "id": "clim-033",
+   "unit": "天氣與氣候",
+   "level": "climate-4",
+   "region": "臺灣",
+   "concepts": [
+    "clim-current"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第2課 位置對臺灣的影響（寒、暖洋流交會帶來豐富海洋資源）",
+   "stem": "臺灣附近海域的漁業資源豐富，和洋流有什麼關係？",
+   "options": [
+    "只有暖流經過，水溫高魚就多",
+    "寒、暖流在附近交會，帶來豐富的海洋生物",
+    "附近沒有洋流，海水很平靜",
+    "洋流把魚都帶走了"
+   ],
+   "answer": 1,
+   "explain": "黑潮和中國沿岸流在臺灣附近交會，寒、暖流交會處營養鹽和魚類豐富，形成良好的漁場。"
+  },
+  {
+   "id": "clim-040",
+   "unit": "天氣與氣候",
+   "level": "climate-4",
+   "region": "通論",
+   "concepts": [
+    "clim-isoline"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 等溫線圖",
+   "stem": "等溫線圖上的一條等溫線，連接的是什麼樣的地點？",
+   "options": [
+    "氣溫相同的地點",
+    "降水量相同的地點",
+    "海拔相同的地點",
+    "氣壓相同的地點"
+   ],
+   "answer": 0,
+   "explain": "等溫線把氣溫相同的點連起來，和等高線連接海拔相同的點是同樣的道理。"
+  },
+  {
+   "id": "clim-041",
+   "unit": "天氣與氣候",
+   "level": "climate-4",
+   "region": "通論",
+   "concepts": [
+    "clim-hazard",
+    "clim-rain-type"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 氣象災害（強降水造成水災）",
+   "stem": "下列哪一種天氣現象，最可能在短時間內帶來強降水，造成淹水或土石流？",
+   "options": [
+    "颱風",
+    "冬季晴朗的高氣壓",
+    "乾燥的背風風",
+    "秋季的晴天"
+   ],
+   "answer": 0,
+   "explain": "颱風、梅雨鋒面和午後雷陣雨都可能帶來強降水。降水集中在短時間內，就容易造成淹水和土石流。"
+  },
+  {
+   "id": "clim-034",
+   "unit": "天氣與氣候",
+   "level": "climate-boss",
+   "region": "臺灣",
+   "concepts": [
+    "clim-chart",
+    "clim-monsoon",
+    "clim-hazard"
+   ],
+   "type": "chain",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 氣候圖判讀、季風、氣象災害；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "颱風巨靈的第一道試煉：比較宜蘭（甲）和臺南（乙）的溫雨圖。",
+   "figure": {
+    "type": "climographs",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "stations": [
+     {
+      "station": "宜蘭",
+      "label": "甲：宜蘭"
+     },
+     {
+      "station": "臺南",
+      "label": "乙：臺南"
+     }
+    ]
+   },
+   "parts": [
+    {
+     "stem": "1 月時，哪一地的降水比較多？",
+     "options": [
+      "甲：宜蘭",
+      "乙：臺南",
+      "差不多"
+     ],
+     "answer": 0,
+     "explain": "宜蘭 1 月約 155.2 mm，臺南只有約 20.7 mm。",
+     "concepts": [
+      "clim-chart"
+     ],
+     "check": {
+      "kind": "climate-rank",
+      "data": "climate/tw-cwa-1991-2020.json",
+      "prop": "janPrecip",
+      "pick": "max",
+      "stations": [
+       "宜蘭",
+       "臺南"
+      ]
+     }
+    },
+    {
+     "stem": "造成這個差異的主要原因是什麼？",
+     "options": [
+      "宜蘭面迎冬季東北季風，臺南在背風側",
+      "臺南緯度比較低",
+      "宜蘭海拔比較高",
+      "臺南夏季颱風多"
+     ],
+     "answer": 0,
+     "explain": "冬季東北季風吹向宜蘭，遇到山地抬升形成地形雨；臺南在背風側，冬季很乾燥。",
+     "concepts": [
+      "clim-monsoon"
+     ]
+    },
+    {
+     "stem": "乙地冬春季最需要防範哪一種氣象災害？",
+     "options": [
+      "旱災",
+      "寒流造成的大雪",
+      "梅雨造成的水災",
+      "強烈颱風"
+     ],
+     "answer": 0,
+     "explain": "臺南冬春季降水很少，若前一年雨季水量不足，就容易發生旱災。",
+     "concepts": [
+      "clim-hazard"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "clim-035",
+   "unit": "天氣與氣候",
+   "level": "climate-boss",
+   "region": "通論",
+   "concepts": [
+    "wx-map",
+    "wx-pressure-wind"
+   ],
+   "type": "chain",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 地面天氣圖、氣壓與風",
+   "stem": "颱風巨靈的第二道試煉：天氣圖上出現了四個符號。",
+   "figure": {
+    "type": "diagram",
+    "id": "fronts",
+    "opts": {
+     "order": [
+      "cold",
+      "typhoon",
+      "high",
+      "warm"
+     ]
+    }
+   },
+   "parts": [
+    {
+     "stem": "哪一個是颱風的符號？",
+     "options": [
+      "甲",
+      "乙",
+      "丙",
+      "丁"
+     ],
+     "answer": 1,
+     "explain": "颱風的符號是中間一個圓圈、上下各帶一道彎鉤，像在旋轉的樣子。",
+     "concepts": [
+      "wx-map"
+     ],
+     "check": {
+      "kind": "fronts",
+      "order": [
+       "cold",
+       "typhoon",
+       "high",
+       "warm"
+      ],
+      "want": "typhoon"
+     }
+    },
+    {
+     "stem": "颱風中心是高氣壓還是低氣壓？",
+     "options": [
+      "高氣壓",
+      "低氣壓",
+      "和周圍一樣"
+     ],
+     "answer": 1,
+     "explain": "颱風是很強烈的低氣壓。",
+     "concepts": [
+      "wx-map"
+     ]
+    },
+    {
+     "stem": "颱風接近時，周圍的空氣會怎麼流動？",
+     "options": [
+      "由颱風中心往外吹",
+      "由周圍往颱風中心吹",
+      "完全不流動",
+      "只往上吹"
+     ],
+     "answer": 1,
+     "explain": "風由高壓吹向低壓。颱風中心氣壓最低，周圍的空氣都往中心吹，而且氣壓差很大，所以風特別強。",
+     "concepts": [
+      "wx-pressure-wind"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "clim-036",
+   "unit": "天氣與氣候",
+   "level": "climate-boss",
+   "region": "臺灣",
+   "concepts": [
+    "clim-alt",
+    "clim-chart"
+   ],
+   "type": "clue",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 地勢與氣溫；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "颱風巨靈的謎語：猜猜這是哪一個氣象站？",
+   "clues": [
+    "它的年降水量約 2,900 mm。",
+    "它全年 12 個月的月均溫都在 10℃ 以下。",
+    "它 7 月的平均氣溫只有約 8℃。",
+    "它是臺灣海拔最高的氣象站，約 3,845 公尺。"
+   ],
+   "options": [
+    "阿里山",
+    "日月潭",
+    "玉山",
+    "鞍部"
+   ],
+   "answer": 2,
+   "explain": "玉山測站海拔約 3,845 公尺，年降水量 2,902.5 mm，7 月均溫約 8℃，是臺灣最冷的氣象站。阿里山 7 月約 14.7℃，日月潭、鞍部更暖。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "values": [
+     {
+      "station": "玉山",
+      "prop": "precipTotal",
+      "eq": 2902.5
+     },
+     {
+      "station": "玉山",
+      "prop": "julTemp",
+      "eq": 8
+     },
+     {
+      "station": "阿里山",
+      "prop": "julTemp",
+      "eq": 14.7
+     }
+    ]
+   }
+  },
+  {
+   "id": "clim-037",
+   "unit": "天氣與氣候",
+   "level": "climate-boss",
+   "region": "臺灣",
+   "concepts": [
+    "clim-lat",
+    "clim-alt"
+   ],
+   "type": "order",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 影響氣溫的因素（緯度、高度）；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "依「年均溫」由高到低排列這四個測站。",
+   "items": [
+    "阿里山",
+    "臺北",
+    "日月潭",
+    "恆春"
+   ],
+   "answer": [
+    3,
+    1,
+    2,
+    0
+   ],
+   "explain": "恆春 25.5℃（緯度最低的平地）＞臺北 23.3℃（緯度較高的平地）＞日月潭 19.3℃（海拔約 1,000 公尺）＞阿里山 11.4℃（海拔約 2,400 公尺）。",
+   "check": {
+    "kind": "climate-order",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "prop": "tempAvg",
+    "desc": true
+   }
+  },
+  {
+   "id": "clim-038",
+   "unit": "天氣與氣候",
+   "level": "climate-boss",
+   "region": "臺灣",
+   "concepts": [
+    "clim-orographic",
+    "clim-monsoon"
+   ],
+   "type": "decode",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第5課 臺灣的降水（季風與迎風坡）；資料：中央氣象署氣候平年值 1991–2020",
+   "stem": "原理解碼：同樣是 1 月，基隆的平均降水量約 327.8 mm，高雄只有約 19.1 mm。造成這個現象最主要的原理是什麼？",
+   "options": [
+    "季風吹到山地，迎風坡多雨、背風坡少雨",
+    "緯度愈低，氣溫愈高",
+    "海拔愈高，氣溫愈低",
+    "寒、暖流交會帶來魚群"
+   ],
+   "answer": 0,
+   "explain": "1 月吹東北季風：基隆在迎風面，空氣被山地抬升形成地形雨；高雄在背風側，乾燥少雨。這就是迎風坡、背風坡的原理。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/tw-cwa-1991-2020.json",
+    "values": [
+     {
+      "station": "基隆",
+      "prop": "janPrecip",
+      "eq": 327.8
+     },
+     {
+      "station": "高雄",
+      "prop": "janPrecip",
+      "eq": 19.1
+     }
+    ]
+   }
+  }
+ ]
+}

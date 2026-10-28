@@ -1,0 +1,1533 @@
+{
+ "unit": "地圖與位置",
+ "questions": [
+  {
+   "id": "map-001",
+   "unit": "地圖與位置",
+   "level": "map-1",
+   "region": "通論",
+   "concepts": [
+    "map-grid"
+   ],
+   "type": "click",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 座標系統（網格定位）；圖：故事用虛構地圖",
+   "stem": "羅盤港的街道圖用網格標示位置。請在圖上點出位於 C3 格的地標。",
+   "figure": {
+    "type": "town",
+    "map": "maps/compass-town.json",
+    "pick": true
+   },
+   "options": [
+    "學校",
+    "廟",
+    "車站",
+    "市場"
+   ],
+   "answer": 1,
+   "explain": "先找直排的 C，再往下找橫排的 3，交會的格子裡是廟。",
+   "check": {
+    "kind": "town-cell",
+    "map": "maps/compass-town.json",
+    "cell": "C3"
+   }
+  },
+  {
+   "id": "map-002",
+   "unit": "地圖與位置",
+   "level": "map-1",
+   "region": "通論",
+   "concepts": [
+    "map-grid"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 座標系統（網格定位）；圖：故事用虛構地圖",
+   "stem": "郵局位在街道圖的哪一格？",
+   "figure": {
+    "type": "town",
+    "map": "maps/compass-town.json"
+   },
+   "options": [
+    "A5",
+    "D5",
+    "D4",
+    "E5"
+   ],
+   "answer": 1,
+   "explain": "郵局在 D 欄、第 5 列，所以是 D5。先讀字母（直排）、再讀數字（橫排）。",
+   "check": {
+    "kind": "town-cell-of",
+    "map": "maps/compass-town.json",
+    "name": "郵局"
+   }
+  },
+  {
+   "id": "map-003",
+   "unit": "地圖與位置",
+   "level": "map-1",
+   "region": "通論",
+   "concepts": [
+    "map-direction"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 方位；圖：故事用虛構地圖",
+   "stem": "阿鵲站在車站，抬頭找燈塔。從車站看，燈塔在哪一個方位？",
+   "figure": {
+    "type": "town",
+    "map": "maps/compass-town.json"
+   },
+   "options": [
+    "西北",
+    "東北",
+    "東南",
+    "正東"
+   ],
+   "answer": 1,
+   "explain": "方向標指向上方是北。燈塔在車站的右上方：右邊是東、上方是北，所以是東北方。",
+   "check": {
+    "kind": "town-direction",
+    "map": "maps/compass-town.json",
+    "from": "車站",
+    "to": "燈塔",
+    "n": 8
+   }
+  },
+  {
+   "id": "map-004",
+   "unit": "地圖與位置",
+   "level": "map-1",
+   "region": "通論",
+   "concepts": [
+    "map-direction"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 方位；圖：故事用虛構地圖",
+   "stem": "從廟出發要去公園，應該往哪個方位走？",
+   "figure": {
+    "type": "town",
+    "map": "maps/compass-town.json"
+   },
+   "options": [
+    "東北",
+    "西北",
+    "西南",
+    "東南"
+   ],
+   "answer": 2,
+   "explain": "公園在廟的左下方：左邊是西、下方是南，所以是西南方。",
+   "check": {
+    "kind": "town-direction",
+    "map": "maps/compass-town.json",
+    "from": "廟",
+    "to": "公園",
+    "n": 8
+   }
+  },
+  {
+   "id": "map-005",
+   "unit": "地圖與位置",
+   "level": "map-1",
+   "region": "通論",
+   "concepts": [
+    "map-direction"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 方位（相對方位的描述）；圖：故事用虛構地圖",
+   "stem": "「學校在觀星臺的東南方。」如果改成從學校看觀星臺，觀星臺在學校的哪個方位？",
+   "figure": {
+    "type": "town",
+    "map": "maps/compass-town.json"
+   },
+   "options": [
+    "東南",
+    "西北",
+    "東北",
+    "西南"
+   ],
+   "answer": 1,
+   "explain": "觀察的起點換了，方位就要反過來：東南的反方向是西北。",
+   "check": {
+    "kind": "town-direction",
+    "map": "maps/compass-town.json",
+    "from": "學校",
+    "to": "觀星臺",
+    "n": 8
+   }
+  },
+  {
+   "id": "map-006",
+   "unit": "地圖與位置",
+   "level": "map-1",
+   "region": "通論",
+   "concepts": [
+    "map-scale"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 比例尺的應用；圖：故事用虛構地圖",
+   "stem": "街道圖下方的線段比例尺表示每一格邊長是 500 公尺。從車站沿著同一列一直往東走到市場，大約要走多遠？",
+   "figure": {
+    "type": "town",
+    "map": "maps/compass-town.json"
+   },
+   "options": [
+    "1 公里",
+    "1.5 公里",
+    "2 公里",
+    "3 公里"
+   ],
+   "answer": 1,
+   "explain": "車站在 B4、市場在 E4，中間相差 3 格。3 × 500 公尺＝1,500 公尺＝1.5 公里。",
+   "check": {
+    "kind": "town-distance",
+    "map": "maps/compass-town.json",
+    "from": "車站",
+    "to": "市場",
+    "meters": 1500
+   }
+  },
+  {
+   "id": "map-007",
+   "unit": "地圖與位置",
+   "level": "map-1",
+   "region": "通論",
+   "concepts": [
+    "map-scale"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 比例尺（圖上距離與實際距離換算）",
+   "stem": "在比例尺 1:50,000 的地圖上，兩地相距 4 公分，兩地的實際距離是多少？",
+   "options": [
+    "200 公尺",
+    "2 公里",
+    "20 公里",
+    "200 公里"
+   ],
+   "answer": 1,
+   "explain": "4 公分 × 50,000＝200,000 公分。去掉兩個 0 變 2,000 公尺，再除以 1,000 就是 2 公里。",
+   "check": {
+    "kind": "scale",
+    "cm": 4,
+    "denom": 50000,
+    "meters": 2000
+   }
+  },
+  {
+   "id": "map-008",
+   "unit": "地圖與位置",
+   "level": "map-1",
+   "region": "通論",
+   "concepts": [
+    "map-scale"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 大比例尺與小比例尺地圖",
+   "stem": "小芸要畫兩張圖：一張是校園導覽圖，一張是整個臺灣的地圖。兩張圖紙一樣大，下列敘述何者正確？",
+   "options": [
+    "校園導覽圖要用小比例尺，內容比較簡略",
+    "校園導覽圖要用大比例尺，能畫出比較詳細的內容",
+    "臺灣地圖要用大比例尺，才放得下整個臺灣",
+    "兩張圖的比例尺應該相同"
+   ],
+   "answer": 1,
+   "explain": "同樣大的圖紙，要畫的範圍愈小，就可以用愈大的比例尺（分母小），內容也能畫得愈詳細。臺灣範圍大，要用小比例尺。"
+  },
+  {
+   "id": "map-009",
+   "unit": "地圖與位置",
+   "level": "map-1",
+   "region": "通論",
+   "concepts": [
+    "map-elements"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 地圖要素",
+   "stem": "看地圖時，要知道「⚓」這個符號代表港口，應該查看地圖的哪一個要素？",
+   "options": [
+    "圖名",
+    "比例尺",
+    "方向標",
+    "圖例"
+   ],
+   "answer": 3,
+   "explain": "圖例說明地圖上各種符號、顏色代表什麼。圖名說明地圖的主題，比例尺用來換算距離，方向標指出方位。"
+  },
+  {
+   "id": "map-010",
+   "unit": "地圖與位置",
+   "level": "map-1",
+   "region": "通論",
+   "concepts": [
+    "map-scale"
+   ],
+   "type": "order",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 大比例尺與小比例尺地圖",
+   "stem": "請把下列比例尺，由「大比例尺」排到「小比例尺」。",
+   "items": [
+    "1:100,000",
+    "1:1,000",
+    "1:1,000,000",
+    "1:25,000"
+   ],
+   "answer": [
+    1,
+    3,
+    0,
+    2
+   ],
+   "explain": "比例尺分母愈小，比例尺愈大。1,000 < 25,000 < 100,000 < 1,000,000。"
+  },
+  {
+   "id": "map-040",
+   "unit": "地圖與位置",
+   "level": "map-1",
+   "region": "通論",
+   "concepts": [
+    "map-elements"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 地圖要素；圖：故事用虛構地圖",
+   "stem": "如果一張地圖上沒有畫方向標，一般會把地圖的哪一邊當作北方？",
+   "options": [
+    "上方",
+    "下方",
+    "左邊",
+    "右邊"
+   ],
+   "answer": 0,
+   "explain": "沒有方向標時，習慣上地圖的上方是北方。羅盤港街道圖有方向標，指向的也是上方。"
+  },
+  {
+   "id": "map-011",
+   "unit": "地圖與位置",
+   "level": "map-2",
+   "region": "通論",
+   "concepts": [
+    "map-latlon"
+   ],
+   "type": "click",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 經緯線座標系統、東西半球與南北半球；底圖：Natural Earth",
+   "stem": "觀星臺的地球儀上標了四個點。請點出位於「南半球」而且位於「西半球」的那一點。",
+   "figure": {
+    "type": "graticule",
+    "basemap": "basemap/world-land-ne110m.json",
+    "pick": true,
+    "points": [
+     {
+      "label": "甲",
+      "lat": 30,
+      "lon": 120
+     },
+     {
+      "label": "乙",
+      "lat": -30,
+      "lon": -60
+     },
+     {
+      "label": "丙",
+      "lat": -30,
+      "lon": 120
+     },
+     {
+      "label": "丁",
+      "lat": 60,
+      "lon": -90
+     }
+    ]
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 1,
+   "explain": "赤道以南是南半球；本初經線（0°）以西是西半球。乙點在 30°S、60°W，同時符合。",
+   "check": {
+    "kind": "latlon-quadrant",
+    "ns": "S",
+    "ew": "W"
+   }
+  },
+  {
+   "id": "map-012",
+   "unit": "地圖與位置",
+   "level": "map-2",
+   "region": "通論",
+   "concepts": [
+    "map-latlon"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 經緯度表示法；底圖：Natural Earth",
+   "stem": "圖中丙點的經緯度，最接近下列哪一個？",
+   "figure": {
+    "type": "graticule",
+    "basemap": "basemap/world-land-ne110m.json",
+    "points": [
+     {
+      "label": "甲",
+      "lat": 30,
+      "lon": 120
+     },
+     {
+      "label": "乙",
+      "lat": -30,
+      "lon": -60
+     },
+     {
+      "label": "丙",
+      "lat": -30,
+      "lon": 120
+     },
+     {
+      "label": "丁",
+      "lat": 60,
+      "lon": -90
+     }
+    ]
+   },
+   "options": [
+    "30°N，120°E",
+    "30°S，120°E",
+    "30°S，120°W",
+    "120°S，30°E"
+   ],
+   "answer": 1,
+   "explain": "丙點在赤道以南第一條緯線（30°S），本初經線以東第四條經線（120°E）。緯度最多只到 90 度，所以「120°S」不可能存在。",
+   "check": {
+    "kind": "latlon-point",
+    "label": "丙",
+    "lat": -30,
+    "lon": 120
+   }
+  },
+  {
+   "id": "map-013",
+   "unit": "地圖與位置",
+   "level": "map-2",
+   "region": "通論",
+   "concepts": [
+    "map-latlon"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 經線與緯線",
+   "stem": "關於經線與緯線，下列敘述何者正確？",
+   "options": [
+    "經線愈往北長度愈短",
+    "本初經線通過南美洲的厄瓜多",
+    "緯線是東西方向、彼此平行的圓圈",
+    "緯度最大可以到 180 度"
+   ],
+   "answer": 2,
+   "explain": "緯線是東西向、互相平行的圈，從赤道（0°）往南北各到 90°。經線是連接南北極的半圓，每條一樣長；本初經線通過英國倫敦的格林威治，厄瓜多是赤道通過的國家。"
+  },
+  {
+   "id": "map-014",
+   "unit": "地圖與位置",
+   "level": "map-2",
+   "region": "通論",
+   "concepts": [
+    "map-latlon"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 南北半球與東西半球",
+   "stem": "下列哪一組線，把地球分成「東半球」和「西半球」？",
+   "options": [
+    "赤道",
+    "南、北回歸線",
+    "0 度與 180 度經線",
+    "南、北極圈"
+   ],
+   "answer": 2,
+   "explain": "赤道分出南、北半球；0 度（本初經線）和 180 度經線合起來，才把地球分成東、西半球。"
+  },
+  {
+   "id": "map-015",
+   "unit": "地圖與位置",
+   "level": "map-2",
+   "region": "通論",
+   "concepts": [
+    "map-landsea"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第2課 南、北半球的海陸分布比例；底圖：Natural Earth",
+   "stem": "觀察世界地圖上的陸地分布，下列敘述何者正確？",
+   "figure": {
+    "type": "graticule",
+    "basemap": "basemap/world-land-ne110m.json",
+    "points": []
+   },
+   "options": [
+    "南半球的陸地比北半球多",
+    "北半球陸地所占的比例比南半球高",
+    "南、北半球的海陸比例差不多",
+    "地球表面陸地比海洋多"
+   ],
+   "answer": 1,
+   "explain": "陸地多集中在北半球。北半球海洋約占 61%、陸地 39%；南半球海洋約占 81%、陸地只有 19%。兩個半球都是海洋比陸地多。"
+  },
+  {
+   "id": "map-016",
+   "unit": "地圖與位置",
+   "level": "map-2",
+   "region": "通論",
+   "concepts": [
+    "map-abs-rel"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第2課 絕對位置與相對位置",
+   "stem": "下列哪一句是用「絕對位置」來描述一個地點？",
+   "options": [
+    "學校在車站的北方約 500 公尺",
+    "臺灣位在菲律賓的北方",
+    "某島位於 23°N、121°E",
+    "日本在臺灣的東北方"
+   ],
+   "answer": 2,
+   "explain": "用經緯度描述的位置，全世界只有一個答案，是絕對位置。其他三句都是和別的地方比較，是相對位置。"
+  },
+  {
+   "id": "map-017",
+   "unit": "地圖與位置",
+   "level": "map-2",
+   "region": "臺灣",
+   "concepts": [
+    "map-abs-rel"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第2課 臺灣的相對位置（鄰國位置）",
+   "stem": "如果從菲律賓看臺灣，臺灣位在菲律賓的哪個方位？",
+   "options": [
+    "北方",
+    "南方",
+    "東方",
+    "西南方"
+   ],
+   "answer": 0,
+   "explain": "臺灣在菲律賓的北方，隔著巴士海峽。反過來說，菲律賓在臺灣的南方。"
+  },
+  {
+   "id": "map-018",
+   "unit": "地圖與位置",
+   "level": "map-2",
+   "region": "臺灣",
+   "concepts": [
+    "map-abs-rel",
+    "map-latlon"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第2課 臺灣的位置（臺灣島大致位於東經 120～122 度、北緯 22～25 度）",
+   "stem": "臺灣本島的絕對位置，大致位在下列哪個範圍？",
+   "options": [
+    "120°E～122°E，22°N～25°N",
+    "120°W～122°W，22°N～25°N",
+    "120°E～122°E，22°S～25°S",
+    "100°E～102°E，22°N～25°N"
+   ],
+   "answer": 0,
+   "explain": "臺灣在東半球、北半球，所以是東經（E）、北緯（N）。本島大致在東經 120～122 度、北緯 22～25 度之間。"
+  },
+  {
+   "id": "map-019",
+   "unit": "地圖與位置",
+   "level": "map-2",
+   "region": "臺灣",
+   "concepts": [
+    "map-abs-rel"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第2課 位置對臺灣的影響（十七世紀荷蘭貿易據點、亞太海空運樞紐）",
+   "stem": "十七世紀荷蘭人選擇臺灣作為東亞的貿易據點；今天臺灣也是聯繫東北亞和東南亞的海空運樞紐。這主要和臺灣的哪一項條件有關？",
+   "options": [
+    "面積廣大、資源豐富",
+    "位在亞洲大陸東側、太平洋西側，是南北往來的要道",
+    "位在熱帶，全年高溫",
+    "地形以平原為主"
+   ],
+   "answer": 1,
+   "explain": "這是「相對位置」帶來的影響：臺灣位在最大陸地與最大海洋交界，又在東北亞與東南亞之間，南北往來都會經過。"
+  },
+  {
+   "id": "map-020",
+   "unit": "地圖與位置",
+   "level": "map-2",
+   "region": "臺灣",
+   "concepts": [
+    "map-abs-rel"
+   ],
+   "type": "clue",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第2課 臺灣的位置與相對位置、洋流",
+   "stem": "線索猜地：線索一條一條揭開，越早猜對分數越高。",
+   "clues": [
+    "它位在世界最大陸地的東側、最大海洋的西側。",
+    "北回歸線（23.5°N）通過這裡。",
+    "它在菲律賓的北方、日本的西南方。",
+    "東邊海域有黑潮由南往北流過。"
+   ],
+   "options": [
+    "日本",
+    "臺灣",
+    "菲律賓",
+    "南韓"
+   ],
+   "answer": 1,
+   "explain": "最大陸地是亞洲、最大海洋是太平洋；北回歸線通過，又在菲律賓北方、日本西南方，就是臺灣。"
+  },
+  {
+   "id": "map-041",
+   "unit": "地圖與位置",
+   "level": "map-2",
+   "region": "通論",
+   "concepts": [
+    "map-landsea"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第2課 七大洲與四大洋",
+   "stem": "世界上面積最大的洲和面積最大的洋，分別是哪一個？",
+   "options": [
+    "亞洲、太平洋",
+    "非洲、大西洋",
+    "亞洲、印度洋",
+    "歐洲、太平洋"
+   ],
+   "answer": 0,
+   "explain": "亞洲是面積最大的洲，太平洋是面積最大的洋。臺灣正好位在兩者交界：亞洲東部、太平洋西側。"
+  },
+  {
+   "id": "map-021",
+   "unit": "地圖與位置",
+   "level": "map-3",
+   "region": "通論",
+   "concepts": [
+    "map-timezone"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 經度與時區",
+   "stem": "全球分成 24 個時區。相鄰的兩個時區，中央經線大約相差幾度？",
+   "figure": {
+    "type": "diagram",
+    "id": "timezone"
+   },
+   "options": [
+    "10 度",
+    "15 度",
+    "24 度",
+    "30 度"
+   ],
+   "answer": 1,
+   "explain": "地球自轉一圈 360 度需要 24 小時，360 ÷ 24＝15，所以每 15 度經度相差 1 小時。"
+  },
+  {
+   "id": "map-022",
+   "unit": "地圖與位置",
+   "level": "map-3",
+   "region": "通論",
+   "concepts": [
+    "map-timezone"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 時差（臺北比倫敦早 8 小時）",
+   "stem": "臺北（約東經 121 度）是上午 10 點時，倫敦（0 度經線）是幾點？",
+   "options": [
+    "當天凌晨 2 點",
+    "當天下午 6 點",
+    "前一天晚上 10 點",
+    "當天上午 10 點"
+   ],
+   "answer": 0,
+   "explain": "臺北在東八區，比倫敦早 8 小時。倫敦時間＝10－8＝2，所以是同一天凌晨 2 點。",
+   "check": {
+    "kind": "timezone",
+    "fromLon": 121,
+    "fromHour": 10,
+    "toLon": 0,
+    "h": 2,
+    "day": 0
+   }
+  },
+  {
+   "id": "map-023",
+   "unit": "地圖與位置",
+   "level": "map-3",
+   "region": "通論",
+   "concepts": [
+    "map-timezone"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 經度與時區、時差計算",
+   "stem": "甲地位於東經 135 度，乙地位於西經 75 度。甲地是 1 月 2 日上午 9 點時，乙地是幾月幾日幾點？",
+   "options": [
+    "1 月 2 日晚上 11 點",
+    "1 月 1 日晚上 7 點",
+    "1 月 2 日凌晨 4 點",
+    "1 月 1 日上午 9 點"
+   ],
+   "answer": 1,
+   "explain": "甲地是東 9 區（135÷15），乙地是西 5 區（75÷15）。兩地相差 9＋5＝14 小時，乙地在西邊要減：9－14＝－5，也就是前一天的 24－5＝19 點，即 1 月 1 日晚上 7 點。",
+   "check": {
+    "kind": "timezone",
+    "fromLon": 135,
+    "fromHour": 9,
+    "toLon": -75,
+    "h": 19,
+    "day": -1
+   }
+  },
+  {
+   "id": "map-024",
+   "unit": "地圖與位置",
+   "level": "map-3",
+   "region": "通論",
+   "concepts": [
+    "map-timezone"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 地球自轉與時差",
+   "stem": "為什麼位置愈東邊的地方，時間愈早（數字愈大）？",
+   "options": [
+    "因為東邊的地方緯度比較高",
+    "因為地球由西向東自轉，東邊的地方先看到太陽",
+    "因為地球由東向西自轉",
+    "因為倫敦規定東邊的時間比較早"
+   ],
+   "answer": 1,
+   "explain": "地球由西向東自轉，東邊的地方比西邊先轉到面向太陽，所以日出比較早、時間也比較早。"
+  },
+  {
+   "id": "map-025",
+   "unit": "地圖與位置",
+   "level": "map-3",
+   "region": "通論",
+   "concepts": [
+    "map-season"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 太陽直射位置與冬夏季節、南北半球季節相反",
+   "stem": "6 月時，太陽直射北回歸線附近。這時下列哪一個地方正值冬季？",
+   "figure": {
+    "type": "diagram",
+    "id": "season",
+    "opts": {
+     "lat": 23.5,
+     "label": "6 月直射北回歸線"
+    }
+   },
+   "options": [
+    "臺灣",
+    "日本",
+    "澳洲",
+    "英國"
+   ],
+   "answer": 2,
+   "explain": "6 月太陽直射北半球，北半球是夏季；南半球得到的熱量少，是冬季。四個選項中只有澳洲在南半球。"
+  },
+  {
+   "id": "map-026",
+   "unit": "地圖與位置",
+   "level": "map-3",
+   "region": "通論",
+   "concepts": [
+    "map-season"
+   ],
+   "type": "click",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 全球氣候帶劃分（熱帶、溫帶、寒帶）；底圖：Natural Earth",
+   "stem": "圖上虛線是南、北回歸線和南、北極圈。請點出位於「熱帶」的那一點。",
+   "figure": {
+    "type": "graticule",
+    "basemap": "basemap/world-land-ne110m.json",
+    "pick": true,
+    "tropics": true,
+    "points": [
+     {
+      "label": "甲",
+      "lat": 10,
+      "lon": 20
+     },
+     {
+      "label": "乙",
+      "lat": 45,
+      "lon": -100
+     },
+     {
+      "label": "丙",
+      "lat": -75,
+      "lon": 60
+     },
+     {
+      "label": "丁",
+      "lat": -45,
+      "lon": -70
+     }
+    ]
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 0,
+   "explain": "熱帶在南、北回歸線（23.5 度）之間。甲點在 10°N，位於熱帶；乙、丁在溫帶，丙在南極圈以內的寒帶。",
+   "check": {
+    "kind": "latlon-zone",
+    "zone": "熱帶"
+   }
+  },
+  {
+   "id": "map-027",
+   "unit": "地圖與位置",
+   "level": "map-3",
+   "region": "通論",
+   "concepts": [
+    "map-polar"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 3上第6課 永晝與永夜（極圈以內）",
+   "stem": "北半球正值夏季時，下列哪一個地方最可能出現整天太陽不下山的「永晝」？",
+   "options": [
+    "北緯 70 度",
+    "北緯 23.5 度",
+    "赤道",
+    "南緯 70 度"
+   ],
+   "answer": 0,
+   "explain": "永晝只出現在極圈（66.5 度）以內，而且是該半球的夏季。北半球夏季時，北緯 70 度是永晝，南緯 70 度反而是永夜。"
+  },
+  {
+   "id": "map-028",
+   "unit": "地圖與位置",
+   "level": "map-3",
+   "region": "通論",
+   "concepts": [
+    "map-season"
+   ],
+   "type": "match",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 全球氣候帶劃分",
+   "stem": "請把五帶和它們的位置配對起來。",
+   "left": [
+    "熱帶",
+    "溫帶",
+    "寒帶"
+   ],
+   "right": [
+    "回歸線與極圈之間",
+    "極圈以內",
+    "南、北回歸線之間"
+   ],
+   "answer": [
+    2,
+    0,
+    1
+   ],
+   "explain": "熱帶在南、北回歸線之間；寒帶在南、北極圈以內；介於兩者之間的是溫帶。緯度愈高，氣候愈寒冷。"
+  },
+  {
+   "id": "map-042",
+   "unit": "地圖與位置",
+   "level": "map-3",
+   "region": "通論",
+   "concepts": [
+    "map-polar",
+    "map-season"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 3上第6課 永晝、永夜（受地軸傾斜影響）",
+   "stem": "12 月時，南極圈以內的地方會出現什麼現象？",
+   "options": [
+    "永晝",
+    "永夜",
+    "每天日夜各 12 小時",
+    "全天都是黃昏"
+   ],
+   "answer": 0,
+   "explain": "12 月太陽直射南半球，南半球是夏季，南極圈以內整天太陽不下山，出現永晝；同時北極圈以內是永夜。"
+  },
+  {
+   "id": "map-029",
+   "unit": "地圖與位置",
+   "level": "map-4",
+   "region": "通論",
+   "concepts": [
+    "map-contour"
+   ],
+   "type": "click",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 等高線地形圖；圖：練習用虛構地形",
+   "stem": "這是山中測量站附近的等高線地形圖。請點出海拔最高的那一點。",
+   "figure": {
+    "type": "contour",
+    "terrain": "terrain/practice-a.json",
+    "points": [
+     "甲",
+     "乙",
+     "丙",
+     "丁"
+    ],
+    "pick": true
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 0,
+   "explain": "沿著等高線上的數字往上數：甲點被最多圈等高線包圍，是最高的山頂。",
+   "check": {
+    "kind": "terrain-highest",
+    "terrain": "terrain/practice-a.json"
+   }
+  },
+  {
+   "id": "map-030",
+   "unit": "地圖與位置",
+   "level": "map-4",
+   "region": "通論",
+   "concepts": [
+    "map-contour"
+   ],
+   "type": "click",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 等高線疏密與坡度；圖：練習用虛構地形",
+   "stem": "阿鵲要找一段最陡的山坡練習攀爬。請點出附近坡度最陡的那一點。",
+   "figure": {
+    "type": "contour",
+    "terrain": "terrain/practice-a.json",
+    "points": [
+     "戊",
+     "己",
+     "庚",
+     "辛"
+    ],
+    "pick": true
+   },
+   "options": [
+    "戊",
+    "己",
+    "庚",
+    "辛"
+   ],
+   "answer": 0,
+   "explain": "等高線愈密集，代表很短的水平距離內高度變化很大，坡度愈陡。戊點附近的等高線最密。",
+   "check": {
+    "kind": "terrain-steepest",
+    "terrain": "terrain/practice-a.json"
+   }
+  },
+  {
+   "id": "map-031",
+   "unit": "地圖與位置",
+   "level": "map-4",
+   "region": "通論",
+   "concepts": [
+    "map-contour"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 等高線地形圖判讀",
+   "stem": "在同一張等高線地形圖上，某處的等高線特別稀疏，代表那裡的地形如何？",
+   "options": [
+    "坡度平緩",
+    "坡度陡峭",
+    "海拔一定很高",
+    "一定是河谷"
+   ],
+   "answer": 0,
+   "explain": "等高線稀疏表示走很遠的水平距離，高度才變化一點，坡度平緩。等高線疏密看的是坡度，不是海拔高低。"
+  },
+  {
+   "id": "map-032",
+   "unit": "地圖與位置",
+   "level": "map-4",
+   "region": "通論",
+   "concepts": [
+    "map-contour"
+   ],
+   "type": "click",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 等高線判讀山脊與河谷；圖：練習用虛構地形",
+   "stem": "下雨時，雨水會沿著河谷流下。請點出位在河谷中的那一點。",
+   "figure": {
+    "type": "contour",
+    "terrain": "terrain/practice-b.json",
+    "points": [
+     "甲",
+     "乙",
+     "丙",
+     "丁"
+    ],
+    "pick": true
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 1,
+   "explain": "通過河谷的等高線，彎曲的尖端指向高處（上游）；乙點正位在這樣一連串向上游凸出的彎折上，是河谷。甲點那一串彎折的尖端指向低處，是山脊。",
+   "check": {
+    "kind": "terrain-feature",
+    "terrain": "terrain/practice-b.json",
+    "feature": "valley"
+   }
+  },
+  {
+   "id": "map-033",
+   "unit": "地圖與位置",
+   "level": "map-4",
+   "region": "通論",
+   "concepts": [
+    "map-contour"
+   ],
+   "type": "click",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 等高線判讀山脊與河谷；圖：練習用虛構地形",
+   "stem": "測量員想沿著山脊走上山頂，避開容易積水的谷地。請點出位在山脊上的那一點。",
+   "figure": {
+    "type": "contour",
+    "terrain": "terrain/practice-b.json",
+    "points": [
+     "甲",
+     "乙",
+     "丙",
+     "丁"
+    ],
+    "pick": true
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 0,
+   "explain": "通過山脊的等高線，彎曲的尖端指向低處。甲點所在的那一串等高線向山下凸出，是從山頂延伸下來的山脊。",
+   "check": {
+    "kind": "terrain-feature",
+    "terrain": "terrain/practice-b.json",
+    "feature": "ridge"
+   }
+  },
+  {
+   "id": "map-034",
+   "unit": "地圖與位置",
+   "level": "map-4",
+   "region": "通論",
+   "concepts": [
+    "map-profile"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 地理工具箱：繪製地形剖面圖；圖：練習用虛構地形",
+   "stem": "沿著圖中 A—B 虛線畫出的地形剖面圖，是下列哪一個？（左端是 A）",
+   "figure": {
+    "type": "contour",
+    "terrain": "terrain/practice-a.json",
+    "points": [
+     "A",
+     "B"
+    ],
+    "line": [
+     "A",
+     "B"
+    ]
+   },
+   "options": [
+    {
+     "figure": {
+      "type": "profile",
+      "terrain": "terrain/practice-a.json",
+      "from": "B",
+      "to": "A"
+     }
+    },
+    {
+     "figure": {
+      "type": "profile",
+      "terrain": "terrain/practice-a.json",
+      "from": "A",
+      "to": "B"
+     }
+    },
+    {
+     "figure": {
+      "type": "profile",
+      "terrain": "terrain/practice-a.json",
+      "from": "C",
+      "to": "D"
+     }
+    },
+    {
+     "figure": {
+      "type": "profile",
+      "terrain": "terrain/practice-b.json",
+      "from": "A",
+      "to": "B"
+     }
+    }
+   ],
+   "answer": 1,
+   "explain": "從 A 往東出發，先爬上最高的山頂（甲），下到兩山之間較低處，再爬上第二座較矮的山，最後下坡到 B。左高右低、兩座山頂的剖面就是答案。",
+   "check": {
+    "kind": "profile-match"
+   }
+  },
+  {
+   "id": "map-043",
+   "unit": "地圖與位置",
+   "level": "map-4",
+   "region": "通論",
+   "concepts": [
+    "map-contour"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 等高線地形圖（等高距）",
+   "stem": "等高線地形圖上，相鄰兩條等高線之間的高度差，叫做什麼？",
+   "options": [
+    "等高距",
+    "相對高度",
+    "海拔",
+    "比例尺"
+   ],
+   "answer": 0,
+   "explain": "相鄰兩條等高線的高度差叫等高距，同一張圖的等高距都一樣。練習圖的等高距是 50 公尺。"
+  },
+  {
+   "id": "map-044",
+   "unit": "地圖與位置",
+   "level": "map-4",
+   "region": "通論",
+   "concepts": [
+    "map-contour"
+   ],
+   "type": "click",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 等高線地形圖；圖：練習用虛構地形",
+   "stem": "大雨過後，積水最可能聚集在地勢最低的地方。請點出海拔最低的那一點。",
+   "figure": {
+    "type": "contour",
+    "terrain": "terrain/practice-a.json",
+    "points": [
+     "甲",
+     "乙",
+     "丙",
+     "丁"
+    ],
+    "pick": true
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 3,
+   "explain": "沿著等高線上的數字看：丁點在最外圍、數字最小的等高線附近，海拔最低。",
+   "check": {
+    "kind": "terrain-lowest",
+    "terrain": "terrain/practice-a.json"
+   }
+  },
+  {
+   "id": "map-045",
+   "unit": "地圖與位置",
+   "level": "map-4",
+   "region": "通論",
+   "concepts": [
+    "map-contour"
+   ],
+   "type": "single",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 等高線地形圖判讀",
+   "stem": "等高線地形圖上有一圈圈封閉的等高線，數字由外往內愈來愈大。圈圈的中心最可能是什麼地形？",
+   "options": [
+    "山頂",
+    "河谷",
+    "平原",
+    "海灣"
+   ],
+   "answer": 0,
+   "explain": "一圈圈封閉、而且愈往中心愈高的等高線，中心就是山頂。"
+  },
+  {
+   "id": "map-046",
+   "unit": "地圖與位置",
+   "level": "map-4",
+   "region": "通論",
+   "concepts": [
+    "map-contour"
+   ],
+   "type": "click",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 等高線地形圖；圖：練習用虛構地形",
+   "stem": "測量員要在最高的地方架設觀測儀器。請點出海拔最高的那一點。",
+   "figure": {
+    "type": "contour",
+    "terrain": "terrain/practice-b.json",
+    "points": [
+     "甲",
+     "乙",
+     "丙",
+     "丁"
+    ],
+    "pick": true
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 2,
+   "explain": "丙點在一圈圈封閉等高線的中心，數字最大，是山頂。",
+   "check": {
+    "kind": "terrain-highest",
+    "terrain": "terrain/practice-b.json"
+   }
+  },
+  {
+   "id": "map-035",
+   "unit": "地圖與位置",
+   "level": "map-boss",
+   "region": "通論",
+   "concepts": [
+    "map-grid",
+    "map-direction",
+    "map-scale"
+   ],
+   "type": "chain",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 網格座標、方位、比例尺；圖：故事用虛構地圖",
+   "stem": "迷途羅盤的第一道機關：它要你帶著街道圖，從學校走到港口送信。",
+   "figure": {
+    "type": "town",
+    "map": "maps/compass-town.json"
+   },
+   "parts": [
+    {
+     "stem": "港口位在哪一格？",
+     "options": [
+      "E1",
+      "E2",
+      "D2",
+      "B2"
+     ],
+     "answer": 1,
+     "explain": "港口在 E 欄、第 2 列，是 E2。",
+     "concepts": [
+      "map-grid"
+     ],
+     "check": {
+      "kind": "town-cell-of",
+      "map": "maps/compass-town.json",
+      "name": "港口"
+     }
+    },
+    {
+     "stem": "從學校看港口，港口在哪個方位？",
+     "options": [
+      "正北",
+      "正東",
+      "東南",
+      "正西"
+     ],
+     "answer": 1,
+     "explain": "學校在 B2、港口在 E2，同一列，港口在學校的右邊，也就是正東方。",
+     "concepts": [
+      "map-direction"
+     ],
+     "check": {
+      "kind": "town-direction",
+      "map": "maps/compass-town.json",
+      "from": "學校",
+      "to": "港口",
+      "n": 8
+     }
+    },
+    {
+     "stem": "每格邊長 500 公尺，學校到港口的直線距離是多少？",
+     "options": [
+      "500 公尺",
+      "1 公里",
+      "1.5 公里",
+      "2.5 公里"
+     ],
+     "answer": 2,
+     "explain": "B 到 E 相差 3 格，3 × 500＝1,500 公尺＝1.5 公里。",
+     "concepts": [
+      "map-scale"
+     ],
+     "check": {
+      "kind": "town-distance",
+      "map": "maps/compass-town.json",
+      "from": "學校",
+      "to": "港口",
+      "meters": 1500
+     }
+    }
+   ]
+  },
+  {
+   "id": "map-036",
+   "unit": "地圖與位置",
+   "level": "map-boss",
+   "region": "通論",
+   "concepts": [
+    "map-contour",
+    "map-profile"
+   ],
+   "type": "chain",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 等高線地形圖、地形剖面圖；圖：練習用虛構地形",
+   "stem": "迷途羅盤的第二道機關：沿著 A—B 測線橫越兩座山。",
+   "figure": {
+    "type": "contour",
+    "terrain": "terrain/practice-a.json",
+    "points": [
+     "甲",
+     "乙",
+     "A",
+     "B"
+    ],
+    "line": [
+     "A",
+     "B"
+    ]
+   },
+   "parts": [
+    {
+     "stem": "甲、乙兩座山頂，哪一座比較高？",
+     "options": [
+      "甲",
+      "乙",
+      "一樣高",
+      "看不出來"
+     ],
+     "answer": 0,
+     "explain": "甲被更多圈等高線包圍，海拔較高。",
+     "concepts": [
+      "map-contour"
+     ],
+     "check": {
+      "kind": "terrain-highest",
+      "terrain": "terrain/practice-a.json",
+      "points": [
+       "甲",
+       "乙"
+      ]
+     }
+    },
+    {
+     "stem": "從 A 走到 B，一路上會翻過幾座山頂？",
+     "options": [
+      "1 座",
+      "2 座",
+      "3 座",
+      "0 座"
+     ],
+     "answer": 1,
+     "explain": "測線先經過甲山、再經過乙山附近，剖面上會有兩個高點。",
+     "concepts": [
+      "map-profile"
+     ],
+     "check": {
+      "kind": "profile-peaks",
+      "terrain": "terrain/practice-a.json",
+      "from": "A",
+      "to": "B",
+      "peaks": 2
+     }
+    },
+    {
+     "stem": "下列哪一張是 A—B 的地形剖面圖？（左端是 A）",
+     "options": [
+      {
+       "figure": {
+        "type": "profile",
+        "terrain": "terrain/practice-a.json",
+        "from": "C",
+        "to": "D"
+       }
+      },
+      {
+       "figure": {
+        "type": "profile",
+        "terrain": "terrain/practice-a.json",
+        "from": "B",
+        "to": "A"
+       }
+      },
+      {
+       "figure": {
+        "type": "profile",
+        "terrain": "terrain/practice-a.json",
+        "from": "A",
+        "to": "B"
+       }
+      }
+     ],
+     "answer": 2,
+     "explain": "左端 A 先爬上最高的甲山，後面再接一座較矮的山，最後下降到 B。",
+     "concepts": [
+      "map-profile"
+     ],
+     "check": {
+      "kind": "profile-match"
+     }
+    }
+   ]
+  },
+  {
+   "id": "map-037",
+   "unit": "地圖與位置",
+   "level": "map-boss",
+   "region": "通論",
+   "concepts": [
+    "map-latlon",
+    "map-timezone",
+    "map-season"
+   ],
+   "type": "chain",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 經緯度、時區、南北半球季節相反",
+   "stem": "迷途羅盤的第三道機關：阿鵲在臺北（約東經 121 度），要在 12 月 25 日晚上 8 點，打視訊電話給住在南緯 34 度、東經 151 度一座城市的朋友。",
+   "parts": [
+    {
+     "stem": "朋友住的城市位在哪兩個半球？",
+     "options": [
+      "北半球、東半球",
+      "南半球、東半球",
+      "南半球、西半球",
+      "北半球、西半球"
+     ],
+     "answer": 1,
+     "explain": "南緯在赤道以南是南半球；東經在本初經線以東是東半球。",
+     "concepts": [
+      "map-latlon"
+     ]
+    },
+    {
+     "stem": "電話接通時，朋友那裡是幾點？",
+     "options": [
+      "12 月 25 日晚上 6 點",
+      "12 月 25 日晚上 10 點",
+      "12 月 26 日凌晨 2 點",
+      "12 月 25 日下午 2 點"
+     ],
+     "answer": 1,
+     "explain": "151÷15 約等於 10，是東 10 區；臺北是東 8 區。朋友在東邊、早 2 小時：20＋2＝22 點，同一天晚上 10 點。",
+     "concepts": [
+      "map-timezone"
+     ],
+     "check": {
+      "kind": "timezone",
+      "fromLon": 121,
+      "fromHour": 20,
+      "toLon": 151,
+      "h": 22,
+      "day": 0
+     }
+    },
+    {
+     "stem": "12 月時，朋友那裡是什麼季節？",
+     "options": [
+      "夏季",
+      "冬季",
+      "春季",
+      "秋季"
+     ],
+     "answer": 0,
+     "explain": "12 月太陽直射南半球，南半球是夏季，所以朋友那裡過的是夏天的聖誕節。",
+     "concepts": [
+      "map-season"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "map-038",
+   "unit": "地圖與位置",
+   "level": "map-boss",
+   "region": "通論",
+   "concepts": [
+    "map-latlon",
+    "map-season"
+   ],
+   "type": "clue",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第1課 經緯線、回歸線與氣候帶",
+   "stem": "迷途羅盤的謎語：猜猜這是哪一條線？",
+   "clues": [
+    "它是一條緯線。",
+    "太陽一年之中直射的最北界線就是它。",
+    "它是熱帶和北溫帶的分界。",
+    "它通過臺灣的嘉義、花蓮一帶。"
+   ],
+   "options": [
+    "赤道",
+    "北回歸線",
+    "北極圈",
+    "本初經線"
+   ],
+   "answer": 1,
+   "explain": "北回歸線在北緯約 23.5 度，是太陽直射最北的位置，也是熱帶與北溫帶的分界，通過臺灣中南部。"
+  },
+  {
+   "id": "map-039",
+   "unit": "地圖與位置",
+   "level": "map-boss",
+   "region": "通論",
+   "concepts": [
+    "map-profile"
+   ],
+   "type": "order",
+   "status": "待審",
+   "source": "課本概念：康軒 1上第3課 地理工具箱：繪製地形剖面圖的步驟",
+   "stem": "迷途羅盤的最後一道機關：把畫地形剖面圖的步驟排好。",
+   "items": [
+    "把各點依高度畫到下方的方格上",
+    "在等高線圖上畫一條直線當剖面線",
+    "把各點連成平順的曲線",
+    "找出剖面線和每條等高線的交點，記下高度"
+   ],
+   "answer": [
+    1,
+    3,
+    0,
+    2
+   ],
+   "explain": "先畫剖面線，找出它和每條等高線的交點與高度，再把這些點依水平位置和高度畫到方格上，最後連成平順的曲線。"
+  }
+ ]
+}

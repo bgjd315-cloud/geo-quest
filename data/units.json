@@ -1,0 +1,154 @@
+{
+ "units": [
+  {
+   "id": "map",
+   "name": "地圖與位置",
+   "island": "羅盤島",
+   "no": 1,
+   "cover": "cover_compass",
+   "stage": 1,
+   "story": "羅盤島的港口小鎮裡，所有路標都被迷霧吹歪了。阿鵲說：「先學會找位置，地圖冊才會認得你。」",
+   "levels": [
+    {
+     "id": "map-1",
+     "name": "港口街道：方位、網格與比例尺",
+     "banner": "lv_map_1",
+     "concepts": [
+      "map-direction",
+      "map-grid",
+      "map-elements",
+      "map-scale"
+     ]
+    },
+    {
+     "id": "map-2",
+     "name": "觀星臺：經緯度與海陸",
+     "banner": "lv_map_2",
+     "concepts": [
+      "map-latlon",
+      "map-landsea",
+      "map-abs-rel"
+     ]
+    },
+    {
+     "id": "map-3",
+     "name": "鐘塔廣場：時區與季節",
+     "banner": "lv_map_3",
+     "concepts": [
+      "map-timezone",
+      "map-season",
+      "map-polar"
+     ]
+    },
+    {
+     "id": "map-4",
+     "name": "山中測量站：等高線與剖面",
+     "banner": "lv_map_4",
+     "concepts": [
+      "map-contour",
+      "map-profile"
+     ]
+    }
+   ],
+   "boss": {
+    "id": "map-boss",
+    "name": "魔王試煉：迷途羅盤",
+    "image": "boss_compass",
+    "intro": "巨大的發條羅盤指針亂轉。用你學會的方位、經緯度和等高線，讓它一格一格歸位。"
+   }
+  },
+  {
+   "id": "climate",
+   "name": "天氣與氣候",
+   "island": "雲頂島",
+   "no": 2,
+   "cover": "cover_cloud",
+   "stage": 1,
+   "story": "雲頂島的氣象站觀測紀錄被吹散了。把數字和雲層讀懂，雲海就會慢慢退開。",
+   "levels": [
+    {
+     "id": "climate-1",
+     "name": "觀測坪：天氣、氣壓與風",
+     "banner": "lv_cl_1",
+     "concepts": [
+      "wx-weather-climate",
+      "wx-pressure-wind",
+      "wx-map"
+     ]
+    },
+    {
+     "id": "climate-2",
+     "name": "山的兩側：降水與季風",
+     "banner": "lv_cl_2",
+     "concepts": [
+      "clim-rain-type",
+      "clim-orographic",
+      "clim-monsoon"
+     ]
+    },
+    {
+     "id": "climate-3",
+     "name": "紀錄室：溫雨圖判讀",
+     "banner": "lv_cl_3",
+     "concepts": [
+      "clim-chart",
+      "clim-lat",
+      "clim-alt"
+     ]
+    },
+    {
+     "id": "climate-4",
+     "name": "燈塔之夜：氣溫分布與氣象災害",
+     "banner": "lv_cl_4",
+     "concepts": [
+      "clim-isoline",
+      "clim-hazard",
+      "clim-current"
+     ]
+    }
+   ],
+   "boss": {
+    "id": "climate-boss",
+    "name": "魔王試煉：颱風巨靈",
+    "image": "boss_typhoon",
+    "intro": "雲氣聚成的巨靈守在燈塔前。說出臺灣各地天氣差異的原因，它就會一層層散去。"
+   }
+  },
+  {
+   "id": "landform",
+   "name": "地形與海岸",
+   "island": "裂谷島",
+   "no": 3,
+   "cover": "cover_rift",
+   "stage": 2,
+   "levels": []
+  },
+  {
+   "id": "hydro",
+   "name": "水文",
+   "island": "泉源島",
+   "no": 4,
+   "cover": "cover_spring",
+   "stage": 2,
+   "levels": []
+  },
+  {
+   "id": "pop",
+   "name": "人口",
+   "island": "燈火島",
+   "no": 5,
+   "cover": "cover_lights",
+   "stage": 2,
+   "levels": []
+  },
+  {
+   "id": "industry",
+   "name": "聚落與產業",
+   "island": "市集島",
+   "no": 6,
+   "cover": "cover_market",
+   "stage": 2,
+   "levels": []
+  }
+ ]
+}

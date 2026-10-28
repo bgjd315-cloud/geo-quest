@@ -1,0 +1,74 @@
+{
+ "regions": [
+  {
+   "name": "通論",
+   "code": "通論",
+   "volume": ""
+  },
+  {
+   "name": "臺灣",
+   "code": "tw",
+   "volume": "一、二"
+  },
+  {
+   "name": "中國",
+   "code": "cn",
+   "volume": "三"
+  },
+  {
+   "name": "東北亞",
+   "code": "nea",
+   "volume": "三"
+  },
+  {
+   "name": "東南亞",
+   "code": "sea",
+   "volume": "四"
+  },
+  {
+   "name": "南亞",
+   "code": "sa",
+   "volume": "四"
+  },
+  {
+   "name": "西亞與北非",
+   "code": "wana",
+   "volume": "四"
+  },
+  {
+   "name": "漠南非洲",
+   "code": "ssa",
+   "volume": "四"
+  },
+  {
+   "name": "歐洲",
+   "code": "eu",
+   "volume": "五"
+  },
+  {
+   "name": "俄羅斯",
+   "code": "ru",
+   "volume": "五"
+  },
+  {
+   "name": "北美洲",
+   "code": "na",
+   "volume": "五"
+  },
+  {
+   "name": "中南美洲",
+   "code": "la",
+   "volume": "五"
+  },
+  {
+   "name": "大洋洲",
+   "code": "oc",
+   "volume": "五"
+  },
+  {
+   "name": "兩極地區",
+   "code": "polar",
+   "volume": "五"
+  }
+ ]
+}

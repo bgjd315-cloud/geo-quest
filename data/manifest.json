@@ -1,0 +1,13 @@
+{
+ "core": ["concepts.json", "regions.json", "units.json"],
+ "figures": [
+  "climate/tw-cwa-1991-2020.json",
+  "basemap/taiwan-ne10m.json",
+  "basemap/world-land-ne110m.json",
+  "terrain/practice-a.json",
+  "terrain/practice-b.json",
+  "maps/compass-town.json"
+ ],
+ "cards": ["cards/map.json", "cards/climate.json"],
+ "questions": ["questions/map.json", "questions/climate.json"]
+}
