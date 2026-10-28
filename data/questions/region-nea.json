@@ -1,0 +1,1256 @@
+{
+ "unit": "東北亞",
+ "questions": [
+  {
+   "id": "nea-001",
+   "unit": "東北亞",
+   "level": "nea-1",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "clim-lat"
+   ],
+   "type": "click",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（南韓楓葉轉紅與日本櫻花開花時間預測圖）；資料：WMO 1991–2020",
+   "stem": "日本的櫻花大致由南往北陸續開花。圖中哪一個都市的櫻花通常最晚開？",
+   "figure": {
+    "type": "region-map",
+    "basemap": "basemap/world-countries-ne50m.json",
+    "bbox": [
+     122,
+     24,
+     147,
+     46
+    ],
+    "highlight": [
+     "JPN",
+     "KOR",
+     "PRK"
+    ],
+    "data": "climate/world-wmo-1991-2020.json",
+    "pick": true,
+    "points": [
+     {
+      "station": "那霸",
+      "label": "甲"
+     },
+     {
+      "station": "東京",
+      "label": "乙"
+     },
+     {
+      "station": "札幌",
+      "label": "丙"
+     },
+     {
+      "station": "新潟",
+      "label": "丁"
+     }
+    ]
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 2,
+   "explain": "櫻花要等春天氣溫回升才開。丙札幌在北海道，緯度最高、年均溫最低，春天回暖最晚，所以最晚開；甲那霸緯度最低，最早開。日本所跨緯度大，南北氣候差異明顯。",
+   "check": {
+    "kind": "climate-rank",
+    "data": "climate/world-wmo-1991-2020.json",
+    "prop": "tempAvg",
+    "pick": "min",
+    "stations": [
+     "那霸",
+     "東京",
+     "札幌",
+     "新潟"
+    ]
+   }
+  },
+  {
+   "id": "nea-002",
+   "unit": "東北亞",
+   "level": "nea-1",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "land-endo"
+   ],
+   "type": "decode",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（日本地處板塊交界帶，多火山、地震與溫泉）",
+   "stem": "原理解碼：日本有富士山、阿蘇山等活火山，地震頻繁，溫泉也很多，長野縣甚至有雪猴泡溫泉的景象。造成這些現象的通論原理是什麼？",
+   "options": [
+    "位於板塊交界帶，板塊擠壓使地殼不穩定",
+    "河流侵蝕作用旺盛，切割出高山與深谷",
+    "冰河侵蝕與堆積作用旺盛，塑造出多山地形",
+    "冬季季風帶來大量降雪，積雪融化形成溫泉"
+   ],
+   "answer": 0,
+   "explain": "日本周邊有歐亞、北美、太平洋、菲律賓海等板塊，地處板塊交界帶，地殼不穩，所以多火山、地震與溫泉。板塊擠壓也讓日本山地廣布、平原狹小。臺灣同樣位在板塊交界帶。"
+  },
+  {
+   "id": "nea-003",
+   "unit": "東北亞",
+   "level": "nea-1",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "hydro-river-world",
+    "land-5types"
+   ],
+   "type": "single",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（日本河川短小，利於水力發電）",
+   "stem": "日本山地廣布、地形起伏大。日本的河川有什麼特色？",
+   "options": [
+    "河川短小湍急，不利航運，但落差大利於水力發電",
+    "河川長而平緩，是重要的航運通道，可運送工業原料",
+    "河川多為內流河，流入內陸盆地後消失在沙漠中",
+    "河川流經廣大平原，水流緩慢，下游形成大三角洲"
+   ],
+   "answer": 0,
+   "explain": "島嶼面積有限、山地多，河川從山地很快就流入海，所以短小、水流湍急，不利航運；但中上游河床落差大，適合水力發電。臺灣的河川也有相同特色。"
+  },
+  {
+   "id": "nea-004",
+   "unit": "東北亞",
+   "level": "nea-1",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "land-5types"
+   ],
+   "type": "click",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（朝鮮半島地形：太白山脈偏在東部，平原多分布於西南沿海）",
+   "stem": "太白山脈是朝鮮半島地形的脊梁，位置偏在半島東部。圖中甲、乙兩處，哪一處較可能是平原？",
+   "figure": {
+    "type": "region-map",
+    "basemap": "basemap/world-countries-ne50m.json",
+    "bbox": [
+     123,
+     33,
+     132,
+     43.5
+    ],
+    "highlight": [
+     "KOR",
+     "PRK"
+    ],
+    "pick": true,
+    "points": [
+     {
+      "label": "甲",
+      "lat": 35.9,
+      "lon": 126.9
+     },
+     {
+      "label": "乙",
+      "lat": 37.6,
+      "lon": 128.7
+     }
+    ],
+    "texts": [
+     {
+      "text": "太白山脈",
+      "lat": 37.1,
+      "lon": 129.6
+     },
+     {
+      "text": "黃海",
+      "lat": 36.5,
+      "lon": 124.5
+     },
+     {
+      "text": "日本海",
+      "lat": 39.5,
+      "lon": 131
+     }
+    ]
+   },
+   "options": [
+    "甲",
+    "乙"
+   ],
+   "answer": 0,
+   "explain": "朝鮮半島多高原與山地，太白山脈偏在東側，東部地勢高、坡陡；平原多分布在半島西南沿海，所以甲（西南側）較可能是平原，乙在太白山脈附近的山地。"
+  },
+  {
+   "id": "nea-005",
+   "unit": "東北亞",
+   "level": "nea-1",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "clim-sea",
+    "clim-chart"
+   ],
+   "type": "compare",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（地理工具箱：東京、新潟、首爾、釜山氣候比一比）；資料：WMO 1991–2020",
+   "stem": "跨區比較：東京（甲）和首爾（乙）緯度相近，都屬溫帶季風氣候。比較兩地的溫雨圖。",
+   "figure": {
+    "type": "climographs",
+    "data": "climate/world-wmo-1991-2020.json",
+    "stations": [
+     {
+      "station": "東京",
+      "label": "甲：東京"
+     },
+     {
+      "station": "首爾",
+      "label": "乙：首爾"
+     }
+    ]
+   },
+   "parts": [
+    {
+     "stem": "哪一地的年溫差較大？",
+     "options": [
+      "甲 東京",
+      "乙 首爾",
+      "兩地一樣"
+     ],
+     "answer": 1,
+     "concepts": [
+      "clim-chart"
+     ],
+     "explain": "首爾 1 月約 −2.0℃、8 月約 26.1℃，年溫差約 28.1℃；東京年溫差約 21.5℃。",
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/world-wmo-1991-2020.json",
+      "values": [
+       {
+        "station": "首爾",
+        "prop": "janTemp",
+        "eq": -2
+       },
+       {
+        "station": "首爾",
+        "prop": "annualRange",
+        "eq": 28.1
+       },
+       {
+        "station": "東京",
+        "prop": "annualRange",
+        "eq": 21.5
+       },
+       {
+        "station": "首爾",
+        "prop": "warmest",
+        "eq": 8
+       }
+      ]
+     }
+    },
+    {
+     "stem": "首爾的年溫差比東京大，主要原因是什麼？",
+     "options": [
+      "東京位在四面環海的日本列島，受海洋調節較深",
+      "首爾的海拔比東京高很多，所以冬季特別冷",
+      "東京冬季有寒流經過，冬夏氣溫較平均",
+      "首爾夏季吹乾燥的西北季風，氣溫特別高"
+     ],
+     "answer": 0,
+     "concepts": [
+      "clim-sea"
+     ],
+     "explain": "海洋增溫、降溫都比陸地慢，四面環海的日本受海洋調節，冬夏溫差較小；首爾在大陸邊緣的半島上，受大陸影響較大。首爾測站海拔約 85 公尺，東京約 25.2 公尺，差別不大，不是高度造成的。",
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/world-wmo-1991-2020.json",
+      "values": [
+       {
+        "station": "首爾",
+        "prop": "alt",
+        "eq": 85
+       },
+       {
+        "station": "東京",
+        "prop": "alt",
+        "eq": 25.2
+       }
+      ]
+     }
+    },
+    {
+     "stem": "兩地降水的季節分布，哪一項正確？",
+     "options": [
+      "東京較平均；首爾集中在夏季",
+      "東京集中在夏季；首爾較平均",
+      "兩地都很平均",
+      "兩地都集中在冬季"
+     ],
+     "answer": 0,
+     "concepts": [
+      "clim-chart",
+      "clim-monsoon"
+     ],
+     "explain": "首爾 5～9 月的降水占全年八成以上，非常集中；東京 5～9 月只占約一半，秋季還有颱風、鋒面帶來降水，分布較平均。",
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/world-wmo-1991-2020.json",
+      "values": [
+       {
+        "station": "首爾",
+        "prop": "summerShare",
+        "gt": 0.8
+       },
+       {
+        "station": "東京",
+        "prop": "summerShare",
+        "gt": 0.45,
+        "lt": 0.6
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "nea-006",
+   "unit": "東北亞",
+   "level": "nea-1",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "clim-orographic",
+    "clim-monsoon"
+   ],
+   "type": "transfer",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（冬季西北季風經過日本海，本州日本海沿岸多雨雪；合掌造）；康軒 1上第5課 臺灣的降水；資料：WMO 1991–2020、中央氣象署氣候平年值 1991–2020",
+   "stem": "遷移題：同一個原理，先在臺灣找，再到日本找。",
+   "parts": [
+    {
+     "stem": "臺灣：1 月時，基隆降水約 327.8 mm，高雄只有約 19.1 mm。主要原因是什麼？",
+     "figure": {
+      "type": "climographs",
+      "data": "climate/tw-cwa-1991-2020.json",
+      "stations": [
+       {
+        "station": "基隆",
+        "label": "基隆"
+       },
+       {
+        "station": "高雄",
+        "label": "高雄"
+       }
+      ]
+     },
+     "options": [
+      "東北季風遇山抬升，基隆在迎風面、高雄在背風側",
+      "高雄緯度較低，冬季氣溫太高，水氣不易凝結",
+      "基隆冬季受颱風侵襲，颱風帶來大量雨水",
+      "高雄海拔較高，冬季水氣被擋在山下上不去"
+     ],
+     "answer": 0,
+     "concepts": [
+      "clim-orographic",
+      "clim-monsoon"
+     ],
+     "explain": "冬季季風經過海洋帶來水氣，碰到山地被抬升，在迎風面形成地形雨；越過山後的背風側就很乾燥。",
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/tw-cwa-1991-2020.json",
+      "values": [
+       {
+        "station": "基隆",
+        "prop": "janPrecip",
+        "eq": 327.8
+       },
+       {
+        "station": "高雄",
+        "prop": "janPrecip",
+        "eq": 19.1
+       }
+      ]
+     }
+    },
+    {
+     "stem": "換到日本：面日本海的新潟，降水最多在 12 月，1 月降水約 180.9 mm；面太平洋的東京，1 月只有約 59.7 mm。原因是什麼？",
+     "figure": {
+      "type": "climographs",
+      "data": "climate/world-wmo-1991-2020.json",
+      "stations": [
+       {
+        "station": "新潟",
+        "label": "新潟"
+       },
+       {
+        "station": "東京",
+        "label": "東京"
+       }
+      ]
+     },
+     "options": [
+      "冬季西北季風經日本海帶來水氣，在新潟遇山抬升成雨雪",
+      "夏季東南季風從太平洋帶來水氣，在新潟一側被抬升",
+      "東京冬季受黑潮影響，暖流使空氣下沉而乾燥",
+      "新潟緯度比東京低很多，冬季對流旺盛而多雨"
+     ],
+     "answer": 0,
+     "concepts": [
+      "clim-orographic",
+      "clim-monsoon"
+     ],
+     "explain": "原理和基隆一樣：冬季西北季風經過日本海吸收水氣，吹到本州的山地，新潟在迎風面，多雨雪；東京在背風側，冬季晴朗乾燥。",
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/world-wmo-1991-2020.json",
+      "values": [
+       {
+        "station": "新潟",
+        "prop": "wettest",
+        "eq": 12
+       },
+       {
+        "station": "新潟",
+        "prop": "janPrecip",
+        "eq": 180.9
+       },
+       {
+        "station": "東京",
+        "prop": "janPrecip",
+        "eq": 59.7
+       }
+      ]
+     }
+    },
+    {
+     "stem": "日本岐阜縣白川鄉的傳統民居「合掌造」，屋頂傾斜度很大，是為了什麼？",
+     "options": [
+      "冬季常降大雪，利於排雪",
+      "夏季日照強，用來遮陽",
+      "颱風多，用來擋風",
+      "地震多，屋頂愈斜愈不會倒"
+     ],
+     "answer": 0,
+     "concepts": [
+      "clim-monsoon",
+      "pop-culture"
+     ],
+     "explain": "白川鄉地處日本中央山區，冬季常降大雪，屋頂做得很陡，積雪才容易滑落，這是居民適應環境的生活方式。"
+    }
+   ]
+  },
+  {
+   "id": "nea-007",
+   "unit": "東北亞",
+   "level": "nea-1",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "clim-lat",
+    "clim-chart"
+   ],
+   "type": "single",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（日本所跨緯度較大，南北氣候差異顯著）；資料：WMO 1991–2020",
+   "stem": "觀察甲地的溫雨圖：全年各月月均溫都在 15℃ 以上，年溫差很小。甲地最可能位在日本哪裡？",
+   "figure": {
+    "type": "climograph",
+    "data": "climate/world-wmo-1991-2020.json",
+    "station": "那霸",
+    "label": "甲地",
+    "hideTotals": true
+   },
+   "options": [
+    "沖繩島",
+    "北海道",
+    "本州的日本海沿岸",
+    "本州的中央山區"
+   ],
+   "answer": 0,
+   "explain": "甲地是沖繩島的那霸，最冷的 1 月仍有約 17.3℃，年溫差只有約 11.8℃。日本南北跨的緯度大，南端的沖繩緯度低、四面環海，全年溫暖；北海道則冬季嚴寒。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/world-wmo-1991-2020.json",
+    "values": [
+     {
+      "station": "那霸",
+      "prop": "janTemp",
+      "eq": 17.3,
+      "gt": 15
+     },
+     {
+      "station": "那霸",
+      "prop": "coldest",
+      "eq": 1
+     },
+     {
+      "station": "那霸",
+      "prop": "annualRange",
+      "eq": 11.8
+     }
+    ]
+   }
+  },
+  {
+   "id": "nea-008",
+   "unit": "東北亞",
+   "level": "nea-1",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "clim-monsoon",
+    "clim-chart"
+   ],
+   "type": "single",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（夏季東南季風、梅雨鋒面與颱風帶來降水）；資料：WMO 1991–2020",
+   "stem": "觀察甲地的溫雨圖，降水最集中在什麼季節？主要原因是什麼？",
+   "figure": {
+    "type": "climograph",
+    "data": "climate/world-wmo-1991-2020.json",
+    "station": "首爾",
+    "label": "甲地",
+    "hideTotals": true
+   },
+   "options": [
+    "夏季；東南季風帶來水氣，加上梅雨鋒面與颱風",
+    "冬季；西北季風經過日本海，帶來大量水氣與降雪",
+    "全年平均；四面環海，受海洋調節降水均勻",
+    "春季；冰雪融化使空氣溼潤，形成降水"
+   ],
+   "answer": 0,
+   "explain": "甲地是首爾，降水最多的 7 月約 414.4 mm，5～9 月占全年八成以上。夏季東南季風從溫暖海域帶來水氣，加上梅雨鋒面滯留、颱風侵襲，是東北亞主要的降水季節。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/world-wmo-1991-2020.json",
+    "values": [
+     {
+      "station": "首爾",
+      "prop": "wettest",
+      "eq": 7
+     },
+     {
+      "station": "首爾",
+      "prop": "julPrecip",
+      "eq": 414.4
+     },
+     {
+      "station": "首爾",
+      "prop": "summerShare",
+      "gt": 0.8
+     }
+    ]
+   }
+  },
+  {
+   "id": "nea-009",
+   "unit": "東北亞",
+   "level": "nea-1",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "clim-lat",
+    "clim-chart"
+   ],
+   "type": "single",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（朝鮮半島受緯度影響，南部年均溫較高、生長季較長）；資料：WMO 1991–2020",
+   "stem": "首爾（甲）和釜山（乙）都在朝鮮半島，釜山的緯度較低。比較兩地溫雨圖，下列何者正確？",
+   "figure": {
+    "type": "climographs",
+    "data": "climate/world-wmo-1991-2020.json",
+    "stations": [
+     {
+      "station": "首爾",
+      "label": "甲：首爾"
+     },
+     {
+      "station": "釜山",
+      "label": "乙：釜山"
+     }
+    ]
+   },
+   "options": [
+    "釜山最冷月月均溫較高，年溫差較小",
+    "釜山最冷月月均溫較低，年溫差較大",
+    "兩地最冷月月均溫相同",
+    "首爾的年溫差比釜山小"
+   ],
+   "answer": 0,
+   "explain": "首爾 1 月約 −2.0℃，年溫差約 28.1℃；釜山 1 月約 3.6℃，年溫差約 22.5℃。釜山緯度較低，冬季較溫暖，生長季也較長。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/world-wmo-1991-2020.json",
+    "values": [
+     {
+      "station": "首爾",
+      "prop": "janTemp",
+      "eq": -2
+     },
+     {
+      "station": "釜山",
+      "prop": "janTemp",
+      "eq": 3.6
+     },
+     {
+      "station": "首爾",
+      "prop": "annualRange",
+      "eq": 28.1
+     },
+     {
+      "station": "釜山",
+      "prop": "annualRange",
+      "eq": 22.5
+     }
+    ]
+   }
+  },
+  {
+   "id": "nea-010",
+   "unit": "東北亞",
+   "level": "nea-2",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "pop-culture",
+    "clim-lat"
+   ],
+   "type": "single",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（溫突、韓式泡菜與冬季寒冷）；資料：WMO 1991–2020",
+   "stem": "朝鮮半島傳統韓屋的地板下設有「溫突」，居民也習慣把蔬菜醃製、發酵成泡菜（辛奇）儲存。這些生活方式主要是在適應什麼環境？",
+   "options": [
+    "冬季漫長寒冷，蔬果不易生長",
+    "夏季乾旱，作物歉收",
+    "全年高溫，食物容易腐壞",
+    "颱風頻繁，交通常中斷"
+   ],
+   "answer": 0,
+   "explain": "朝鮮半島冬季較長、氣溫低，例如首爾 1 月月均溫約 −2.0℃。溫突把爐灶的熱氣引入室內取暖；冬季不利蔬果生長，就把蔬菜醃製成泡菜儲存。中國北方的火炕也是類似的智慧。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/world-wmo-1991-2020.json",
+    "values": [
+     {
+      "station": "首爾",
+      "prop": "janTemp",
+      "eq": -2
+     }
+    ]
+   }
+  },
+  {
+   "id": "nea-011",
+   "unit": "東北亞",
+   "level": "nea-2",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "pop-culture"
+   ],
+   "type": "single",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（日、韓融合中國文化）",
+   "stem": "下列哪一項是朝鮮半島受到中國文化影響的例子？",
+   "options": [
+    "南韓的「秋夕」在農曆 8 月 15 日團圓、祭祖",
+    "韓式炸雞店在美國紐約開設分店，大排長龍",
+    "南韓偶像團體在英國倫敦舉辦演唱會，門票秒殺",
+    "南韓影視作品翻譯成多國語言，在世界各地播放"
+   ],
+   "answer": 0,
+   "explain": "朝鮮半島因地緣關係，儒學、漢字、漢傳佛教、建築（如首爾景福宮）、節慶、韓醫都受中國文化影響。秋夕就像中秋節。其他選項是韓流向世界擴散的例子，方向相反。"
+  },
+  {
+   "id": "nea-012",
+   "unit": "東北亞",
+   "level": "nea-2",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "fish",
+    "clim-current"
+   ],
+   "type": "decode",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（日本漁業發達，寒、暖洋流交會；食魚文化）",
+   "stem": "原理解碼：日本山多田少，魚、貝類是居民重要的蛋白質來源，漁業非常發達。這和哪一個自然條件最有關？",
+   "options": [
+    "鄰近海洋有寒、暖洋流交會，形成良好漁場",
+    "冬季西北季風帶來大雪，雪水使河川魚類增多",
+    "位於板塊交界，海底火山提供豐富養分",
+    "河川短小湍急，大量魚類順流進入近海"
+   ],
+   "answer": 0,
+   "explain": "寒流與暖流交會的海域，營養鹽和浮游生物豐富，魚群聚集，形成良好漁場。日本四面環海，近海有寒、暖洋流交會，發展出食魚文化。"
+  },
+  {
+   "id": "nea-013",
+   "unit": "東北亞",
+   "level": "nea-2",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "pop-aging",
+    "pop-pyramid",
+    "agri-type"
+   ],
+   "type": "chain",
+   "source": "課本概念：康軒 2上第6課 東北亞的經濟發展（日本人口金字塔、智慧型農業）；資料：聯合國 WPP 2024",
+   "stem": "比較日本 1975 年（甲）與 2023 年（乙）的人口金字塔。",
+   "figure": {
+    "type": "pyramids",
+    "data": "population/un-wpp-2024.json",
+    "items": [
+     {
+      "country": "日本",
+      "year": "1975",
+      "label": "甲：1975 年"
+     },
+     {
+      "country": "日本",
+      "year": "2023",
+      "label": "乙：2023 年"
+     }
+    ]
+   },
+   "parts": [
+    {
+     "stem": "和 1975 年相比，2023 年日本的人口結構最大的變化是什麼？",
+     "options": [
+      "老年人口比例大增，幼年人口比例減少",
+      "幼年人口比例大增，老年人口比例減少",
+      "老年人口比例減少，幼年人口比例也減少",
+      "15～64 歲人口大增，幼年人口也增加"
+     ],
+     "answer": 0,
+     "concepts": [
+      "pop-pyramid",
+      "pop-aging"
+     ],
+     "explain": "65 歲以上人口從約 7.9% 增加到約 29.6%，0～14 歲從約 23.8% 降到約 11.6%，金字塔變成上寬下窄。",
+     "check": {
+      "kind": "pyramid-value",
+      "data": "population/un-wpp-2024.json",
+      "values": [
+       {
+        "country": "日本",
+        "year": "1975",
+        "prop": "old",
+        "eq": 7.9
+       },
+       {
+        "country": "日本",
+        "year": "2023",
+        "prop": "old",
+        "eq": 29.6
+       },
+       {
+        "country": "日本",
+        "year": "1975",
+        "prop": "young",
+        "eq": 23.8
+       },
+       {
+        "country": "日本",
+        "year": "2023",
+        "prop": "young",
+        "eq": 11.6
+       }
+      ]
+     }
+    },
+    {
+     "stem": "這樣的人口變化，讓日本農業遇到什麼問題？政府怎麼因應？",
+     "options": [
+      "勞動力減少、老化；發展智慧型農業，用高科技機械減少人力",
+      "農業人口太多、生產過剩；鼓勵農民轉業到工業部門",
+      "糧食生產過剩、價格下跌；政府補助減少耕地面積",
+      "農村人口暴增、住宅不足；在農地上大量興建新市鎮"
+     ],
+     "answer": 0,
+     "concepts": [
+      "agri-type",
+      "pop-aging"
+     ],
+     "explain": "人口減少、勞動力老化，政府積極發展智慧型農業，例如無人駕駛耕耘機、無人機監控、大數據分析。臺灣、南韓也面臨相同問題，同樣推動智慧型農業。"
+    }
+   ]
+  },
+  {
+   "id": "nea-014",
+   "unit": "東北亞",
+   "level": "nea-2",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "ind-location",
+    "trade"
+   ],
+   "type": "click",
+   "source": "課本概念：康軒 2上第6課 東北亞的經濟發展（日本主要工業區分布於太平洋沿岸）",
+   "stem": "日本的工業地帶主要集中在太平洋沿岸。圖中哪一點最可能位在日本主要的工業區？",
+   "figure": {
+    "type": "region-map",
+    "basemap": "basemap/world-countries-ne50m.json",
+    "bbox": [
+     122,
+     24,
+     147,
+     46
+    ],
+    "highlight": [
+     "JPN"
+    ],
+    "data": "climate/world-wmo-1991-2020.json",
+    "pick": true,
+    "points": [
+     {
+      "station": "札幌",
+      "label": "甲"
+     },
+     {
+      "label": "乙",
+      "lat": 40.82,
+      "lon": 140.74
+     },
+     {
+      "label": "丙",
+      "lat": 34.69,
+      "lon": 135.5
+     },
+     {
+      "station": "那霸",
+      "label": "丁"
+     }
+    ]
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙",
+    "丁"
+   ],
+   "answer": 2,
+   "explain": "丙是大阪，屬阪神工業區。日本的京濱、名古屋、阪神、瀨戶內海、北九州等工業區，大多沿著太平洋沿岸分布，港口方便進口原料、出口產品。甲札幌、乙青森、丁那霸都不在主要工業帶上。"
+  },
+  {
+   "id": "nea-015",
+   "unit": "東北亞",
+   "level": "nea-2",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "trade",
+    "ind-location",
+    "resource"
+   ],
+   "type": "single",
+   "source": "課本概念：康軒 2上第6課 東北亞的經濟發展（日本缺乏天然資源，國際貿易是經濟命脈）",
+   "stem": "日本各工業地帶的港口（如橫濱、名古屋港）多發展成重要都市。日本工業區靠近港口，最主要的原因是什麼？",
+   "options": [
+    "缺乏天然資源，原料、能源靠進口，產品也要外銷",
+    "港口附近礦產特別豐富，可以就近開採原料",
+    "港口附近地勢高，不怕淹水，適合建工廠",
+    "港口附近人口最少，土地便宜，容易取得廠地"
+   ],
+   "answer": 0,
+   "explain": "日本缺乏天然資源，原料、能源多仰賴進口；大規模生產的工業產品又亟需海外市場，所以國際貿易是日本的經濟命脈，工業自然集中在交通便利的港口。"
+  },
+  {
+   "id": "nea-016",
+   "unit": "東北亞",
+   "level": "nea-2",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "agri-cond",
+    "clim-lat"
+   ],
+   "type": "single",
+   "source": "課本概念：康軒 2上第6課 東北亞的經濟發展（屢遭經濟制裁的北韓）",
+   "stem": "北韓糧食供應不足，饑荒時有所聞。依課本，造成北韓糧食不足的自然與技術原因是什麼？",
+   "options": [
+    "作物生長季較短，加上缺乏完善的生產技術與水利設施",
+    "全年高溫多雨，作物容易腐爛，又缺乏冷藏設備",
+    "國土大多是沙漠，缺乏水源，無法灌溉農田",
+    "平原面積廣大，但土壤貧瘠，又常受颱風侵襲"
+   ],
+   "answer": 0,
+   "explain": "北韓位在朝鮮半島北部，緯度較高、冬季長，作物生長季較短；又缺乏完善的生產技術與水利設施，糧食供應不足。課本也提到，北韓工業長期重國防而輕民生，加上發展核武，屢遭國際社會以限制貿易為手段的經濟制裁。"
+  },
+  {
+   "id": "nea-017",
+   "unit": "東北亞",
+   "level": "nea-2",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "ind-type",
+    "ind-shift"
+   ],
+   "type": "order",
+   "source": "課本概念：康軒 2上第6課 東北亞的經濟發展（經濟突飛猛進的南韓）",
+   "stem": "請依時間先後，排列南韓工業發展的三個階段。",
+   "items": [
+    "與大型財團結合，奠定汽車、造船等重工業的基礎",
+    "以消費性電子、半導體等高科技工業為發展主軸",
+    "工業化初期，以發展中小企業為主"
+   ],
+   "answer": [
+    2,
+    0,
+    1
+   ],
+   "explain": "南韓工業化初期以中小企業為主；之後為加快腳步改與大型財團結合，奠定汽車、造船等重工業；進入二十一世紀後推動工業升級，以高科技工業為主軸。但政府過度扶植大型財團、忽略中小企業，也出現財富集中、貧富差距擴大的現象。"
+  },
+  {
+   "id": "nea-018",
+   "unit": "東北亞",
+   "level": "nea-2",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "clim-lat",
+    "clim-chart"
+   ],
+   "type": "clue",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境（朝鮮半島南北氣候差異；釜山旅遊景點）；資料：WMO 1991–2020",
+   "stem": "線索猜地：猜猜這是東北亞的哪一座都市？",
+   "clues": [
+    "年降水量約 1,576.7 mm，降水最多在 7 月。",
+    "1 月月均溫約 3.6℃，比首爾的約 −2.0℃ 溫暖。",
+    "位於朝鮮半島東南端，隔海峽與日本相望。",
+    "甘川洞文化村、海東龍宮寺都是這裡的旅遊景點。"
+   ],
+   "options": [
+    "釜山",
+    "首爾",
+    "平壤",
+    "福岡"
+   ],
+   "answer": 0,
+   "explain": "釜山在朝鮮半島東南端，緯度比首爾低，冬季較溫暖。第一條線索不夠：首爾的降水也是 7 月最多，年降水約 1,417.9 mm，和釜山相近。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/world-wmo-1991-2020.json",
+    "values": [
+     {
+      "station": "釜山",
+      "prop": "precipTotal",
+      "eq": 1576.7
+     },
+     {
+      "station": "釜山",
+      "prop": "wettest",
+      "eq": 7
+     },
+     {
+      "station": "釜山",
+      "prop": "janTemp",
+      "eq": 3.6
+     },
+     {
+      "station": "首爾",
+      "prop": "janTemp",
+      "eq": -2
+     },
+     {
+      "station": "首爾",
+      "prop": "wettest",
+      "eq": 7
+     },
+     {
+      "station": "首爾",
+      "prop": "precipTotal",
+      "eq": 1417.9
+     }
+    ]
+   }
+  },
+  {
+   "id": "nea-019",
+   "unit": "東北亞",
+   "level": "nea-boss",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "land-5types",
+    "pop-aging",
+    "ind-shift"
+   ],
+   "type": "chain",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境、第6課（日本平原分布、人口老化、技術升級與海外投資）；資料：聯合國 WPP 2024",
+   "stem": "區域魔王第一關：從東京（甲）出發，沿著太平洋沿岸經過名古屋（乙）到大阪（丙）。",
+   "figure": {
+    "type": "region-map",
+    "basemap": "basemap/world-countries-ne50m.json",
+    "bbox": [
+     128,
+     30,
+     146,
+     42
+    ],
+    "highlight": [
+     "JPN"
+    ],
+    "data": "climate/world-wmo-1991-2020.json",
+    "points": [
+     {
+      "station": "東京",
+      "label": "甲"
+     },
+     {
+      "label": "乙",
+      "lat": 35.18,
+      "lon": 136.91
+     },
+     {
+      "label": "丙",
+      "lat": 34.69,
+      "lon": 135.5
+     }
+    ],
+    "texts": [
+     {
+      "text": "太平洋",
+      "lat": 32,
+      "lon": 141
+     },
+     {
+      "text": "日本海",
+      "lat": 39,
+      "lon": 134
+     }
+    ]
+   },
+   "parts": [
+    {
+     "stem": "【自然】日本平原面積狹小，主要分布在哪一帶？",
+     "options": [
+      "本州東南沿海",
+      "本州日本海沿岸的山區",
+      "北海道內陸山地",
+      "四國的山區"
+     ],
+     "answer": 0,
+     "concepts": [
+      "land-5types",
+      "land-endo"
+     ],
+     "explain": "日本受板塊擠壓，山地廣布，平原狹小，主要分布在本州東南沿海，例如關東平原、濃尾平原、近畿平原。甲、乙、丙三地都位在這些平原上，人口和工業也集中在這裡。"
+    },
+    {
+     "stem": "【人口】2023 年日本 65 歲以上人口約占 29.6%，15～64 歲約占 58.8%。這對產業最可能的影響是什麼？",
+     "options": [
+      "勞動力不足，需要產業機器人、自動化來補充人力",
+      "勞動力過剩，失業者大增，需要擴大公共工程",
+      "幼年人口多，教育支出大增，需要廣設學校",
+      "人口快速增加，住宅嚴重不足，需要興建新市鎮"
+     ],
+     "answer": 0,
+     "concepts": [
+      "pop-aging",
+      "pop-structure"
+     ],
+     "explain": "高齡化讓勞動力減少。日本的產業機器人生產量名列世界前茅，人型機器人也能在農村勞動、工業配送、居家服務等領域協助。",
+     "check": {
+      "kind": "pyramid-value",
+      "data": "population/un-wpp-2024.json",
+      "values": [
+       {
+        "country": "日本",
+        "year": "2023",
+        "prop": "old",
+        "eq": 29.6
+       },
+       {
+        "country": "日本",
+        "year": "2023",
+        "prop": "work",
+        "eq": 58.8
+       }
+      ]
+     }
+    },
+    {
+     "stem": "【產業】日本企業把製造部門大量移到海外後，留在國內的多是哪些部門？",
+     "options": [
+      "企業總部或技術層次較高的產業",
+      "勞力密集、需要大量工人的組裝工廠",
+      "技術層次較低的原料加工廠",
+      "需要大面積土地的露天礦場"
+     ],
+     "answer": 0,
+     "concepts": [
+      "ind-shift"
+     ],
+     "explain": "日本把較低階的技術輸出到鄰近國家，帶動當地工業發展；國內留下企業總部與高技術部門，鞏固在國際分工中的主導地位。但製造部門外移也帶來失業率提高、產業衰退的危機。"
+    }
+   ]
+  },
+  {
+   "id": "nea-020",
+   "unit": "東北亞",
+   "level": "nea-boss",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "clim-monsoon",
+    "pop-culture",
+    "ind-sectors"
+   ],
+   "type": "chain",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境、第6課（日本海側冬季多雨雪、合掌造與米食文化、振興地方文化）；資料：WMO 1991–2020",
+   "stem": "區域魔王第二關：冬天來到本州日本海側的新潟，再進入山區的白川鄉。",
+   "figure": {
+    "type": "climograph",
+    "data": "climate/world-wmo-1991-2020.json",
+    "station": "新潟",
+    "label": "新潟"
+   },
+   "parts": [
+    {
+     "stem": "【自然】新潟降水最多的是哪一個月？",
+     "options": [
+      "12 月",
+      "7 月",
+      "4 月",
+      "5 月"
+     ],
+     "answer": 0,
+     "concepts": [
+      "clim-monsoon",
+      "clim-orographic"
+     ],
+     "explain": "新潟降水最多在 12 月，最少在 5 月。冬季西北季風經過日本海帶來水氣，吹到本州山地抬升，日本海沿岸多雨雪。",
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/world-wmo-1991-2020.json",
+      "values": [
+       {
+        "station": "新潟",
+        "prop": "wettest",
+        "eq": 12
+       },
+       {
+        "station": "新潟",
+        "prop": "driest",
+        "eq": 5
+       }
+      ]
+     }
+    },
+    {
+     "stem": "【文化】白川鄉合掌造的屋頂多用稻草覆蓋。這和當地哪一種飲食文化有關？",
+     "options": [
+      "以稻米為主食的米食文化",
+      "以小麥為主的麵食文化",
+      "以肉類、乳製品為主的游牧飲食",
+      "以玉米為主食的飲食"
+     ],
+     "answer": 0,
+     "concepts": [
+      "pop-culture"
+     ],
+     "explain": "東北亞屬季風亞洲，夏季多雨適合水稻，居民以稻米為主食。種稻留下大量稻草，就成了屋頂的材料。"
+    },
+    {
+     "stem": "【產業】日本政府每年撥經費振興地方文化，結合傳統工藝與特色祭典，向全世界介紹日本。這主要在發展哪一類產業？",
+     "options": [
+      "文化與觀光產業",
+      "鋼鐵與造船業",
+      "石油化學工業",
+      "遠洋漁業"
+     ],
+     "answer": 0,
+     "concepts": [
+      "ind-sectors"
+     ],
+     "explain": "文化與觀光屬於服務業（第三級產業）。合掌造聚落、京都古都、三大祭典、漆器等，都是吸引觀光客的文化資源，也是日本的軟實力。"
+    }
+   ]
+  },
+  {
+   "id": "nea-021",
+   "unit": "東北亞",
+   "level": "nea-boss",
+   "region": "東北亞",
+   "status": "確認",
+   "concepts": [
+    "clim-monsoon",
+    "pop-aging",
+    "ind-sectors"
+   ],
+   "type": "chain",
+   "source": "課本概念：康軒 2上第5課 東北亞的自然環境、第6課（東北亞夏季降水、南韓少子高齡、文化立國與韓流）；資料：WMO 1991–2020；資料：聯合國 WPP 2024",
+   "stem": "區域魔王第三關：來到南韓首爾。",
+   "figure": {
+    "type": "climograph",
+    "data": "climate/world-wmo-1991-2020.json",
+    "station": "首爾",
+    "label": "首爾"
+   },
+   "parts": [
+    {
+     "stem": "【自然】首爾 5～9 月的降水占全年八成以上。下列哪一項「不是」東北亞夏季降水的來源？",
+     "options": [
+      "冬季西北季風",
+      "東南季風",
+      "梅雨鋒面滯留",
+      "颱風侵襲"
+     ],
+     "answer": 0,
+     "concepts": [
+      "clim-monsoon"
+     ],
+     "explain": "夏季東南季風從南方溫暖海域帶來水氣，加上梅雨鋒面與颱風，是主要的降水季節。西北季風是冬季從亞洲大陸吹來的風，寒冷乾燥。",
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/world-wmo-1991-2020.json",
+      "values": [
+       {
+        "station": "首爾",
+        "prop": "summerShare",
+        "gt": 0.8
+       }
+      ]
+     }
+    },
+    {
+     "stem": "【人口】2023 年南韓 0～14 歲人口約占 11%，65 歲以上約占 18.3%。南韓面臨什麼人口問題？",
+     "options": [
+      "少子化與高齡化",
+      "人口快速成長",
+      "幼年人口過多",
+      "老年人口比例太低"
+     ],
+     "answer": 0,
+     "concepts": [
+      "pop-aging"
+     ],
+     "explain": "幼年人口比例低、老年人口比例高，代表少子化與高齡化。和日本、臺灣一樣，勞動力減少，也推動智慧型農業與自動化。",
+     "check": {
+      "kind": "pyramid-value",
+      "data": "population/un-wpp-2024.json",
+      "values": [
+       {
+        "country": "南韓",
+        "year": "2023",
+        "prop": "young",
+        "eq": 11
+       },
+       {
+        "country": "南韓",
+        "year": "2023",
+        "prop": "old",
+        "eq": 18.3
+       }
+      ]
+     }
+    },
+    {
+     "stem": "【產業】南韓在二十世紀末確定「文化立國」政策，讓影視、流行歌曲打進世界市場。除了政府推動，韓流還靠什麼快速擴散到全世界？",
+     "options": [
+      "發達的網路流通擴散",
+      "大量出口石油",
+      "擴大游牧業",
+      "擴大稻米出口"
+     ],
+     "answer": 0,
+     "concepts": [
+      "ind-sectors"
+     ],
+     "explain": "南韓設置文化產業園區、成立專責機構，再憑藉發達的網路流通，讓韓流延伸到觀光、飲食、運動，成為全球文化產業出口大國之一。"
+    }
+   ]
+  }
+ ]
+}

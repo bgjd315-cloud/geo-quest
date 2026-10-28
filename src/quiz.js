@@ -21,11 +21,7 @@
       const src = D[f.data].stations;
       const pts = f.stations.map(o => {
         const st = src[o.station];
-        let value = null;
-        if (o.show) {
-          const s = window.GeoCalc.climateStats(st);
-          value = o.show === 'precipTotal' ? Math.round(s.precipTotal).toLocaleString() + 'mm' : s[o.show] + '℃';
-        }
+        const value = o.show ? showValue(st, o.show) : null;
         return { label: o.label || o.station, lat: st.lat, lon: st.lon, value, dx: o.dx, dy: o.dy };
       });
       svg = C.twMap(D[f.basemap], pts, f);
@@ -37,6 +33,20 @@
       svg = C.townGrid(D[f.map], f);
     } else if (f.type === 'graticule') {
       svg = C.graticule(D[f.basemap], f.points, f);
+    } else if (f.type === 'region-map' || f.type === 'polar-map') {
+      // 點可以直接給經緯度，或引用氣候資料檔裡的測站座標
+      const pts = (f.points || []).map(p => {
+        if (p.station) { const st = D[p.data || f.data].stations[p.station]; return Object.assign({ label: p.label || p.station, lat: st.lat, lon: st.lon }, p.show ? { value: showValue(st, p.show) } : {}, { dx: p.dx, dy: p.dy }); }
+        return p;
+      });
+      const o = Object.assign({}, f, { points: pts });
+      svg = f.type === 'region-map' ? C.regionMap(D[f.basemap], o) : C.polarMap(D[f.basemap], o);
+    } else if (f.type === 'pyramid') {
+      const d = D[f.data];
+      svg = C.pyramid(d.countries[f.country][f.year], f.label || `${f.country} ${f.year} 年${d.projectionYears.includes(f.year) ? '（推估）' : ''}`, f);
+    } else if (f.type === 'pyramids') {
+      const d = D[f.data];
+      svg = `<div class="fig-row">${f.items.map(o => C.pyramid(d.countries[o.country][o.year], o.label || `${o.country} ${o.year} 年${d.projectionYears.includes(o.year) ? '（推估）' : ''}`, Object.assign({ maxPct: f.maxPct }, o))).join('')}</div>`;
     } else if (f.type === 'diagram') {
       svg = C.diagram(f.id, Object.assign({}, f.opts, { pick: f.pick }));
     }
@@ -44,13 +54,31 @@
     const src = sourceLine(f);
     return `<figure class="figure">${svg}${cap}${src}</figure>`;
   }
+  function showValue(st, show) {
+    const s = window.GeoCalc.climateStats(st);
+    return show === 'precipTotal' ? Math.round(s.precipTotal).toLocaleString() + 'mm' : s[show] + '℃';
+  }
   function sourceLine(f) {
     const D = window.Data.files;
     if (f.type === 'climograph' || f.type === 'climographs') return `<div class="figsrc">資料：${esc(D[f.data].source)}，${esc(D[f.data].period)}</div>`;
     if (f.type === 'tw-stations') return `<div class="figsrc">資料：${esc(D[f.data].source)}，${esc(D[f.data].period)}</div>`;
     if (f.type === 'contour' || f.type === 'profile') return `<div class="figsrc">練習用虛構地形</div>`;
     if (f.type === 'diagram') return `<div class="figsrc">原理示意圖</div>`;
+    if (f.type === 'pyramid' || f.type === 'pyramids') return `<div class="figsrc">資料：${esc(D[f.data].source.split('，')[0])}</div>`;
+    if ((f.type === 'region-map' || f.type === 'polar-map') && (f.points || []).some(p => p.station)) return `<div class="figsrc">測站座標：${esc(D[f.data].source.split('（')[0])}</div>`;
     return '';
+  }
+
+  // 選項顯示順序：每次隨機排列，避免正解總在同一個位置；
+  // 甲乙丙丁這類標記、數字開頭（月份、距離、經緯度）的選項保持原順序
+  function order(options, type) {
+    const idx = options.map((_, i) => i);
+    if (type === 'click') return idx;
+    const fixed = options.every(o => typeof o === 'string' && (o.length <= 2 || /^[\d０-９\-−+.]/.test(o)));
+    return fixed ? idx : shuffle(idx);
+  }
+  function optsHTML(options, type) {
+    return order(options, type).map((i, k) => `<button class="opt" data-i="${i}"><b>${MARK[k]}</b> ${optionHTML(options[i])}</button>`).join('');
   }
 
   function optionHTML(o) {
@@ -63,14 +91,14 @@
   function renderItem(el, q, ctx, done) {
     const sim = ctx.mode === 'sim';
     const head = `<div class="qmeta"><span class="tag">${esc(q.unit)}</span>${q.region !== '通論' ? `<span class="tag region">${esc(q.region)}</span>` : ''}<span class="tag soft">${esc(typeName(q.type))}</span></div>`;
-    if (q.type === 'chain') return renderChain(el, q, ctx, done, head);
+    if (Array.isArray(q.parts)) return renderChain(el, q, ctx, done, head);
     if (q.type === 'order') return renderOrder(el, q, ctx, done, head);
     if (q.type === 'match') return renderMatch(el, q, ctx, done, head);
     if (q.type === 'clue') return renderClue(el, q, ctx, done, head);
 
     // single / click / decode / compare / transfer：選擇題介面
     el.innerHTML = `${head}<div class="stem">${fmt(q.stem)}</div>${figure(q.figure)}
-      <div class="opts ${hasFigOpts(q) ? 'fig-opts' : ''}">${q.options.map((o, i) => `<button class="opt" data-i="${i}"><b>${MARK[i]}</b> ${optionHTML(o)}</button>`).join('')}</div>
+      <div class="opts ${hasFigOpts(q) ? 'fig-opts' : ''}">${optsHTML(q.options, q.type)}</div>
       <div class="feedback"></div>`;
     const choose = i => {
       if (el.dataset.locked) return;
@@ -105,7 +133,7 @@
       const d = document.createElement('div');
       d.className = 'part' + (!sim && k > 0 ? ' locked' : '');
       d.innerHTML = `<div class="pstem"><b>${k + 1}.</b> ${fmt(p.stem)}</div>${p.figure ? figure(p.figure) : ''}
-        <div class="opts">${p.options.map((o, i) => `<button class="opt" data-i="${i}"><b>${MARK[i]}</b> ${optionHTML(o)}</button>`).join('')}</div><div class="feedback"></div>`;
+        <div class="opts">${optsHTML(p.options, 'part')}</div><div class="feedback"></div>`;
       box.appendChild(d);
       d.querySelectorAll('.opt').forEach(b => b.onclick = () => {
         if (d.dataset.locked || d.classList.contains('locked')) return;
@@ -139,11 +167,12 @@
   function renderClue(el, q, ctx, done, head) {
     const sim = ctx.mode === 'sim';
     let shown = 1;
+    const ord = order(q.options, q.type);
     const draw = () => {
       el.innerHTML = `${head}<div class="stem">${fmt(q.stem || '線索逐一揭開，越早猜對得分越高。')}</div>${figure(q.figure)}
         <ol class="clues">${q.clues.map((c, i) => `<li class="${i < shown ? 'on' : 'off'}">${i < shown ? fmt(c) : '？？？'}</li>`).join('')}</ol>
         ${shown < q.clues.length ? '<button class="ghost more">再揭開一條線索</button>' : ''}
-        <div class="opts">${q.options.map((o, i) => `<button class="opt" data-i="${i}"><b>${MARK[i]}</b> ${optionHTML(o)}</button>`).join('')}</div><div class="feedback"></div>`;
+        <div class="opts">${ord.map((i, k) => `<button class="opt" data-i="${i}"><b>${MARK[k]}</b> ${optionHTML(q.options[i])}</button>`).join('')}</div><div class="feedback"></div>`;
       const more = $('.more', el);
       if (more) more.onclick = () => { shown++; draw(); };
       el.querySelectorAll('.opt').forEach(b => b.onclick = () => {
@@ -254,7 +283,7 @@
           // 區域題答錯：原理卡 → 通論基本題 → 同區域另一題變化題
           later.push({ kind: 'card', concept: c });
           // 通論基本題：優先沒出過的；都出過了就重出一題，原理比新鮮感重要
-          const basics = shuffle(live.filter(x => x.region === '通論' && x.concepts.includes(c) && x.type !== 'chain' && !/-boss$/.test(x.level)));
+          const basics = shuffle(live.filter(x => x.region === '通論' && x.concepts.includes(c) && !x.parts && !/-boss$/.test(x.level)));
           const basic = basics.find(x => !used.has(x.id)) || basics[0];
           if (basic) { used.add(basic.id); later.push({ kind: 'q', q: basic, tag: '通論基本題' }); }
           const variant = shuffle(live.filter(x => x.region === q.region && x.concepts.includes(c) && !used.has(x.id) && !/-boss$/.test(x.level)))[0];
@@ -292,7 +321,7 @@
       renderItem(box, item.q, { mode }, r => {
         results.push({ q: item.q, r });
         const q = item.q;
-        if (q.type === 'chain') r.parts.forEach((ok, k) => window.Store.record({ q: q.id, part: k, ok, c: q.parts[k].concepts || q.concepts, r: q.region, m: mode }));
+        if (q.parts) r.parts.forEach((ok, k) => window.Store.record({ q: q.id, part: k, ok, c: q.parts[k].concepts || q.concepts, r: q.region, m: mode }));
         else window.Store.record({ q: q.id, ok: r.ok, c: q.concepts, r: q.region, m: mode });
         if (!r.ok && mode === 'practice') remedy(q);
         next.disabled = false;
@@ -306,7 +335,7 @@
       clearInterval(timer);
       let got = 0, total = 0;
       for (const { q, r } of results) {
-        if (q.type === 'chain') { total += q.parts.length; got += r.score; }
+        if (q.parts) { total += q.parts.length; got += r.score; }
         else { total += 1; got += r.ok ? 1 : 0; }
       }
       const summary = { got, total, results, mode, timeUp, seconds: Math.round((Date.now() - t0) / 1000) };
@@ -319,12 +348,12 @@
   // 模擬模式結束後：逐題顯示作答與解析
   function reviewList(results) {
     return results.map(({ q, r }, n) => {
-      if (q.type === 'chain') {
-        return `<div class="rv"><div class="rvh">${n + 1}. ${fmt(q.stem)}</div>${figure(q.figure)}${q.parts.map((p, k) => `<div class="rvp ${r.parts[k] ? 'good' : 'bad'}"><b>${k + 1}.</b> ${fmt(p.stem)}<div>正解：${MARK[p.answer]} ${optionHTML(p.options[p.answer])}</div><p>${fmt(p.explain)}</p></div>`).join('')}</div>`;
+      if (q.parts) {
+        return `<div class="rv"><div class="rvh">${n + 1}. ${fmt(q.stem)}</div>${figure(q.figure)}${q.parts.map((p, k) => `<div class="rvp ${r.parts[k] ? 'good' : 'bad'}"><b>${k + 1}.</b> ${fmt(p.stem)}<div>正解：${optionHTML(p.options[p.answer])}</div><p>${fmt(p.explain)}</p></div>`).join('')}</div>`;
       }
       const ans = q.type === 'order' ? q.answer.map(i => q.items[i]).join(' → ')
         : q.type === 'match' ? q.left.map((l, i) => `${l} → ${q.right[q.answer[i]]}`).join('；')
-          : `${MARK[q.answer]} ${typeof q.options[q.answer] === 'string' ? q.options[q.answer] : (q.options[q.answer].text || '（圖）')}`;
+          : `${typeof q.options[q.answer] === 'string' ? q.options[q.answer] : (q.options[q.answer].text || '（見圖）')}`;
       return `<div class="rv ${r.ok ? 'good' : 'bad'}"><div class="rvh">${n + 1}. ${r.ok ? '○' : '×'} ${fmt(q.stem)}</div>${figure(q.figure)}<div>正解：${esc(ans)}</div><p>${fmt(q.explain)}</p></div>`;
     }).join('');
   }

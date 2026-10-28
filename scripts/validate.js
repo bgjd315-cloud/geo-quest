@@ -37,6 +37,7 @@ function validate() {
     if (!f) continue;
     if (!f.source) err(rel, '資料檔沒有註明 source（來源）');
     if (rel.startsWith('climate/') && !f.period) err(rel, '氣候資料沒有註明統計期間 period');
+    if (rel.startsWith('population/') && !(f.estimateYears && f.projectionYears)) err(rel, '人口資料要註明哪些年份是估計值、哪些是推估');
     if ((rel.startsWith('terrain/') || rel.startsWith('maps/')) && f.fictional !== true) err(rel, '虛構圖資必須標示 fictional: true');
     if (rel.startsWith('terrain/') && !/練習用虛構地形/.test(f.name)) err(rel, '等高線練習圖名稱必須標示「練習用虛構地形」');
   }
@@ -58,6 +59,35 @@ function validate() {
       case 'profile': { const t = need('terrain'); if (t) for (const k of [fig.from, fig.to]) if (!t.points[k]) err(id, `地形 ${fig.terrain} 沒有點「${k}」`); break; }
       case 'town': { const m = need('map'); if (m && fig.hide) for (const n of fig.hide) if (!m.landmarks.find(l => l.name === n)) err(id, `地圖沒有地標「${n}」`); break; }
       case 'graticule': { need('basemap'); for (const p of fig.points || []) if (Math.abs(p.lat) > 90 || Math.abs(p.lon) > 180) err(id, `經緯度超出範圍：${p.label}`); break; }
+      case 'region-map': case 'polar-map': {
+        const b = need('basemap');
+        if (fig.type === 'region-map' && !(Array.isArray(fig.bbox) && fig.bbox.length === 4 && fig.bbox[0] < fig.bbox[2] && fig.bbox[1] < fig.bbox[3])) err(id, 'region-map 的 bbox 必須是 [西經度, 南緯度, 東經度, 北緯度]');
+        if (b) for (const a3 of fig.highlight || []) if (!b.countries.find(c => c.a3 === a3)) err(id, `底圖沒有國家代碼 ${a3}`);
+        const xy = [];
+        for (const p of fig.points || []) {
+          let lat = p.lat, lon = p.lon;
+          if (p.station) { const d = files[p.data || fig.data]; if (!d) { err(id, `點「${p.station}」引用的氣候資料檔不存在`); continue; } const s = d.stations[p.station]; if (!s) { err(id, `氣候資料沒有測站「${p.station}」`); continue; } lat = s.lat; lon = s.lon; }
+          else if (typeof p.lat !== 'number' || typeof p.lon !== 'number' || !p.label) { err(id, '地圖上的點要有 label、lat、lon，或引用 station'); continue; }
+          // 用和 charts.js 相同的投影算螢幕位置，檢查是否在圖框內、彼此是否太近
+          if (fig.type === 'region-map' && fig.bbox) {
+            const [x0, y0, x1, y1] = fig.bbox, wrap = x1 > 180, L = wrap && lon < 0 ? lon + 360 : lon;
+            if (L < x0 || L > x1 || lat < y0 || lat > y1) { err(id, `點「${p.label || p.station}」(${lat}, ${lon}) 在地圖範圍 ${JSON.stringify(fig.bbox)} 之外`); continue; }
+            const k = Math.cos((y0 + y1) / 2 * Math.PI / 180), W = fig.width || 360, H = W * (y1 - y0) / ((x1 - x0) * k);
+            xy.push([p.label || p.station, (L - x0) / (x1 - x0) * W, (y1 - lat) / (y1 - y0) * H]);
+          } else if (fig.type === 'polar-map') {
+            const S = fig.pole === 'S' ? -1 : 1, edge = fig.edge || 50;
+            if (S * lat < edge) { err(id, `點「${p.label || p.station}」在極區地圖外緣（${edge} 度）之外`); continue; }
+            const r = (90 - S * lat) / (90 - edge) * 170, a = lon * Math.PI / 180;
+            xy.push([p.label || p.station, 180 + r * Math.sin(a), 180 + S * r * Math.cos(a)]);
+          }
+        }
+        for (let i = 0; i < xy.length; i++) for (let j = i + 1; j < xy.length; j++) {
+          if (Math.hypot(xy[i][1] - xy[j][1], xy[i][2] - xy[j][2]) < 14) warn(id, `地圖上「${xy[i][0]}」和「${xy[j][0]}」距離太近，標籤可能重疊`);
+        }
+        break;
+      }
+      case 'pyramid': { const d = need('data'); if (d && !(d.countries[fig.country] && d.countries[fig.country][fig.year])) err(id, `人口資料沒有 ${fig.country} ${fig.year}`); break; }
+      case 'pyramids': { const d = need('data'); if (d) for (const o of fig.items) if (!(d.countries[o.country] && d.countries[o.country][o.year])) err(id, `人口資料沒有 ${o.country} ${o.year}`); break; }
       case 'diagram': if (!DIAGRAMS.has(fig.id)) err(id, `未知的示意圖 ${fig.id}`); break;
       default: err(id, `未知的圖表類型 ${fig.type}`);
     }
@@ -82,6 +112,7 @@ function validate() {
   const STATUS = new Set(['待審', '確認', '退回']);
   const CHOICE = new Set(['single', 'click', 'clue', 'decode', 'compare', 'transfer']);
   const TYPES = new Set([...CHOICE, 'chain', 'order', 'match']);
+  CHOICE.add('compare'); CHOICE.add('transfer');
   const all = [];
   for (const rel of man.questions) {
     const f = files[rel];
@@ -96,6 +127,12 @@ function validate() {
     const texts = q.options.map(o => typeof o === 'string' ? o : JSON.stringify(o));
     if (new Set(texts).size !== texts.length) err(id, '選項有重複');
     for (const o of q.options) if (typeof o === 'object') checkFigure(id, o.figure);
+    // 正解明顯比每個干擾選項都長，孩子會「挑最長的」猜對
+    const L = q.options.map(o => typeof o === 'string' ? o.length : 0);
+    if (L.every(v => v > 0) && q.answer >= 0 && q.answer < L.length) {
+      const others = Math.max(...L.filter((_, i) => i !== q.answer));
+      if (L[q.answer] > others * 1.3 && L[q.answer] - others >= 4) warn(id, `正解（${L[q.answer]} 字）明顯比其他選項長（最長 ${others} 字），容易被猜中`);
+    }
     if (!q.explain) err(id, '缺少解析 explain');
   }
 
@@ -123,17 +160,20 @@ function validate() {
     if (seenStem.has(key)) err(id, `與 ${seenStem.get(key)} 重複`);
     seenStem.set(key, id);
 
-    if (CHOICE.has(q.type)) checkChoice(id, q);
+    const PARTS = new Set(['chain', 'transfer', 'compare']);
+    if (Array.isArray(q.parts) && !PARTS.has(q.type)) err(id, `只有 chain／transfer／compare 可以有小題 parts`);
+    if (CHOICE.has(q.type) && !q.parts) checkChoice(id, q);
     if (q.type === 'click') {
       const f = q.figure || {};
       if (!f.pick) err(id, '圖上點選題的圖必須設定 pick: true');
-      const labels = f.type === 'contour' ? f.points : f.type === 'graticule' ? (f.points || []).map(p => p.label) : f.type === 'town' ? files[f.map] && files[f.map].landmarks.map(l => l.name) : f.type === 'diagram' && f.id === 'fronts' ? ['甲', '乙', '丙', '丁'] : null;
+      const labels = f.type === 'contour' ? f.points : (f.type === 'graticule' || f.type === 'region-map' || f.type === 'polar-map') ? (f.points || []).map(p => p.label || p.station) : f.type === 'tw-stations' ? f.stations.map(o => o.label || o.station) : f.type === 'town' ? files[f.map] && files[f.map].landmarks.map(l => l.name) : f.type === 'diagram' && f.id === 'fronts' ? ['甲', '乙', '丙', '丁'] : null;
       if (!labels) err(id, `圖上點選題不支援圖表 ${f.type}`);
       else for (const o of q.options || []) if (!labels.includes(o)) err(id, `選項「${o}」在圖上找不到可點的標記`);
     }
     if (q.type === 'clue' && (!Array.isArray(q.clues) || q.clues.length < 2)) err(id, '線索猜地至少要 2 條線索');
-    if (q.type === 'chain') {
-      if (!Array.isArray(q.parts) || q.parts.length < 2) err(id, '連鎖題組至少要 2 小題');
+    if (q.type === 'chain' && !Array.isArray(q.parts)) err(id, '連鎖題組必須有 parts');
+    if (Array.isArray(q.parts)) {
+      if (q.parts.length < 2) err(id, '有小題的題目至少要 2 小題');
       (q.parts || []).forEach((p, k) => {
         checkChoice(`${id}#${k + 1}`, p);
         for (const c of p.concepts || []) if (!conceptIds.has(c)) err(`${id}#${k + 1}`, `概念「${c}」不在 concepts.json`);
@@ -293,6 +333,25 @@ function runCheck(id, q, figure, files) {
       const v = n => G.climateStats(d.stations[n])[c.prop];
       const right = q.items.map((n, i) => i).sort((a, b) => (c.desc ? v(q.items[b]) - v(q.items[a]) : v(q.items[a]) - v(q.items[b])));
       if (JSON.stringify(right) !== JSON.stringify(q.answer)) fail(`正確排序應為 ${right.map(i => q.items[i]).join(' → ')}`);
+      break;
+    }
+    case 'pyramid-value': {
+      const d = files[c.data];
+      for (const v of c.values) {
+        const g = d.countries[v.country] && d.countries[v.country][v.year];
+        if (!g) { fail(`沒有 ${v.country} ${v.year} 的人口資料`); continue; }
+        const x = G.popStats(g)[v.prop];
+        if (v.eq != null && Math.abs(x - v.eq) > 0.05) fail(`${v.country} ${v.year} 的 ${v.prop} 是 ${x}，題目寫 ${v.eq}`);
+        if (v.gt != null && !(x > v.gt)) fail(`${v.country} ${v.year} 的 ${v.prop} 是 ${x}，不大於 ${v.gt}`);
+        if (v.lt != null && !(x < v.lt)) fail(`${v.country} ${v.year} 的 ${v.prop} 是 ${x}，不小於 ${v.lt}`);
+      }
+      break;
+    }
+    case 'pyramid-rank': {
+      const d = files[c.data];
+      const vals = c.items.map(o => G.popStats(d.countries[o.country][o.year])[c.prop]);
+      const target = c.pick === 'max' ? Math.max(...vals) : Math.min(...vals);
+      if (vals.indexOf(target) !== q.answer) fail(`${c.prop} ${c.pick} 是第 ${vals.indexOf(target) + 1} 個（${vals.join('、')}），答案卻是第 ${q.answer + 1} 個`);
       break;
     }
     default: fail(`未知的驗算類型 ${c.kind}`);

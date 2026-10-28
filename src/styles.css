@@ -236,3 +236,29 @@ section { margin: 1em 0; }
 }
 .fig .tyc { fill: none; stroke: #c4553b; stroke-width: 2.4; }
 .fig .tyarm { fill: none; stroke: #c4553b; stroke-width: 2.4; stroke-linecap: round; }
+
+.fig .land.hl { fill: #e9c98a; stroke: #a27d3c; }
+.fig .maptext { font-size: 11px; fill: #3d6f87; font-style: italic; paint-order: stroke; stroke: #dbe9ef; stroke-width: 3px; }
+.fig.mini .land { stroke-width: .4; }
+.fig .pm { fill: #6f9fc9; } .fig .pf { fill: #d9897a; }
+.fig .agebreak { stroke: #8a8f92; stroke-dasharray: 3 3; }
+
+/* 區域遠征 */
+h2.sec { margin-top: 1.4em; border-bottom: 2px solid var(--line); padding-bottom: .2em; }
+h3.vol { color: var(--teal); margin: .8em 0 .2em; }
+.unit-list.exp { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.unit-card { min-width: 0; }
+.mapcover { background: var(--sea); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.mapcover svg { width: 100%; height: 100%; max-height: none; display: block; }
+.unit-card .mapcover { width: 40%; flex: none; }
+.expcard { flex-direction: column; }
+.expcard .mapcover { width: 100%; height: 96px; }
+.expcard > div:last-child { padding: .4em .7em .6em; }
+.cover.expcover .mapcover { height: 170px; }
+.cover.expcover h1 { color: var(--ink); text-shadow: 0 0 6px #fff, 0 0 2px #fff; }
+.level .mapcover { height: 100%; min-height: 90px; grid-row: span 2; }
+.banner.expbanner .mapcover { height: 120px; }
+.fig.mini { max-height: none; }
+@media (max-width: 480px) { .level .mapcover { height: 110px; grid-row: auto; } }
+
+.fig .grat, .fig .tropic, .fig .prime { fill: none; }

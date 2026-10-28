@@ -154,6 +154,97 @@
     return `<svg class="fig grat-fig" viewBox="-26 -4 ${W + 32} ${H + 18}" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
   }
 
+  // ---------- 區域地圖（Natural Earth 國界） ----------
+  // opt: {bbox:[lon0,lat0,lon1,lat1], highlight:[ADM0_A3...], points:[{label,lat,lon,dx,dy}], pick, width, mini}
+  // bbox 的經度可以超過 180（跨換日線的太平洋島嶼），負經度會自動加 360
+  function regionMap(base, opt) {
+    const [lon0, lat0, lon1, lat1] = opt.bbox;
+    const wrap = lon1 > 180;
+    const fix = lon => (wrap && lon < 0 ? lon + 360 : lon);
+    const k = Math.cos(((lat0 + lat1) / 2) * Math.PI / 180);
+    const W = opt.width || 360, H = Math.round(W * (lat1 - lat0) / ((lon1 - lon0) * k));
+    const X = lon => (fix(lon) - lon0) / (lon1 - lon0) * W, Y = lat => (lat1 - lat) / (lat1 - lat0) * H;
+    const hl = new Set(opt.highlight || []);
+    let s = `<rect width="${W}" height="${H}" class="sea"/>`;
+    for (const c of base.countries) for (const r of c.rings) {
+      let minx = 999, maxx = -999, miny = 999, maxy = -999;
+      for (const [lo, la] of r) { const x = fix(lo); minx = Math.min(minx, x); maxx = Math.max(maxx, x); miny = Math.min(miny, la); maxy = Math.max(maxy, la); }
+      if (maxx < lon0 - 2 || minx > lon1 + 2 || maxy < lat0 - 2 || miny > lat1 + 2) continue;
+      if (wrap && maxx - minx > 180) continue; // 跨換日線的大陸輪廓在這種圖框裡會畫歪，略過
+      s += `<path d="M${r.map(([lo, la]) => `${X(lo).toFixed(1)},${Y(la).toFixed(1)}`).join('L')}Z" class="${hl.has(c.a3) ? 'land hl' : 'land'}"/>`;
+    }
+    if (opt.tropics) for (const lat of [23.44, -23.44, 66.56, -66.56, 0]) if (lat > lat0 && lat < lat1) s += `<line x1="0" x2="${W}" y1="${Y(lat)}" y2="${Y(lat)}" class="${lat === 0 ? 'prime' : 'tropic'}"/>`;
+    if (!opt.mini) {
+      for (const p of opt.points || []) {
+        // 靠右的點把標籤放左邊，避免被圖框切掉
+        const cx = X(p.lon), cy = Y(p.lat), dx = p.dx != null ? p.dx : (cx > W * 0.8 ? -7 : 7), dy = p.dy || (cy < 12 ? 8 : 0);
+        s += `<g ${opt.pick ? `data-pick="${esc(p.label)}" class="pickable"` : ''}><circle cx="${cx}" cy="${cy}" r="${opt.pick ? 7 : 4.5}" class="stn"/><text x="${cx + dx}" y="${cy + 4 + dy}" class="stnlabel" text-anchor="${dx < 0 ? 'end' : dx === 0 ? 'middle' : 'start'}">${esc(p.label)}${p.value != null ? ' ' + esc(p.value) : ''}</text></g>`;
+      }
+      for (const t of opt.texts || []) s += `<text x="${X(t.lon)}" y="${Y(t.lat)}" class="maptext" text-anchor="middle">${esc(t.text)}</text>`;
+      s += `<g transform="translate(14,${H - 10})"><path d="M0,-14 L5,4 L0,0 L-5,4Z" class="north"/><text x="9" y="2" class="tick">北</text></g>`;
+      s += `<text x="${W - 4}" y="${H - 4}" class="src" text-anchor="end">底圖：Natural Earth</text>`;
+    }
+    return frame(W, H, s, opt.mini ? 'regionmap mini' : 'regionmap');
+  }
+
+  // ---------- 極區地圖（以極點為中心的方位等距投影） ----------
+  // opt: {pole:'N'|'S', edge: 地圖外緣緯度（絕對值）, highlight, points}
+  function polarMap(base, opt) {
+    const S = opt.pole === 'S' ? -1 : 1, edge = opt.edge || 50, R = 170, C = 180;
+    const P = (lon, lat) => {
+      const r = (90 - S * lat) / (90 - edge) * R, a = lon * Math.PI / 180;
+      // 北極圖：0 度經線朝下（同課本）；南極圖：0 度經線朝上
+      return [C + r * Math.sin(a), C + S * r * Math.cos(a)];
+    };
+    const hl = new Set(opt.highlight || []);
+    let s = `<circle cx="${C}" cy="${C}" r="${R}" class="sea"/><clipPath id="pc${S}"><circle cx="${C}" cy="${C}" r="${R}"/></clipPath><g clip-path="url(#pc${S})">`;
+    for (const c of base.countries) for (const r of c.rings) {
+      if (!r.some(([, la]) => S * la > edge - 15)) continue;
+      s += `<path d="M${r.map(([lo, la]) => P(lo, Math.max(-90, Math.min(90, la))).map(v => v.toFixed(1)).join(',')).join('L')}Z" class="${hl.has(c.a3) ? 'land hl' : 'land'}"/>`;
+    }
+    for (let lat = edge; lat < 90; lat += 10) { const [, y] = P(0, S * lat); s += `<circle cx="${C}" cy="${C}" r="${Math.abs(y - C)}" class="${Math.abs(lat - 66.56) < 1 ? 'tropic' : 'grat'}"/>`; }
+    const [, yc] = P(0, S * 66.56); s += `<circle cx="${C}" cy="${C}" r="${Math.abs(yc - C)}" class="tropic"/>`;
+    for (let lon = 0; lon < 360; lon += 30) { const [x, y] = P(lon, S * edge); s += `<line x1="${C}" y1="${C}" x2="${x}" y2="${y}" class="grat"/>`; }
+    s += `</g>`;
+    for (const p of opt.points || []) {
+      const [cx, cy] = P(p.lon, p.lat), dx = p.dx != null ? p.dx : 7;
+      s += `<g ${opt.pick ? `data-pick="${esc(p.label)}" class="pickable"` : ''}><circle cx="${cx}" cy="${cy}" r="${opt.pick ? 7 : 4.5}" class="stn"/><text x="${cx + dx}" y="${cy + 4 + (p.dy || 0)}" class="stnlabel" text-anchor="${dx < 0 ? 'end' : 'start'}">${esc(p.label)}</text></g>`;
+    }
+    for (const t of opt.texts || []) { const [x, y] = P(t.lon, t.lat); s += `<text x="${x}" y="${y}" class="maptext" text-anchor="middle">${esc(t.text)}</text>`; }
+    s += `<text x="${C}" y="${C + 4}" class="tick" text-anchor="middle">${S > 0 ? '北極點' : '南極點'}</text>`;
+    s += `<text x="${C + R - 4}" y="${C - Math.abs(yc - C) - 4}" class="tick" text-anchor="end">${S > 0 ? '北極圈' : '南極圈'}</text>`;
+    s += `<text x="${2 * C - 4}" y="${2 * C - 2}" class="src" text-anchor="end">底圖：Natural Earth</text>`;
+    return frame(2 * C, 2 * C, s, 'polarmap');
+  }
+
+  // ---------- 人口金字塔（聯合國 WPP，5 歲一組，85 歲以上合併） ----------
+  function pyramid(g, title, opt) {
+    opt = opt || {};
+    // 原始資料 0-4 … 80-84 共 17 組，85 歲以上（85-89、90-94、95-99、100+）合併成一組
+    const merge = a => a.slice(0, 17).concat([a.slice(17).reduce((x, y) => x + y, 0)]);
+    const m = merge(g.male), f = merge(g.female), n = m.length;
+    const tot = m.reduce((a, b) => a + b, 0) + f.reduce((a, b) => a + b, 0);
+    const pm = m.map(v => v / tot * 100), pf = f.map(v => v / tot * 100);
+    const maxP = opt.maxPct || Math.max(8, Math.ceil(Math.max(...pm, ...pf)));
+    const W = 300, H = 250, Cx = W / 2, T = 26, B = 220, bh = (B - T) / n, half = W / 2 - 34;
+    const sx = v => v / maxP * half;
+    let s = `<rect width="${W}" height="${H}" class="paper"/>`;
+    s += `<text x="${Cx}" y="16" class="title" text-anchor="middle">${esc(title)}</text>`;
+    for (let i = 0; i < n; i++) {
+      const y = B - (i + 1) * bh;
+      s += `<rect x="${Cx - 14 - sx(pm[i])}" y="${y + 0.5}" width="${sx(pm[i])}" height="${bh - 1}" class="pm"/>`;
+      s += `<rect x="${Cx + 14}" y="${y + 0.5}" width="${sx(pf[i])}" height="${bh - 1}" class="pf"/>`;
+      if (i % 3 === 0 || i === n - 1) s += `<text x="${Cx}" y="${y + bh - 2}" class="tick" text-anchor="middle">${i === n - 1 ? '85+' : i * 5}</text>`;
+    }
+    // 15 歲、65 歲分界線
+    for (const a of [15, 65]) { const y = B - (a / 5) * bh; s += `<line x1="${Cx - half - 14}" x2="${Cx + half + 14}" y1="${y}" y2="${y}" class="agebreak"/><text x="${W - 4}" y="${y - 2}" class="tick" text-anchor="end">${a}歲</text>`; }
+    for (const v of [0, maxP / 2, maxP]) {
+      s += `<text x="${Cx - 14 - sx(v)}" y="${B + 13}" class="tick" text-anchor="middle">${v}</text><text x="${Cx + 14 + sx(v)}" y="${B + 13}" class="tick" text-anchor="middle">${v}</text>`;
+    }
+    s += `<text x="${Cx - 60}" y="${B + 27}" class="axis" text-anchor="middle">男（%）</text><text x="${Cx + 60}" y="${B + 27}" class="axis" text-anchor="middle">女（%）</text>`;
+    return frame(W, H + 14, s, 'pyramid');
+  }
+
   // ---------- 原理示意圖（概念示意，不含數據） ----------
   const DIAGRAMS = {
     // 迎風坡與背風坡
@@ -229,5 +320,5 @@
 
   function diagram(id, o) { return (DIAGRAMS[id] || (() => ''))(o || {}); }
 
-  window.Charts = { climograph, twMap, contourMap, profileChart, townGrid, graticule, diagram, esc };
+  window.Charts = { climograph, twMap, contourMap, profileChart, townGrid, graticule, regionMap, polarMap, pyramid, diagram, esc };
 })();

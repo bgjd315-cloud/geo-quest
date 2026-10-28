@@ -1,0 +1,656 @@
+{
+ "unit": "天氣與氣候",
+ "questions": [
+  {
+   "id": "cw-001",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-pressure-belt"
+   ],
+   "type": "single",
+   "status": "確認",
+   "source": "課本概念：康軒 2下第3課 充電站：副熱帶高氣壓與西風的影響",
+   "stem": "世界上許多大沙漠，例如撒哈拉沙漠、阿拉伯半島的沙漠，都分布在南、北緯 30 度附近。主要原因是什麼？",
+   "options": [
+    "高空氣流下沉形成副熱帶高壓，空氣乾燥",
+    "這裡空氣受熱上升，形成赤道低壓帶",
+    "這裡終年吹西風，水氣被山脈阻擋",
+    "這裡緯度高，終年寒冷空氣乾燥"
+   ],
+   "answer": 0,
+   "explain": "南、北緯 30 度附近，高空氣流下沉形成副熱帶高氣壓。空氣下沉時增溫、溼度下降，不容易成雲下雨，所以氣候乾燥炎熱，多沙漠。"
+  },
+  {
+   "id": "cw-002",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-type",
+    "clim-pressure-belt"
+   ],
+   "type": "single",
+   "status": "確認",
+   "source": "課本概念：康軒 2下第3課 西亞與北非的氣候（副熱帶高氣壓籠罩、熱帶沙漠氣候）；資料：WMO 1991–2020",
+   "stem": "甲地位在北緯 20～30 度之間，年降水量約 99.9 mm，夏季月均溫超過 36℃。甲地屬於哪一種氣候類型？",
+   "figure": {
+    "type": "climograph",
+    "data": "climate/world-wmo-1991-2020.json",
+    "station": "利雅德",
+    "label": "甲地",
+    "hideTotals": true
+   },
+   "options": [
+    "熱帶沙漠氣候",
+    "熱帶雨林氣候",
+    "溫帶海洋性氣候",
+    "熱帶季風氣候"
+   ],
+   "answer": 0,
+   "explain": "甲地是沙烏地阿拉伯的利雅德。它在副熱帶高氣壓籠罩的緯度，氣流下沉、不易降雨，全年降水極少、夏季酷熱，屬於熱帶沙漠氣候。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/world-wmo-1991-2020.json",
+    "values": [
+     {
+      "station": "利雅德",
+      "prop": "lat",
+      "gt": 20
+     },
+     {
+      "station": "利雅德",
+      "prop": "lat",
+      "lt": 30
+     },
+     {
+      "station": "利雅德",
+      "prop": "precipTotal",
+      "eq": 99.9
+     },
+     {
+      "station": "利雅德",
+      "prop": "julTemp",
+      "gt": 36
+     }
+    ]
+   }
+  },
+  {
+   "id": "cw-003",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-pressure-belt"
+   ],
+   "type": "single",
+   "status": "確認",
+   "source": "課本概念：康軒 2下第3課 充電站：副熱帶高氣壓與西風的影響（風帶隨太陽直射位置南北移動）",
+   "stem": "風帶的位置會隨著太陽直射的位置南北移動。北半球夏季時，太陽直射北半球，北半球的副熱帶高氣壓和西風帶會怎麼移動？",
+   "options": [
+    "往北移動",
+    "往南移動",
+    "完全不動",
+    "移到赤道上"
+   ],
+   "answer": 0,
+   "explain": "北半球夏季太陽直射點偏北，風帶跟著北移；冬季直射點南移，風帶也往南移。所以同一個地方，可能夏季被副熱帶高氣壓籠罩、冬季改吹西風。"
+  },
+  {
+   "id": "cw-004",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-type",
+    "clim-pressure-belt"
+   ],
+   "type": "chain",
+   "status": "確認",
+   "source": "課本概念：康軒 3上第1課 歐洲的氣候（溫帶地中海型氣候，西風帶南北移動）、2下第3課 副熱帶高氣壓與西風；資料：WMO 1991–2020",
+   "stem": "風之地圖的第一頁：這是義大利羅馬的溫雨圖。",
+   "figure": {
+    "type": "climograph",
+    "data": "climate/world-wmo-1991-2020.json",
+    "station": "羅馬"
+   },
+   "parts": [
+    {
+     "stem": "羅馬 7 月的降水只有約 12.3 mm，11 月降水最多。羅馬的降水集中在什麼季節？",
+     "options": [
+      "冬半年",
+      "夏季",
+      "全年平均",
+      "只有春季"
+     ],
+     "answer": 0,
+     "explain": "羅馬夏季很乾，秋冬季（10～2 月）才是雨季，呈現「夏乾冬雨」。",
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/world-wmo-1991-2020.json",
+      "values": [
+       {
+        "station": "羅馬",
+        "prop": "julPrecip",
+        "eq": 12.3
+       },
+       {
+        "station": "羅馬",
+        "prop": "wettest",
+        "eq": 11
+       },
+       {
+        "station": "羅馬",
+        "prop": "summerShare",
+        "lt": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "stem": "為什麼羅馬的夏季特別乾燥？",
+     "options": [
+      "風帶北移，夏季被副熱帶高氣壓籠罩",
+      "夏季吹西風，帶來大量海洋水氣",
+      "夏季吹來自大陸的乾燥季風",
+      "夏季受涼流影響，空氣穩定少雨"
+     ],
+     "answer": 0,
+     "explain": "夏季風帶北移，地中海沿岸被副熱帶高氣壓籠罩，氣流下沉，乾燥少雨。"
+    },
+    {
+     "stem": "為什麼羅馬的冬季比較多雨？",
+     "options": [
+      "風帶南移，西風帶來海洋水氣",
+      "冬季副熱帶高氣壓更強",
+      "冬季對流旺盛",
+      "冬季吹東北季風"
+     ],
+     "answer": 0,
+     "explain": "冬季風帶南移，西風帶移入地中海沿岸，從海洋帶來水氣形成降水。"
+    },
+    {
+     "stem": "綜合以上，羅馬屬於哪一種氣候類型？",
+     "options": [
+      "溫帶地中海型氣候",
+      "溫帶海洋性氣候",
+      "熱帶沙漠氣候",
+      "夏雨型暖溫帶氣候"
+     ],
+     "answer": 0,
+     "explain": "夏季受副熱帶高氣壓籠罩、冬季受西風影響，形成夏乾冬雨的溫帶地中海型氣候。",
+     "concepts": [
+      "clim-type"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cw-005",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-sea",
+    "clim-current"
+   ],
+   "type": "single",
+   "status": "確認",
+   "source": "課本概念：康軒 3上第1課 歐洲的氣候（西風、北大西洋暖流、距海遠近）；資料：WMO 1991–2020；底圖：Natural Earth",
+   "stem": "圖中甲、乙、丙三地的緯度相近，由西向東排列。哪一地的年溫差最小？",
+   "figure": {
+    "type": "region-map",
+    "basemap": "basemap/world-countries-ne50m.json",
+    "bbox": [
+     -12,
+     52,
+     40,
+     67
+    ],
+    "data": "climate/world-wmo-1991-2020.json",
+    "points": [
+     {
+      "station": "卑爾根",
+      "label": "甲"
+     },
+     {
+      "station": "斯德哥爾摩",
+      "label": "乙"
+     },
+     {
+      "station": "聖彼得堡",
+      "label": "丙"
+     }
+    ],
+    "texts": [
+     {
+      "text": "大西洋",
+      "lat": 62.5,
+      "lon": -6
+     }
+    ]
+   },
+   "options": [
+    "甲",
+    "乙",
+    "丙"
+   ],
+   "answer": 0,
+   "explain": "甲（挪威卑爾根）在大陸西岸，終年吹來自大西洋的西風，又有北大西洋暖流，海洋的調節讓冬季不冷、夏季不熱，年溫差最小。愈往東距海愈遠，海洋的影響愈弱，年溫差就愈大。",
+   "check": {
+    "kind": "climate-rank",
+    "data": "climate/world-wmo-1991-2020.json",
+    "prop": "annualRange",
+    "pick": "min",
+    "stations": [
+     "卑爾根",
+     "斯德哥爾摩",
+     "聖彼得堡"
+    ]
+   }
+  },
+  {
+   "id": "cw-006",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-sea",
+    "clim-type"
+   ],
+   "type": "chain",
+   "status": "確認",
+   "source": "課本概念：康軒 3上第1課 歐洲的氣候（西暖溼、東冷乾；溫帶海洋性與溫帶大陸性氣候）、3上附錄 溫帶氣候大觀園；資料：WMO 1991–2020",
+   "stem": "風之地圖的第二頁：從大西洋岸一路往東，四張溫雨圖依序是甲（愛爾蘭瓦倫西亞島）、乙（巴黎）、丙（華沙）、丁（莫斯科）。",
+   "figure": {
+    "type": "climographs",
+    "data": "climate/world-wmo-1991-2020.json",
+    "stations": [
+     {
+      "station": "瓦倫西亞島",
+      "label": "甲：瓦倫西亞島"
+     },
+     {
+      "station": "巴黎",
+      "label": "乙：巴黎"
+     },
+     {
+      "station": "華沙",
+      "label": "丙：華沙"
+     },
+     {
+      "station": "莫斯科",
+      "label": "丁：莫斯科"
+     }
+    ]
+   },
+   "parts": [
+    {
+     "stem": "四地中，哪一地的年溫差最大？",
+     "options": [
+      "甲",
+      "乙",
+      "丙",
+      "丁"
+     ],
+     "answer": 3,
+     "explain": "年溫差由西向東變大：甲約 8.0℃、乙約 15.5℃、丙約 21.2℃、丁約 25.9℃。",
+     "check": {
+      "kind": "climate-rank",
+      "data": "climate/world-wmo-1991-2020.json",
+      "prop": "annualRange",
+      "pick": "max",
+      "stations": [
+       "瓦倫西亞島",
+       "巴黎",
+       "華沙",
+       "莫斯科"
+      ]
+     }
+    },
+    {
+     "stem": "甲約 8.0℃、乙約 15.5℃、丙約 21.2℃、丁約 25.9℃，年溫差一路變大。最主要的原因是什麼？",
+     "options": [
+      "愈往東距海愈遠，海洋調節氣溫的作用愈弱",
+      "愈往東緯度愈低，太陽照射變化愈大",
+      "愈往東海拔愈低，冬冷夏熱愈明顯",
+      "愈往東愈接近季風區，冬夏風向相反"
+     ],
+     "answer": 0,
+     "explain": "海洋升溫、降溫都比陸地慢，靠海的地方冬暖夏涼。西風從大西洋吹來，愈往東深入內陸，海洋的影響愈弱，冬冷夏熱，年溫差變大。",
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/world-wmo-1991-2020.json",
+      "values": [
+       {
+        "station": "瓦倫西亞島",
+        "prop": "annualRange",
+        "eq": 8
+       },
+       {
+        "station": "巴黎",
+        "prop": "annualRange",
+        "eq": 15.5
+       },
+       {
+        "station": "華沙",
+        "prop": "annualRange",
+        "eq": 21.2
+       },
+       {
+        "station": "莫斯科",
+        "prop": "annualRange",
+        "eq": 25.9
+       }
+      ]
+     }
+    },
+    {
+     "stem": "甲地每個月都有不少雨、年溫差小、冬季也不冷。甲地屬於哪一種氣候類型？",
+     "options": [
+      "溫帶海洋性氣候",
+      "溫帶大陸性氣候",
+      "溫帶地中海型氣候",
+      "寒帶氣候"
+     ],
+     "answer": 0,
+     "explain": "西歐終年受西風吹拂，又有北大西洋暖流帶來水氣，降水季節平均、氣候暖溼、年溫差小，屬於溫帶海洋性氣候；東邊的丙、丁年溫差大，屬於溫帶大陸性氣候。",
+     "concepts": [
+      "clim-type"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cw-007",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-type",
+    "clim-chart"
+   ],
+   "type": "single",
+   "status": "確認",
+   "source": "課本概念：康軒 3上附錄 地球南北大不同（月均溫曲線開口向上為南半球；冬季降水為溫帶地中海型氣候）；資料：WMO 1991–2020",
+   "stem": "甲地的溫雨圖中，氣溫曲線「開口向上」，最暖月是 1 月；降水最多的是 6 月，1 月幾乎不下雨。甲地最可能是下列哪一種？",
+   "figure": {
+    "type": "climograph",
+    "data": "climate/world-wmo-1991-2020.json",
+    "station": "庫利科",
+    "label": "甲地",
+    "hideTotals": true
+   },
+   "options": [
+    "南半球的溫帶地中海型氣候",
+    "北半球的溫帶地中海型氣候",
+    "南半球的夏雨型暖溫帶氣候",
+    "北半球的夏雨型暖溫帶氣候"
+   ],
+   "answer": 0,
+   "explain": "最暖月在 1 月、曲線開口向上，代表在南半球。南半球的 6 月是冬季，雨下在冬季、夏季乾燥，就是夏乾冬雨的溫帶地中海型氣候。甲地是智利的庫利科，位在南美洲大陸西岸。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/world-wmo-1991-2020.json",
+    "values": [
+     {
+      "station": "庫利科",
+      "prop": "warmest",
+      "eq": 1
+     },
+     {
+      "station": "庫利科",
+      "prop": "wettest",
+      "eq": 6
+     },
+     {
+      "station": "庫利科",
+      "prop": "janPrecip",
+      "lt": 5
+     },
+     {
+      "station": "庫利科",
+      "prop": "lat",
+      "lt": 0
+     }
+    ]
+   }
+  },
+  {
+   "id": "cw-008",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-type",
+    "clim-pressure-belt"
+   ],
+   "type": "chain",
+   "status": "確認",
+   "source": "課本概念：康軒 3上第5課 大洋洲的氣候（伯斯為溫帶地中海型、布利斯班迎東南信風為夏雨型暖溫帶）、3上附錄 地球南北大不同；資料：WMO 1991–2020",
+   "stem": "風之地圖的第三頁：澳洲西岸的伯斯（甲）和東岸的布利斯班（乙）。",
+   "figure": {
+    "type": "climographs",
+    "data": "climate/world-wmo-1991-2020.json",
+    "stations": [
+     {
+      "station": "伯斯",
+      "label": "甲：伯斯"
+     },
+     {
+      "station": "布里斯本",
+      "label": "乙：布利斯班"
+     }
+    ]
+   },
+   "parts": [
+    {
+     "stem": "兩地的最暖月都在 1 月或 2 月。這告訴我們什麼？",
+     "options": [
+      "兩地都在南半球",
+      "兩地都在北半球",
+      "兩地都在赤道上",
+      "兩地都是高地"
+     ],
+     "answer": 0,
+     "explain": "南半球的夏季在 12～2 月，所以最暖月出現在 1、2 月，氣溫曲線開口向上。",
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/world-wmo-1991-2020.json",
+      "values": [
+       {
+        "station": "伯斯",
+        "prop": "warmest",
+        "eq": 2
+       },
+       {
+        "station": "布里斯本",
+        "prop": "warmest",
+        "eq": 1
+       }
+      ]
+     }
+    },
+    {
+     "stem": "甲地降水最多在 7 月，乙地降水最多在 2 月。兩地的雨季分別是？",
+     "options": [
+      "甲冬雨、乙夏雨",
+      "甲夏雨、乙冬雨",
+      "兩地都是冬雨",
+      "兩地都是夏雨"
+     ],
+     "answer": 0,
+     "explain": "南半球 7 月是冬季、2 月是夏季，所以甲地冬季多雨，乙地夏季多雨。",
+     "check": {
+      "kind": "climate-value",
+      "data": "climate/world-wmo-1991-2020.json",
+      "values": [
+       {
+        "station": "伯斯",
+        "prop": "wettest",
+        "eq": 7
+       },
+       {
+        "station": "布里斯本",
+        "prop": "wettest",
+        "eq": 2
+       }
+      ]
+     }
+    },
+    {
+     "stem": "依照雨季判斷，甲、乙兩地的氣候類型分別是？",
+     "options": [
+      "甲溫帶地中海型氣候、乙夏雨型暖溫帶氣候",
+      "甲夏雨型暖溫帶氣候、乙溫帶地中海型氣候",
+      "兩地都是熱帶沙漠氣候",
+      "甲溫帶海洋性氣候、乙熱帶雨林氣候"
+     ],
+     "answer": 0,
+     "explain": "冬季降水是溫帶地中海型氣候，夏季降水是夏雨型暖溫帶氣候。課本的判讀口訣：地中海型在大陸西岸，夏雨型暖溫帶在大陸東岸。",
+     "concepts": [
+      "clim-type"
+     ]
+    },
+    {
+     "stem": "乙地夏季多雨，和哪一種風有關？",
+     "options": [
+      "從海上吹來的東南信風，在東岸迎風帶來水氣",
+      "從內陸吹來的西風，翻山後帶來水氣",
+      "副熱帶高氣壓的下沉氣流，帶來雷雨",
+      "從南極吹來的冷風，遇暖空氣成雨"
+     ],
+     "answer": 0,
+     "explain": "澳洲東岸迎著東南信風，海上的水氣被帶上岸，加上沿海暖流影響，降水較多；西岸的甲地夏季則受副熱帶高氣壓籠罩而乾燥。",
+     "concepts": [
+      "clim-pressure-belt"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cw-009",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-type",
+    "clim-chart"
+   ],
+   "type": "single",
+   "status": "確認",
+   "source": "課本概念：康軒 2下第1課 東南亞的氣候（新加坡熱帶雨林氣候、永珍熱帶季風氣候）；資料：WMO 1991–2020",
+   "stem": "甲、乙兩地都在熱帶。甲地年溫差只有約 1.8℃，每個月都有不少雨；乙地 1 月降水只有約 7.4 mm，雨集中在夏季。哪一個判斷正確？",
+   "figure": {
+    "type": "climographs",
+    "data": "climate/world-wmo-1991-2020.json",
+    "hideTotals": true,
+    "stations": [
+     {
+      "station": "新加坡",
+      "label": "甲"
+     },
+     {
+      "station": "永珍",
+      "label": "乙"
+     }
+    ]
+   },
+   "options": [
+    "甲是熱帶雨林氣候，乙是熱帶季風氣候",
+    "甲是熱帶季風氣候，乙是熱帶雨林氣候",
+    "兩地都是熱帶沙漠氣候",
+    "甲是溫帶海洋性氣候，乙是溫帶大陸性氣候"
+   ],
+   "answer": 0,
+   "explain": "甲地（新加坡）靠近赤道，全年高溫、對流旺盛，全年有雨，是熱帶雨林氣候。乙地（寮國永珍）離赤道較遠，受季風影響，夏季多雨、冬季有明顯乾季，是熱帶季風氣候。",
+   "check": {
+    "kind": "climate-value",
+    "data": "climate/world-wmo-1991-2020.json",
+    "values": [
+     {
+      "station": "新加坡",
+      "prop": "annualRange",
+      "eq": 1.8
+     },
+     {
+      "station": "永珍",
+      "prop": "janPrecip",
+      "eq": 7.4
+     },
+     {
+      "station": "永珍",
+      "prop": "summerShare",
+      "gt": 0.8
+     }
+    ]
+   }
+  },
+  {
+   "id": "cw-010",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-change"
+   ],
+   "type": "single",
+   "status": "確認",
+   "source": "課本概念：康軒 3上第6課 全球氣候變遷（溫室氣體與全球暖化）",
+   "stem": "工業革命以後，全球平均氣溫逐漸上升。課本說明造成全球暖化最主要的人為原因是什麼？",
+   "options": [
+    "溫室氣體在大氣中過度累積，強化溫室效應",
+    "太陽離地球愈來愈近，照射愈來愈強",
+    "海洋面積變大，吸收更多太陽熱能",
+    "南極的冰變多，反射的陽光減少"
+   ],
+   "answer": 0,
+   "explain": "燃燒化石燃料等人類活動讓溫室氣體大量累積，大氣保留的熱量變多，溫室效應增強，地球溫度上升，就是全球暖化。"
+  },
+  {
+   "id": "cw-011",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-change"
+   ],
+   "type": "single",
+   "status": "確認",
+   "source": "課本概念：康軒 3上第6課 全球氣候變遷的衝擊（海平面上升；吐瓦魯外交部長站在海上演說）",
+   "stem": "吐瓦魯的外交部長曾站在海水中發表國際演說，提醒世界重視全球暖化。吐瓦魯這類國家最擔心的衝擊是什麼？",
+   "options": [
+    "海平面上升，低窪島國可能被淹沒",
+    "冬季變得太冷，農作物無法生長",
+    "沙漠面積擴大，島上土地乾旱",
+    "火山活動增加，島嶼常被熔岩覆蓋"
+   ],
+   "answer": 0,
+   "explain": "全球暖化使極區、高山的冰融化流入海洋，海水總量增加、海平面上升。地勢低窪的島國和人口稠密的沿海地區，都面臨被淹沒的危機。"
+  },
+  {
+   "id": "cw-012",
+   "unit": "天氣與氣候",
+   "level": "climate-5",
+   "region": "通論",
+   "concepts": [
+    "clim-change",
+    "hydro-dry"
+   ],
+   "type": "single",
+   "status": "確認",
+   "source": "課本概念：康軒 3上第6課 全球氣候變遷的衝擊（高山雪線上移、融雪減少使下游乾旱）、2下第3課 坎井引高山融雪",
+   "stem": "全球暖化使高山雪線逐漸往山頂移動。伊朗高原山麓的綠洲，靠坎井引來高山融雪滲入的地下水。雪線上移後，這些綠洲最可能面臨什麼問題？",
+   "options": [
+    "高山積雪變少，融雪水減少，用水更缺",
+    "融雪水大量增加，綠洲常常淹水",
+    "坎井裡的地下水變成鹹的海水",
+    "綠洲降水大量增加，不再需要坎井"
+   ],
+   "answer": 0,
+   "explain": "雪線上移代表山上能積雪的範圍變小，能融化補給河川和地下水的雪水也變少。下游依賴融雪的地區，乾旱問題會愈來愈嚴重。"
+  }
+ ]
+}

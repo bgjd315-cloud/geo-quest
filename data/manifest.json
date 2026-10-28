@@ -1,13 +1,48 @@
 {
- "core": ["concepts.json", "regions.json", "units.json"],
+ "core": [
+  "concepts.json",
+  "regions.json",
+  "units.json"
+ ],
  "figures": [
   "climate/tw-cwa-1991-2020.json",
   "basemap/taiwan-ne10m.json",
   "basemap/world-land-ne110m.json",
   "terrain/practice-a.json",
   "terrain/practice-b.json",
-  "maps/compass-town.json"
+  "maps/compass-town.json",
+  "climate/world-wmo-1991-2020.json",
+  "population/un-wpp-2024.json",
+  "basemap/world-countries-ne50m.json"
  ],
- "cards": ["cards/map.json", "cards/climate.json"],
- "questions": ["questions/map.json", "questions/climate.json"]
+ "cards": [
+  "cards/map.json",
+  "cards/climate.json",
+  "cards/landform.json",
+  "cards/hydro.json",
+  "cards/pop.json",
+  "cards/industry.json",
+  "cards/climate-world.json"
+ ],
+ "questions": [
+  "questions/map.json",
+  "questions/climate.json",
+  "questions/landform.json",
+  "questions/hydro.json",
+  "questions/pop.json",
+  "questions/industry.json",
+  "questions/climate-world.json",
+  "questions/region-cn.json",
+  "questions/region-nea.json",
+  "questions/region-sea.json",
+  "questions/region-sa.json",
+  "questions/region-wana.json",
+  "questions/region-ssa.json",
+  "questions/region-eu.json",
+  "questions/region-ru.json",
+  "questions/region-na.json",
+  "questions/region-la.json",
+  "questions/region-oc.json",
+  "questions/region-polar.json"
+ ]
 }

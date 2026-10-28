@@ -105,6 +105,17 @@
       "clim-hazard",
       "clim-current"
      ]
+    },
+    {
+     "id": "climate-5",
+     "name": "風之地圖：行星風系與世界氣候",
+     "banner": "lv_cl_2",
+     "concepts": [
+      "clim-pressure-belt",
+      "clim-type",
+      "clim-sea",
+      "clim-change"
+     ]
     }
    ],
    "boss": {
@@ -121,7 +132,50 @@
    "no": 3,
    "cover": "cover_rift",
    "stage": 2,
-   "levels": []
+   "levels": [
+    {
+     "id": "landform-1",
+     "name": "臺灣的地形",
+     "banner": "cover_rift",
+     "concepts": [
+      "land-5types",
+      "land-tw",
+      "land-use"
+     ]
+    },
+    {
+     "id": "landform-2",
+     "name": "塑造大地的推手：內營力與外營力",
+     "banner": "cover_rift",
+     "concepts": [
+      "land-endo",
+      "land-exo",
+      "land-rift",
+      "land-old",
+      "land-fluvial",
+      "land-glacial",
+      "land-other"
+     ]
+    },
+    {
+     "id": "landform-3",
+     "name": "海岸、島嶼與海域",
+     "banner": "cover_rift",
+     "concepts": [
+      "land-coast",
+      "land-coast-world",
+      "land-island",
+      "land-sea-zone"
+     ]
+    }
+   ],
+   "story": "裂谷島的大地被迷霧蓋住了起伏。看懂山從哪裡來、海岸怎麼變，地形就會重新浮現。",
+   "boss": {
+    "id": "landform-boss",
+    "name": "魔王試煉：裂谷巨岩",
+    "image": "boss_compass",
+    "intro": "裂谷深處的巨岩會出題考你：這片地形是怎麼形成的？"
+   }
   },
   {
    "id": "hydro",
@@ -130,7 +184,44 @@
    "no": 4,
    "cover": "cover_spring",
    "stage": 2,
-   "levels": []
+   "levels": [
+    {
+     "id": "hydro-1",
+     "name": "水循環、水系與流域",
+     "banner": "cover_spring",
+     "concepts": [
+      "hydro-cycle",
+      "hydro-basin"
+     ]
+    },
+    {
+     "id": "hydro-2",
+     "name": "臺灣的河川與水資源",
+     "banner": "cover_spring",
+     "concepts": [
+      "hydro-tw-river",
+      "hydro-resource",
+      "hydro-ground"
+     ]
+    },
+    {
+     "id": "hydro-3",
+     "name": "乾燥地區與國際河川",
+     "banner": "cover_spring",
+     "concepts": [
+      "hydro-dry",
+      "hydro-river-world",
+      "hydro-dam"
+     ]
+    }
+   ],
+   "story": "泉源島的水車停了。弄懂水從哪裡來、往哪裡去，河流就會重新流動。",
+   "boss": {
+    "id": "hydro-boss",
+    "name": "魔王試煉：枯井守門人",
+    "image": "boss_typhoon",
+    "intro": "枯井旁的守門人問：水不夠用的時候，人們想了哪些辦法？"
+   }
   },
   {
    "id": "pop",
@@ -139,7 +230,45 @@
    "no": 5,
    "cover": "cover_lights",
    "stage": 2,
-   "levels": []
+   "levels": [
+    {
+     "id": "pop-1",
+     "name": "人口成長與遷移",
+     "banner": "cover_lights",
+     "concepts": [
+      "pop-growth",
+      "pop-transition",
+      "pop-migration"
+     ]
+    },
+    {
+     "id": "pop-2",
+     "name": "人口分布與人口組成",
+     "banner": "cover_lights",
+     "concepts": [
+      "pop-density",
+      "pop-structure",
+      "pop-pyramid"
+     ]
+    },
+    {
+     "id": "pop-3",
+     "name": "人口議題與多元文化",
+     "banner": "cover_lights",
+     "concepts": [
+      "pop-aging",
+      "pop-capacity",
+      "pop-culture"
+     ]
+    }
+   ],
+   "story": "燈火島的燈一盞盞熄滅了。看懂人口怎麼增加、往哪裡移動，城鎮就會重新亮起來。",
+   "boss": {
+    "id": "pop-boss",
+    "name": "魔王試煉：熄燈的鐘樓",
+    "image": "boss_compass",
+    "intro": "鐘樓上的人口金字塔歪了。讀懂它，燈火島的鐘聲就會響起。"
+   }
   },
   {
    "id": "industry",
@@ -148,7 +277,624 @@
    "no": 6,
    "cover": "cover_market",
    "stage": 2,
-   "levels": []
+   "levels": [
+    {
+     "id": "industry-1",
+     "name": "三級產業與農漁業",
+     "banner": "cover_market",
+     "concepts": [
+      "ind-sectors",
+      "agri-cond",
+      "agri-type",
+      "fish"
+     ]
+    },
+    {
+     "id": "industry-2",
+     "name": "工業區位與全球分工",
+     "banner": "cover_market",
+     "concepts": [
+      "ind-location",
+      "ind-type",
+      "ind-shift",
+      "resource",
+      "trade",
+      "colonial-econ"
+     ]
+    },
+    {
+     "id": "industry-3",
+     "name": "聚落、交通與區域發展",
+     "banner": "cover_market",
+     "concepts": [
+      "settlement",
+      "transport",
+      "region-diff"
+     ]
+    }
+   ],
+   "story": "市集島的貨船停在港口不動。弄懂產業要在哪裡發展、東西怎麼運送，市集就會熱鬧起來。",
+   "boss": {
+    "id": "industry-boss",
+    "name": "魔王試煉：沉默的貨船",
+    "image": "boss_typhoon",
+    "intro": "貨船船長要你替一間新工廠選地點，選對了，港口就會重新開張。"
+   }
+  },
+  {
+   "id": "cn",
+   "kind": "expedition",
+   "name": "中國",
+   "volume": "第三冊",
+   "no": 1,
+   "bbox": [
+    72,
+    17,
+    136,
+    54
+   ],
+   "highlight": [
+    "CHN"
+   ],
+   "story": "地圖冊的世界頁上，中國被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "cn-1",
+     "name": "中國的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "cn-2",
+     "name": "中國的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "cn-boss",
+    "name": "區域魔王：中國三層面",
+    "intro": "把中國的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
+  },
+  {
+   "id": "nea",
+   "kind": "expedition",
+   "name": "東北亞",
+   "volume": "第三冊",
+   "no": 2,
+   "bbox": [
+    122,
+    24,
+    147,
+    46
+   ],
+   "highlight": [
+    "JPN",
+    "KOR",
+    "PRK"
+   ],
+   "story": "地圖冊的世界頁上，東北亞被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "nea-1",
+     "name": "東北亞的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "nea-2",
+     "name": "東北亞的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "nea-boss",
+    "name": "區域魔王：東北亞三層面",
+    "intro": "把東北亞的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
+  },
+  {
+   "id": "sea",
+   "kind": "expedition",
+   "name": "東南亞",
+   "volume": "第四冊",
+   "no": 3,
+   "bbox": [
+    92,
+    -11,
+    142,
+    29
+   ],
+   "highlight": [
+    "MMR",
+    "THA",
+    "LAO",
+    "KHM",
+    "VNM",
+    "MYS",
+    "SGP",
+    "IDN",
+    "PHL",
+    "BRN",
+    "TLS"
+   ],
+   "story": "地圖冊的世界頁上，東南亞被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "sea-1",
+     "name": "東南亞的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "sea-2",
+     "name": "東南亞的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "sea-boss",
+    "name": "區域魔王：東南亞三層面",
+    "intro": "把東南亞的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
+  },
+  {
+   "id": "sa",
+   "kind": "expedition",
+   "name": "南亞",
+   "volume": "第四冊",
+   "no": 4,
+   "bbox": [
+    60,
+    4,
+    98,
+    37
+   ],
+   "highlight": [
+    "IND",
+    "PAK",
+    "BGD",
+    "NPL",
+    "BTN",
+    "LKA"
+   ],
+   "story": "地圖冊的世界頁上，南亞被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "sa-1",
+     "name": "南亞的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "sa-2",
+     "name": "南亞的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "sa-boss",
+    "name": "區域魔王：南亞三層面",
+    "intro": "把南亞的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
+  },
+  {
+   "id": "wana",
+   "kind": "expedition",
+   "name": "西亞與北非",
+   "volume": "第四冊",
+   "no": 5,
+   "bbox": [
+    -18,
+    10,
+    64,
+    43
+   ],
+   "highlight": [
+    "SAU",
+    "YEM",
+    "OMN",
+    "ARE",
+    "QAT",
+    "BHR",
+    "KWT",
+    "IRQ",
+    "SYR",
+    "JOR",
+    "ISR",
+    "PSX",
+    "LBN",
+    "TUR",
+    "IRN",
+    "AFG",
+    "EGY",
+    "LBY",
+    "TUN",
+    "DZA",
+    "MAR",
+    "SAH",
+    "SDN",
+    "CYP",
+    "GEO",
+    "ARM",
+    "AZE"
+   ],
+   "story": "地圖冊的世界頁上，西亞與北非被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "wana-1",
+     "name": "西亞與北非的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "wana-2",
+     "name": "西亞與北非的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "wana-boss",
+    "name": "區域魔王：西亞與北非三層面",
+    "intro": "把西亞與北非的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
+  },
+  {
+   "id": "ssa",
+   "kind": "expedition",
+   "name": "漠南非洲",
+   "volume": "第四冊",
+   "no": 6,
+   "bbox": [
+    -20,
+    -36,
+    52,
+    20
+   ],
+   "highlight": [
+    "MRT",
+    "MLI",
+    "NER",
+    "TCD",
+    "SEN",
+    "GMB",
+    "GNB",
+    "GIN",
+    "SLE",
+    "LBR",
+    "CIV",
+    "BFA",
+    "GHA",
+    "TGO",
+    "BEN",
+    "NGA",
+    "CMR",
+    "CAF",
+    "SDS",
+    "ETH",
+    "ERI",
+    "DJI",
+    "SOM",
+    "SOL",
+    "KEN",
+    "UGA",
+    "RWA",
+    "BDI",
+    "TZA",
+    "COD",
+    "COG",
+    "GAB",
+    "GNQ",
+    "STP",
+    "AGO",
+    "ZMB",
+    "MWI",
+    "MOZ",
+    "ZWE",
+    "BWA",
+    "NAM",
+    "ZAF",
+    "LSO",
+    "SWZ",
+    "MDG",
+    "COM",
+    "MUS",
+    "SYC",
+    "CPV"
+   ],
+   "story": "地圖冊的世界頁上，漠南非洲被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "ssa-1",
+     "name": "漠南非洲的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "ssa-2",
+     "name": "漠南非洲的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "ssa-boss",
+    "name": "區域魔王：漠南非洲三層面",
+    "intro": "把漠南非洲的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
+  },
+  {
+   "id": "eu",
+   "kind": "expedition",
+   "name": "歐洲",
+   "volume": "第五冊",
+   "no": 7,
+   "bbox": [
+    -25,
+    34,
+    45,
+    72
+   ],
+   "highlight": [
+    "ISL",
+    "IRL",
+    "GBR",
+    "NOR",
+    "SWE",
+    "FIN",
+    "DNK",
+    "EST",
+    "LVA",
+    "LTU",
+    "POL",
+    "DEU",
+    "NLD",
+    "BEL",
+    "LUX",
+    "FRA",
+    "CHE",
+    "AUT",
+    "CZE",
+    "SVK",
+    "HUN",
+    "SVN",
+    "HRV",
+    "BIH",
+    "SRB",
+    "MNE",
+    "MKD",
+    "ALB",
+    "GRC",
+    "BGR",
+    "ROU",
+    "MDA",
+    "UKR",
+    "BLR",
+    "ITA",
+    "ESP",
+    "PRT",
+    "AND",
+    "SMR",
+    "MLT",
+    "LIE",
+    "KOS",
+    "CYP"
+   ],
+   "story": "地圖冊的世界頁上，歐洲被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "eu-1",
+     "name": "歐洲的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "eu-2",
+     "name": "歐洲的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "eu-boss",
+    "name": "區域魔王：歐洲三層面",
+    "intro": "把歐洲的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
+  },
+  {
+   "id": "ru",
+   "kind": "expedition",
+   "name": "俄羅斯",
+   "volume": "第五冊",
+   "no": 8,
+   "bbox": [
+    25,
+    38,
+    190,
+    80
+   ],
+   "highlight": [
+    "RUS"
+   ],
+   "story": "地圖冊的世界頁上，俄羅斯被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "ru-1",
+     "name": "俄羅斯的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "ru-2",
+     "name": "俄羅斯的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "ru-boss",
+    "name": "區域魔王：俄羅斯三層面",
+    "intro": "把俄羅斯的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
+  },
+  {
+   "id": "na",
+   "kind": "expedition",
+   "name": "北美洲",
+   "volume": "第五冊",
+   "no": 9,
+   "bbox": [
+    -170,
+    14,
+    -50,
+    75
+   ],
+   "highlight": [
+    "USA",
+    "CAN"
+   ],
+   "story": "地圖冊的世界頁上，北美洲被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "na-1",
+     "name": "北美洲的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "na-2",
+     "name": "北美洲的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "na-boss",
+    "name": "區域魔王：北美洲三層面",
+    "intro": "把北美洲的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
+  },
+  {
+   "id": "la",
+   "kind": "expedition",
+   "name": "中南美洲",
+   "volume": "第五冊",
+   "no": 10,
+   "bbox": [
+    -118,
+    -56,
+    -34,
+    33
+   ],
+   "highlight": [
+    "MEX",
+    "GTM",
+    "BLZ",
+    "HND",
+    "SLV",
+    "NIC",
+    "CRI",
+    "PAN",
+    "CUB",
+    "JAM",
+    "HTI",
+    "DOM",
+    "BHS",
+    "TTO",
+    "COL",
+    "VEN",
+    "GUY",
+    "SUR",
+    "ECU",
+    "PER",
+    "BOL",
+    "BRA",
+    "PRY",
+    "URY",
+    "ARG",
+    "CHL",
+    "PRI"
+   ],
+   "story": "地圖冊的世界頁上，中南美洲被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "la-1",
+     "name": "中南美洲的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "la-2",
+     "name": "中南美洲的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "la-boss",
+    "name": "區域魔王：中南美洲三層面",
+    "intro": "把中南美洲的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
+  },
+  {
+   "id": "oc",
+   "kind": "expedition",
+   "name": "大洋洲",
+   "volume": "第五冊",
+   "no": 11,
+   "bbox": [
+    110,
+    -50,
+    200,
+    10
+   ],
+   "highlight": [
+    "AUS",
+    "NZL",
+    "PNG",
+    "FJI",
+    "SLB",
+    "VUT",
+    "NCL",
+    "WSM",
+    "TON",
+    "KIR",
+    "FSM",
+    "PLW"
+   ],
+   "story": "地圖冊的世界頁上，大洋洲被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "oc-1",
+     "name": "大洋洲的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "oc-2",
+     "name": "大洋洲的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "oc-boss",
+    "name": "區域魔王：大洋洲三層面",
+    "intro": "把大洋洲的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
+  },
+  {
+   "id": "polar",
+   "kind": "expedition",
+   "name": "兩極地區",
+   "volume": "第五冊",
+   "no": 12,
+   "bbox": null,
+   "highlight": [
+    "ATA",
+    "GRL"
+   ],
+   "story": "地圖冊的世界頁上，兩極地區被迷霧蓋住了。帶著通論島學到的原理出海調查，一步步讓它重新浮現。",
+   "levels": [
+    {
+     "id": "polar-1",
+     "name": "兩極地區的自然環境",
+     "concepts": []
+    },
+    {
+     "id": "polar-2",
+     "name": "兩極地區的人文與產業",
+     "concepts": []
+    }
+   ],
+   "boss": {
+    "id": "polar-boss",
+    "name": "區域魔王：兩極地區三層面",
+    "intro": "把兩極地區的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
+   }
   }
  ]
 }

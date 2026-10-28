@@ -141,5 +141,17 @@
     };
   }
 
-  return { elevation, contours, profile, slopeBetween, bearing, direction, DIR8, DIR16, zoneOf, timeAt, climateStats };
+  // ---------- 人口組成（聯合國 WPP 5 歲組） ----------
+  // 回傳百分比：young 0–14、work 15–64、old 65+、dependency 扶養比、sexRatio 性別比
+  function popStats(g) {
+    const sum = a => a.reduce((x, y) => x + y, 0);
+    const tot = sum(g.male) + sum(g.female);
+    const young = sum(g.male.slice(0, 3)) + sum(g.female.slice(0, 3));
+    const old = sum(g.male.slice(13)) + sum(g.female.slice(13));
+    const work = tot - young - old;
+    const r = v => Math.round(v * 10) / 10;
+    return { total: r(tot / 1000), young: r(young / tot * 100), work: r(work / tot * 100), old: r(old / tot * 100), dependency: r((young + old) / work * 100), sexRatio: r(sum(g.male) / sum(g.female) * 100) };
+  }
+
+  return { elevation, contours, profile, slopeBetween, bearing, direction, DIR8, DIR16, zoneOf, timeAt, climateStats, popStats };
 });
