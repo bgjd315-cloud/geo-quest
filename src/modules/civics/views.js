@@ -343,13 +343,12 @@
       next.disabled = true; next.textContent = at === list.length - 1 ? '看結果' : '下一案';
       window.scrollTo(0, 0);
       stage.innerHTML = `<div class="item c-case"><div class="qmeta"><span class="tag">案件 ${at + 1}</span><span class="tag soft">吳律師的法律服務站</span></div><div class="stem">${fmt(c.text)}</div>
-        <div class="c-cstep"><b>① 這是什麼事件？</b>${c.kind.length > 1 ? '<small>（可以複選）</small>' : ''}<div class="c-kinds">${C().CASE_KINDS.map(k => `<button class="c-kind" data-k="${k}">${k}</button>`).join('')}</div><button class="primary c-kgo" disabled>確定</button><div class="c-kfb"></div></div>
+        <div class="c-cstep"><b>① 這是什麼事件？</b><small>（同一件事可能同時是兩種，可以複選）</small><div class="c-kinds">${C().CASE_KINDS.map(k => `<button class="c-kind" data-k="${k}">${k}</button>`).join('')}</div><button class="primary c-kgo" disabled>確定</button><div class="c-kfb"></div></div>
         <div class="c-cstep c-rstep" hidden><b>② 可以怎麼救濟？</b><div class="opts">${Q().shuffle(c.options.map((_, i) => i)).map((i, n) => `<button class="opt" data-i="${i}"><b>${'ⒶⒷⒸⒹⒺⒻ'[n]}</b> ${esc(c.options[i])}</button>`).join('')}</div></div><div class="feedback"></div></div>`;
       const kgo = stage.querySelector('.c-kgo');
       let kindOk = false;
       stage.querySelectorAll('.c-kind').forEach(b => b.onclick = () => {
         if (kgo.dataset.done) return;
-        if (c.kind.length === 1) pick.clear();
         pick.has(b.dataset.k) ? pick.delete(b.dataset.k) : pick.add(b.dataset.k);
         stage.querySelectorAll('.c-kind').forEach(x => x.classList.toggle('on', pick.has(x.dataset.k)));
         kgo.disabled = !pick.size;

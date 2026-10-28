@@ -139,7 +139,7 @@
     const x = Object.assign({}, c, { _file: file, status: c.status || '確認' });
     x.text = c.text || c.situation || c.scenario || c.stem || c.case || '';
     let kind = c.eventType || c.caseType || c.kind || c.category || (KINDS.includes(c.type) ? c.type : null);
-    if (kind && typeof kind === 'object') kind = kind.answer;
+    if (kind && typeof kind === 'object' && !Array.isArray(kind)) kind = kind.answer;
     x.kind = list(kind).map(k => String(k).replace(/事件|案件/g, '')).filter(k => KINDS.includes(k));
     if (!x.kind.length && Array.isArray(c.kindOptions) && Number.isInteger(c.kindAnswer)) x.kind = [c.kindOptions[c.kindAnswer]];
     const r = c.remedy && typeof c.remedy === 'object' && !Array.isArray(c.remedy) ? c.remedy : null;
