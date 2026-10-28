@@ -27,8 +27,17 @@ FOOT = {}
 def footers(page):
     # 頁尾：「請翻頁繼續作答」框（含外框線）與頁碼，截圖時塗白
     if page.number not in FOOT:
-        fs = [r + (-40, -10, 40, 10) for r, t in lines(page) if '請翻頁' in t or '試題結束' in t
-              or (r.y0 > page.rect.height - 60 and re.fullmatch(r'[\d\s\-–]+', t))]
+        fs = []
+        for r, t in lines(page):
+            if '請翻頁' in t or '試題結束' in t:
+                # 只塗「請翻頁」那個框：框線是和文字重疊、右側靠頁邊的向量線條（不往左擴，免得塗到旁邊的選項）
+                box = fitz.Rect(r)
+                for d in page.get_drawings():
+                    dr = fitz.Rect(d['rect'])
+                    if dr.intersects(r + (-12, -10, 30, 10)) and dr.width < 200: box.include_rect(dr)
+                fs.append(box + (-2, -2, 2, 2))
+            elif r.y0 > page.rect.height - 60 and re.fullmatch(r'[\d\s\-–]+', t):
+                fs.append(r + (-4, -3, 4, 3))   # 頁碼
         FOOT[page.number] = fs
     return FOOT[page.number]
 
@@ -45,7 +54,8 @@ def graphics(page):
     return [r for r in rs if not any(f.contains(r) for f in fs)]
 
 def is_footer(page, rect, t):
-    return any(f.intersects(rect) for f in footers(page))
+    # 整行落在頁尾框裡才算頁尾（只沾到邊的選項文字不算）
+    return any(f.contains(rect + (1, 1, -1, -1)) for f in footers(page))
 
 def merge(rects, gap=4):
     rs = [fitz.Rect(r) for r in rects]
