@@ -12,7 +12,8 @@
   "cards/ea-4b.json",
   "cards/w-5a.json",
   "cards/w-5b.json",
-  "cards/w-6.json"
+  "cards/w-6.json",
+  "cards/gap.json"
  ],
  "questions": [
   "questions/tw-1a.json",
@@ -26,7 +27,8 @@
   "questions/ea-4b.json",
   "questions/w-5a.json",
   "questions/w-5b.json",
-  "questions/w-6.json"
+  "questions/w-6.json",
+  "questions/gap.json"
  ],
  "stories": [
   "stories/tw-a.json",

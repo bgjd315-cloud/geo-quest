@@ -45,6 +45,7 @@
   "questions/region-la.json",
   "questions/region-oc.json",
   "questions/region-polar.json",
-  "questions/home.json"
+  "questions/home.json",
+  "questions/exam-gap.json"
  ]
 }

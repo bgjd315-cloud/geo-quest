@@ -868,6 +868,18 @@
    ]
   },
   {
+   "id": "ea-trade",
+   "line": "ea",
+   "name": "國際貿易網：美洲白銀流入中國，絲綢、瓷器、茶葉外銷，美洲作物傳入",
+   "datedInBook": false,
+   "time": "16～18 世紀",
+   "era": "ea-mingqing",
+   "themes": [
+    "經濟與貿易",
+    "對外交流與衝突"
+   ]
+  },
+  {
    "id": "ea-ricci",
    "line": "ea",
    "name": "利瑪竇來華 1582、清朝禁教 1723",
@@ -939,6 +951,17 @@
    "name": "甲午戰爭、馬關條約",
    "datedInBook": true,
    "time": "1894～1895",
+   "era": "ea-lateqing",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-japan-expand",
+   "line": "ea",
+   "name": "日本對外擴張：併吞琉球 1879、日俄戰爭 1904～1905、併吞朝鮮 1910",
+   "datedInBook": true,
+   "time": "1879～1910",
    "era": "ea-lateqing",
    "themes": [
     "對外交流與衝突"
@@ -1221,6 +1244,18 @@
    ]
   },
   {
+   "id": "w-medieval",
+   "line": "w",
+   "name": "中古西歐：莊園、教會與修道院，拉丁文成為共通語文",
+   "datedInBook": false,
+   "time": "5～15 世紀",
+   "era": "w-faith",
+   "themes": [
+    "思想與宗教",
+    "社會與文化"
+   ]
+  },
+  {
    "id": "w-islam",
    "line": "w",
    "name": "伊斯蘭教創立 610、阿拉伯帝國擴張",
@@ -1275,6 +1310,30 @@
    "era": "w-early",
    "themes": [
     "經濟與貿易"
+   ]
+  },
+  {
+   "id": "w-america",
+   "line": "w",
+   "name": "美洲古文明（馬雅、阿茲提克、印加）與西班牙征服（1533 征服印加）",
+   "datedInBook": true,
+   "time": "約 4～16 世紀",
+   "era": "w-early",
+   "themes": [
+    "社會與文化",
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "w-mughal",
+   "line": "w",
+   "name": "蒙兀兒帝國建立 1526（伊斯蘭文化傳入印度），19 世紀中期印度成為英國殖民地",
+   "datedInBook": true,
+   "time": "1526～19 世紀中期",
+   "era": "w-early",
+   "themes": [
+    "統治與政權",
+    "思想與宗教"
    ]
   },
   {
@@ -1343,6 +1402,18 @@
    "era": "w-revolution",
    "themes": [
     "統治與政權"
+   ]
+  },
+  {
+   "id": "w-industrial",
+   "line": "w",
+   "name": "工業革命：蒸汽機與工廠、都市化、勞工問題與社會主義",
+   "datedInBook": false,
+   "time": "18 世紀中葉～19 世紀",
+   "era": "w-revolution",
+   "themes": [
+    "經濟與貿易",
+    "近代化"
    ]
   },
   {

@@ -17,6 +17,7 @@
       "map-direction",
       "map-grid",
       "map-elements",
+      "map-thematic",
       "map-scale"
      ]
     },
@@ -27,7 +28,8 @@
      "concepts": [
       "map-latlon",
       "map-landsea",
-      "map-abs-rel"
+      "map-abs-rel",
+      "map-projection"
      ]
     },
     {
@@ -114,7 +116,8 @@
       "clim-pressure-belt",
       "clim-type",
       "clim-sea",
-      "clim-change"
+      "clim-change",
+      "polar-ice"
      ]
     }
    ],
@@ -286,6 +289,7 @@
       "ind-sectors",
       "agri-cond",
       "agri-type",
+      "agri-origin",
       "fish"
      ]
     },
@@ -296,6 +300,7 @@
      "concepts": [
       "ind-location",
       "ind-type",
+      "ind-tw-stage",
       "ind-shift",
       "resource",
       "trade",

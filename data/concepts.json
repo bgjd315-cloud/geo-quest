@@ -193,6 +193,10 @@
     {
      "id": "clim-change",
      "name": "全球氣候變遷"
+    },
+    {
+     "id": "polar-ice",
+     "name": "冰棚、冰山與海冰"
     }
    ]
   },
@@ -293,6 +297,10 @@
      "name": "農業類型"
     },
     {
+     "id": "agri-origin",
+     "name": "作物原產地與物種交流"
+    },
+    {
      "id": "fish",
      "name": "漁業"
     },
@@ -303,6 +311,10 @@
     {
      "id": "ind-type",
      "name": "工業類型"
+    },
+    {
+     "id": "ind-tw-stage",
+     "name": "臺灣工業發展歷程"
     },
     {
      "id": "ind-shift",
