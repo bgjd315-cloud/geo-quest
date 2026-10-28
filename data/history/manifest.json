@@ -2,11 +2,31 @@
  "events": "events.json",
  "cards": [
   "cards/tw-1a.json",
-  "cards/tw-1b.json"
+  "cards/tw-1b.json",
+  "cards/tw-2a.json",
+  "cards/tw-2b.json",
+  "cards/ea-3a.json",
+  "cards/ea-3b.json",
+  "cards/ea-3c.json",
+  "cards/ea-4a.json",
+  "cards/ea-4b.json",
+  "cards/w-5a.json",
+  "cards/w-5b.json",
+  "cards/w-6.json"
  ],
  "questions": [
   "questions/tw-1a.json",
-  "questions/tw-1b.json"
+  "questions/tw-1b.json",
+  "questions/tw-2a.json",
+  "questions/tw-2b.json",
+  "questions/ea-3a.json",
+  "questions/ea-3b.json",
+  "questions/ea-3c.json",
+  "questions/ea-4a.json",
+  "questions/ea-4b.json",
+  "questions/w-5a.json",
+  "questions/w-5b.json",
+  "questions/w-6.json"
  ],
  "stories": []
 }

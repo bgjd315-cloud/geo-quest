@@ -451,6 +451,23 @@
    "skill": "時序"
   },
   {
+   "id": "ea25",
+   "name": "宋元的商業、科技與思想（理學）",
+   "events": [
+    "ea-liao-song",
+    "ea-mongol"
+   ],
+   "skill": "歷史解釋"
+  },
+  {
+   "id": "ea26",
+   "name": "清初的統治策略（懷柔與高壓）與疆域",
+   "events": [
+    "ea-qing"
+   ],
+   "skill": "比較"
+  },
+  {
    "id": "w01",
    "name": "兩河流域與埃及文明的比較",
    "events": [
