@@ -333,6 +333,36 @@
      "name": "區域發展差異"
     }
    ]
+  },
+  {
+   "id": "home",
+   "name": "地名與農業",
+   "concepts": [
+    {
+     "id": "pn-taiwan",
+     "name": "「臺灣」名稱的由來與範圍"
+    },
+    {
+     "id": "pn-origin",
+     "name": "地名的由來與地名行銷"
+    },
+    {
+     "id": "pn-admin",
+     "name": "行政區名的由來與演變"
+    },
+    {
+     "id": "agri-chain",
+     "name": "現代商業性農業與產銷流程"
+    },
+    {
+     "id": "food-mile",
+     "name": "食物里程、飲食全球化與在地消費"
+    },
+    {
+     "id": "food-safety",
+     "name": "食品安全與友善環境飲食"
+    }
+   ]
   }
  ]
 }

@@ -22,7 +22,8 @@
   "cards/hydro.json",
   "cards/pop.json",
   "cards/industry.json",
-  "cards/climate-world.json"
+  "cards/climate-world.json",
+  "cards/home.json"
  ],
  "questions": [
   "questions/map.json",
@@ -43,6 +44,7 @@
   "questions/region-na.json",
   "questions/region-la.json",
   "questions/region-oc.json",
-  "questions/region-polar.json"
+  "questions/region-polar.json",
+  "questions/home.json"
  ]
 }

@@ -907,6 +907,44 @@
     "intro": "把兩極地區的自然環境、人口文化、產業發展串起來，才能通過這道試煉。"
    },
    "cover": "exp_polar"
+  },
+  {
+   "id": "home",
+   "kind": "homecoming",
+   "name": "地名與農業",
+   "island": "歸鄉島",
+   "volume": "第六冊",
+   "no": 7,
+   "cover": "exp_ship",
+   "stage": 4,
+   "levels": [
+    {
+     "id": "home-1",
+     "name": "地名裡的故事",
+     "banner": "exp_ship",
+     "concepts": [
+      "pn-taiwan",
+      "pn-origin",
+      "pn-admin"
+     ]
+    },
+    {
+     "id": "home-2",
+     "name": "從田裡到餐桌",
+     "banner": "exp_ship",
+     "concepts": [
+      "agri-chain",
+      "food-mile",
+      "food-safety"
+     ]
+    }
+   ],
+   "story": "研究船繞完世界一圈，回到臺灣。歸鄉島的路牌和菜市場都還籠罩在迷霧裡。讀懂地名背後的故事、弄清楚餐桌上的食物從哪裡來，家鄉就會重新亮起來。",
+   "boss": {
+    "id": "home-boss",
+    "name": "魔王試煉：迷霧中的路牌",
+    "intro": "市集上的攤販把產地標籤弄混了，路牌上的地名也被霧氣擦掉一半。把地名和食物的線索拼回去，才能通過試煉。"
+   }
   }
  ]
 }

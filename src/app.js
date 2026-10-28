@@ -105,7 +105,8 @@
 
   views.home = () => {
     if (!S().hero) return views.hero();
-    const units = D().units.filter(u => !isExp(u));
+    const units = D().units.filter(u => !isExp(u) && u.kind !== 'homecoming');
+    const homes = D().units.filter(u => u.kind === 'homecoming');
     const exps = D().units.filter(isExp);
     const weak = weakest(3);
     const live = D().live();
@@ -124,6 +125,9 @@
       <div class="ship"><img src="${D().img('exp_ship')}" alt="研究船出海"></div>
       ${bird('通論島上學到的原理，要帶出海用在世界各地。答錯時，我會先帶你回去複習原理。')}
       ${['第三冊', '第四冊', '第五冊'].map(v => `<h3 class="vol">${v}</h3><section class="unit-list exp">${exps.filter(u => u.volume === v).map(u => unitCard(u)).join('')}</section>`).join('')}
+      ${homes.length ? `<h2 class="sec">回到家鄉</h2>
+      ${bird('繞完世界一圈，研究船回到臺灣了。這一站在第六冊：讀懂家鄉的地名和餐桌。')}
+      <section class="unit-list">${homes.map(u => unitCard(u)).join('')}</section>` : ''}
     </div>`;
   };
 
