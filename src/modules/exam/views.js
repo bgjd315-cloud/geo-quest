@@ -6,7 +6,10 @@
   const X = () => window.XData;
   const P = () => window.Store.X.get();
   const LET = ['A', 'B', 'C', 'D'];
-  const SUBJ_NAME = { geo: '地理', hist: '歷史' };
+  const SUBJ_NAME = { geo: '地理', hist: '歷史', civ: '公民' };
+  const CARD_NAME = { geo: '原理卡', hist: '館藏卡', civ: '概念卡' };
+  const SUBJS = () => ['geo', 'hist', 'civ'].filter(s => X().items.some(it => it.subject === s));
+  const subjList = () => SUBJS().map(s => SUBJ_NAME[s]).join('＋');
   const YEARS = [111, 112, 113, 114, 115];
   const fmt = s => esc(s || '').replace(/\n/g, '<br>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
   const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
@@ -76,7 +79,7 @@
     const keys = X().keysOf(it);
     return `<div class="chips x-chips">${keys.map(k => `<a class="chip" href="${keyHref(k)}">${esc(X().name(k))} ${X().chipKey(k, { short: true })}</a>`).join('')}
       ${it.skill.map(s => `<a class="chip soft" href="#/x/skill/${encodeURIComponent(s)}">${esc(s)}</a>`).join('')}</div>
-      ${keys.length ? `<div class="x-links">${keys.slice(0, 2).map(k => `<a href="${cardHref(k)}">看${X().split(k).subj === 'geo' ? '原理卡' : '館藏卡'}：${esc(short(X().name(k)))}</a>`).join('')}${siteLinks(keys[0])}</div>` : ''}`;
+      ${keys.length ? `<div class="x-links">${keys.slice(0, 2).map(k => `<a href="${cardHref(k)}">看${CARD_NAME[X().split(k).subj]}：${esc(short(X().name(k)))}</a>`).join('')}${siteLinks(keys[0])}</div>` : ''}`;
   }
   function siteLinks(key) {
     const lv = X().siteLevel(key);
@@ -89,6 +92,7 @@
   function cardFor(key) {
     const { subj, id } = X().split(key);
     if (subj === 'geo') return window.Quiz.cardHTML(id);
+    if (subj === 'civ') return window.Subjects.civics ? window.Subjects.civics.card(id) : `<div class="card"><h3>${esc(X().name(key))}</h3></div>`;
     const kp = X().kp[id] || { name: id, events: [] };
     const H = window.HData, hc = window.Subjects.history && window.Subjects.history.card;
     const evs = (kp.events || []).filter(e => H && H.eventById && H.eventById[e]).slice(0, 3);
@@ -118,10 +122,10 @@
     const n = s => X().items.filter(it => it.subject === s).length;
     app().innerHTML = `${topbar('#/hub')}<div class="page x-home">
       <h1>會考真題</h1>
-      <p class="hint">111–115 年國中教育會考社會科的地理、歷史題，共 ${X().items.length} 題（地理 ${n('geo')}、歷史 ${n('hist')}），照原卷截圖呈現；解析是我們自己寫的。</p>
+      <p class="hint">111–115 年國中教育會考社會科的${SUBJS().map(s => SUBJ_NAME[s]).join('、')}題，共 ${X().items.length} 題（${SUBJS().map(s => `${SUBJ_NAME[s]} ${n(s)}`).join('、')}），照原卷截圖呈現；解析是我們自己寫的。</p>
       ${X().missing.length ? `<p class="hint x-wait">還在準備：${X().missing.map(p => esc(p.replace('.json', ' 年'))).join('、')}</p>` : ''}
       <div class="x-modes">
-        <a class="x-mode" href="#x-years"><b>年度模擬</b><small>整年地理＋歷史，計時</small></a>
+        <a class="x-mode" href="#x-years"><b>年度模擬</b><small>整年${subjList()}，計時</small></a>
         <a class="x-mode" href="#/x/kp"><b>知識點練習</b><small>同一觀念 5 年的真題</small></a>
         <a class="x-mode" href="#/x/skill"><b>能力練習</b><small>讀圖、史料判讀…跨年度</small></a>
         <a class="x-mode" href="#/x/redo"><b>錯題重做</b><small>${redo ? `${redo} 題待重做` : '目前沒有錯題'}</small></a>
@@ -132,7 +136,7 @@
         const its = X().yearItems(y), s = sims[y] || [];
         const best = s.reduce((m, r) => !m || r.score / r.total > m.score / m.total ? r : m, null);
         if (!its.length) return `<div class="x-year off"><b>${y} 年</b><span class="hint">資料準備中</span></div>`;
-        return `<div class="x-year"><div><b>${y} 年</b><small>地理 ${its.filter(i => i.subject === 'geo').length}・歷史 ${its.filter(i => i.subject === 'hist').length} 題・限時 ${Math.round(its.length * 75 / 60)} 分</small>
+        return `<div class="x-year"><div><b>${y} 年</b><small>${SUBJS().map(s => `${SUBJ_NAME[s]} ${its.filter(i => i.subject === s).length}`).join('・')} 題・限時 ${Math.round(its.length * 75 / 60)} 分</small>
           <small>${best ? `最佳 ${best.score} / ${best.total}（${pct(best.score, best.total)}%）・做過 ${s.length} 次` : '還沒做過'}</small></div><a class="primary btn" href="#/x/sim/${y}">開始</a></div>`;
       }).join('')}</div>
       <p class="hint">試題來源：國中教育會考 111–115 年社會科試題本與參考答案（心測中心）。依著作權法第 9 條，依法令舉行的考試試題不是著作權的標的。</p>
@@ -148,7 +152,7 @@
     const limit = items.length * 75;
     const ans = {};
     let at = 0, used = 0, since = Date.now(), paused = false, timer = null, over = false;
-    app().innerHTML = `<div class="page play x-sim"><div class="banner plain"><h2>${y} 年會考・地理＋歷史</h2><span class="mode">模擬模式・共 ${items.length} 題，限時 ${Math.round(limit / 60)} 分鐘，交卷後看解析</span></div>
+    app().innerHTML = `<div class="page play x-sim"><div class="banner plain"><h2>${y} 年會考・${subjList()}</h2><span class="mode">模擬模式・共 ${items.length} 題，限時 ${Math.round(limit / 60)} 分鐘，交卷後看解析</span></div>
       <div class="run">
         <div class="runbar"><button class="ghost quit">離開</button><div class="progress"><div class="fill"></div></div><div class="count"></div><div class="clock"></div><button class="ghost x-pause">暫停</button></div>
         <div class="x-stage"></div>
@@ -220,7 +224,7 @@
     const by = s => { const r = results.filter(x => x.it.subject === s); return `${r.filter(x => x.ok).length} / ${r.length}`; };
     const prev = (P().sims[y] || []).slice(0, -1);
     app().innerHTML = `${topbar('#/x')}<div class="page result x-result">
-      <div class="score-hero x-score"><div><div class="big">${sum.score} / ${sum.total}</div><div>${p}%${sum.timeUp ? '・時間到' : ''}・用時 ${Math.floor(sum.secs / 60)} 分 ${sum.secs % 60} 秒</div><div class="hint">地理 ${by('geo')}・歷史 ${by('hist')}${prev.length ? `・上次 ${prev[prev.length - 1].score} / ${prev[prev.length - 1].total}` : ''}</div></div></div>
+      <div class="score-hero x-score"><div><div class="big">${sum.score} / ${sum.total}</div><div>${p}%${sum.timeUp ? '・時間到' : ''}・用時 ${Math.floor(sum.secs / 60)} 分 ${sum.secs % 60} 秒</div><div class="hint">${SUBJS().map(s => `${SUBJ_NAME[s]} ${by(s)}`).join('・')}${prev.length ? `・上次 ${prev[prev.length - 1].score} / ${prev[prev.length - 1].total}` : ''}</div></div></div>
       <section class="x-mini">${window.Diagnosis.miniHTML(results)}</section>
       <h2 class="sec">逐題解析</h2>
       <div class="row"><label class="x-only"><input type="checkbox" id="x-wrongonly"> 只看答錯的題目（${results.filter(r => !r.ok).length} 題）</label></div>
@@ -281,12 +285,13 @@
       if (item.kind === 'site') {
         stage.innerHTML = `<div class="remedy-tag">補救 2／網站原創題・同一觀念</div>`;
         stage.appendChild(box);
-        const geo = X().split(item.key).subj === 'geo';
-        const T = geo ? window.Store : window.Store.H;
+        const sj = X().split(item.key).subj, geo = sj === 'geo';
+        const T = geo ? window.Store : sj === 'civ' ? window.Store.C : window.Store.H;
         const q = item.q;
         window.Quiz.renderItem(box, q, { mode: 'practice' }, r => {
           if (q.parts) r.parts.forEach((ok, k) => T.record({ q: q.id, part: k, ok, c: q.parts[k].concepts || q.concepts, r: q.region, m: 'exam-remedy' }));
           else T.record(Object.assign({ q: q.id, ok: r.ok, c: q.concepts, m: 'exam-remedy' }, geo ? { r: q.region } : {}));
+          if (sj === 'civ' && window.CivicsStats) window.CivicsStats.afterAnswer(q, r);
           next.disabled = false; next.textContent = idx === queue.length - 1 ? '完成' : '回到真題';
         });
         return;
@@ -350,11 +355,11 @@
   views.kpList = () => {
     const done = {}; for (const e of P().log) { const it = X().byId[e.id]; if (it) for (const k of X().keysOf(it)) { done[k] = done[k] || { n: 0, ok: 0 }; done[k].n++; if (e.ok) done[k].ok++; } }
     const sec = subj => { const ks = rankRows(subj); return `<h2 class="sec">${SUBJ_NAME[subj]}</h2>${ks.length ? `<div class="x-kplist">${ks.map(k => `<a class="x-kprow" href="${keyHref(k)}"><span>${esc(X().name(k))}</span><small>${X().chipKey(k, { short: true })} ${X().count(k)} 題${done[k] ? `・答對 ${pct(done[k].ok, done[k].n)}%` : ''}</small></a>`).join('')}</div>` : '<p class="empty">資料準備中。</p>'}`; };
-    app().innerHTML = `${topbar('#/x')}<div class="page"><h1>知識點練習</h1><p class="hint">點一個知識點，練 5 年來考過它的所有真題。答錯時會先看觀念卡，再做一題網站原創題，最後回到真題。標籤是會考出題率：${X().TIERS.filter(t => t.min).map(t => `${X().chip(t.min, { short: true })} ${t.min >= 5 ? '5 題以上' : t.min === 2 ? '2–4 題' : '1 題'}`).join('、')}。</p>${sec('geo')}${sec('hist')}</div>`;
+    app().innerHTML = `${topbar('#/x')}<div class="page"><h1>知識點練習</h1><p class="hint">點一個知識點，練 5 年來考過它的所有真題。答錯時會先看觀念卡，再做一題網站原創題，最後回到真題。標籤是會考出題率：${X().TIERS.filter(t => t.min).map(t => `${X().chip(t.min, { short: true })} ${t.min >= 5 ? '5 題以上' : t.min === 2 ? '2–4 題' : '1 題'}`).join('、')}。</p>${sec('geo')}${sec('hist')}${sec('civ')}</div>`;
   };
   views.skillList = () => {
     const sec = (name, skills) => `<h2 class="sec">${name}</h2><div class="x-kplist">${skills.map(s => { const n = X().itemsOfSkill(s).length; return n ? `<a class="x-kprow" href="#/x/skill/${encodeURIComponent(s)}"><span>${esc(s)}</span><small>${n} 題</small></a>` : `<div class="x-kprow off"><span>${esc(s)}</span><small>沒有題目</small></div>`; }).join('')}</div>`;
-    app().innerHTML = `${topbar('#/x')}<div class="page"><h1>能力練習</h1><p class="hint">同一種能力的真題跨年度一起練，每回 10 題，沒做過和做錯的優先。</p>${sec('地理', X().GEO_SKILLS)}${sec('歷史', X().HIST_SKILLS)}</div>`;
+    app().innerHTML = `${topbar('#/x')}<div class="page"><h1>能力練習</h1><p class="hint">同一種能力的真題跨年度一起練，每回 10 題，沒做過和做錯的優先。</p>${sec('地理', X().GEO_SKILLS)}${sec('歷史', X().HIST_SKILLS)}${sec('公民', X().CIV_SKILLS)}</div>`;
   };
 
   // ---------- 考點分布 ----------
@@ -362,6 +367,7 @@
   const statsOpt = { sort: 'freq', zero: false };
   function allKeys(subj) {
     if (subj === 'geo') return ((window.Data && window.Data.concepts && window.Data.concepts.units) || []).flatMap(u => u.concepts.map(c => 'geo:' + c.id));
+    if (subj === 'civ') return ((window.CData && window.CData.units) || []).flatMap(u => (u.concepts || []).map(c => 'civ:' + c.id));
     return X().kpList.map(p => 'hist:' + p.id);
   }
   function statKeys(subj) {
@@ -386,18 +392,18 @@
       return `<h2 class="sec">${SUBJ_NAME[subj]}：高頻考點排行</h2>
         <p class="hint x-tiersum">${X().TIERS.map(t => `${X().chip(t.min, { short: true })} ${tc[t.name] || 0} 個`).join('　')}</p>
         <ol class="x-rank">${top.map(k => { const lv = X().siteLevel(k); return `<li><div class="x-rk"><a href="${keyHref(k)}">${esc(X().name(k))} ${X().chipKey(k, { short: true })}</a><span class="x-bar"><i style="width:${X().count(k) / max * 100}%"></i></span><b>${X().count(k)}</b></div>
-          <div class="x-links"><a href="${keyHref(k)}">練真題</a><a href="${cardHref(k)}">${subj === 'geo' ? '原理卡' : '館藏卡'}</a>${lv ? `<a href="${lv.href}">網站關卡</a>` : ''}</div></li>`; }).join('')}</ol>
+          <div class="x-links"><a href="${keyHref(k)}">練真題</a><a href="${cardHref(k)}">${CARD_NAME[subj]}</a>${lv ? `<a href="${lv.href}">網站關卡</a>` : ''}</div></li>`; }).join('')}</ol>
         <h3>${SUBJ_NAME[subj]}：知識點 × 年份</h3>
         <div class="mx-wrap"><table class="x-heat"><thead><tr><th>知識點</th><th>出題率</th>${years.map(y => `<th>${y}</th>`).join('')}<th>合計</th><th>網站</th></tr></thead><tbody>
         ${ks.map(k => { const lv = X().siteLevel(k), ay = X().appearYear[k] || {}, n = X().count(k); return `<tr${n ? '' : ' class="x-zero"'}><th>${n ? `<a href="${keyHref(k)}">${esc(short(X().name(k), 18))}</a>` : esc(short(X().name(k), 18))}</th><td class="xf-cell">${X().chip(n, { short: true })}</td>${years.map(y => `<td class="${heat(ay[y] || 0)}">${ay[y] || ''}</td>`).join('')}<td><b>${n}</b></td><td>${lv ? `<a href="${lv.href}">關卡</a>` : `<a href="${cardHref(k)}">卡</a>`}</td></tr>`; }).join('')}
         </tbody></table></div>`;
     };
     app().innerHTML = `${topbar('#/x')}<div class="page x-stats"><h1>考點分布</h1>
-      <p class="hint">統計 ${years.length ? `${years[0]}–${years[years.length - 1]}` : ''} 年會考社會科的地理、歷史題（一題標了幾個知識點就各算一次）。點知識點可以練它的真題。</p>
+      <p class="hint">統計 ${years.length ? `${years[0]}–${years[years.length - 1]}` : ''} 年會考社會科的${SUBJS().map(s => SUBJ_NAME[s]).join('、')}題（一題標了幾個知識點就各算一次）。點知識點可以練它的真題。</p>
       ${X().legendHTML()}
       <div class="x-sort"><span>表格排序：</span><button class="ghost ${statsOpt.sort === 'freq' ? 'on' : ''}" data-sort="freq">出題率高→低</button><button class="ghost ${statsOpt.sort === 'book' ? 'on' : ''}" data-sort="book">課本順序</button>
         <label><input type="checkbox" class="x-zerobox" ${statsOpt.zero ? 'checked' : ''}> 列出沒考過的觀念</label></div>
-      ${sec('geo')}${sec('hist')}<p class="legend x-legend"><span class="h1">1</span><span class="h2">2</span><span class="h3">3</span><span class="h4">4+</span>＝該年出現題數</p></div>`;
+      ${sec('geo')}${sec('hist')}${sec('civ')}<p class="legend x-legend"><span class="h1">1</span><span class="h2">2</span><span class="h3">3</span><span class="h4">4+</span>＝該年出現題數</p></div>`;
     app().querySelectorAll('.x-sort button').forEach(b => b.onclick = () => { statsOpt.sort = b.dataset.sort; keepScroll(views.stats); });
     app().querySelector('.x-zerobox').onchange = e => { statsOpt.zero = e.target.checked; keepScroll(views.stats); };
   };
@@ -408,7 +414,7 @@
     const key = X().keyOf(id), lv = X().siteLevel(key), sts = X().storiesOf(key);
     app().innerHTML = `${topbar('#/x')}<div class="page x-cardpage">${cardFor(key)}
       <div class="row">${X().count(key) ? `<a class="primary btn" href="${keyHref(key)}">練這個觀念的真題（${X().count(key)} 題）</a>` : ''}${lv ? `<a class="ghost btn" href="${lv.href}">網站關卡：${esc(lv.name)}</a>` : ''}</div>
-      ${sts.length ? `<p class="hint">相關故事：${sts.map(ch => `<a href="#/h/story/${encodeURIComponent(ch.id)}">${esc(ch.title || ch.id)}</a>`).join('、')}</p>` : ''}</div>`;
+      ${sts.length ? `<p class="hint">相關故事：${sts.map(ch => `<a href="${ch._href || '#/h/story/' + encodeURIComponent(ch.id)}">${esc(ch.title || ch.id)}</a>`).join('、')}</p>` : ''}</div>`;
   };
 
   views.diag = () => {
@@ -432,10 +438,10 @@
   const COVER = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"><rect width="300" height="200" fill="#e7eaee"/><rect x="40" y="22" width="150" height="160" rx="6" fill="#fff" stroke="#9aa6b2"/>${[0, 1, 2, 3, 4, 5, 6].map(r => [0, 1, 2, 3].map(c => `<rect x="${62 + c * 28}" y="${40 + r * 20}" width="18" height="10" rx="2" fill="${(r * 3 + c * 5) % 4 === 1 ? '#4a5a6a' : '#fff'}" stroke="#9aa6b2"/>`).join('')).join('')}<circle cx="232" cy="92" r="34" fill="none" stroke="#b5523b" stroke-width="6"/><text x="232" y="104" font-size="34" text-anchor="middle" fill="#b5523b" font-family="sans-serif" font-weight="700">會</text></svg>`);
 
   window.Subjects.exam = {
-    name: '會考真題', title: '111–115 年地理＋歷史', book: false, home: '#/x', cover: () => COVER,
+    name: '會考真題', title: '111–115 年地理＋歷史＋公民', book: false, home: '#/x', cover: () => COVER,
     blurb: '歷屆會考原題：年度模擬、知識點與能力練習；答錯就回網站補觀念。',
     load: () => X().load(), route,
-    about: '會考真題：國中教育會考 111–115 年社會科試題本與參考答案（心測中心），只收地理、歷史題；依著作權法第 9 條，依法令舉行之考試試題不是著作權的標的。解析由本站自行撰寫。'
+    about: '會考真題：國中教育會考 111–115 年社會科試題本與參考答案（心測中心），收地理、歷史、公民題；依著作權法第 9 條，依法令舉行之考試試題不是著作權的標的。解析由本站自行撰寫。'
   };
   window.Exam = { views, cardFor, renderItem, figHTML, keyHref, cardHref };
 })();

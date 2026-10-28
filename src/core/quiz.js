@@ -91,7 +91,10 @@
   // done(result) 會帶回 {ok, score, parts?}
   function renderItem(el, q, ctx, done) {
     const sim = ctx.mode === 'sim';
-    const head = `<div class="qmeta"><span class="tag">${esc(q.unit)}</span>${q.region && q.region !== '通論' ? `<span class="tag region">${esc(q.region)}</span>` : ''}<span class="tag soft">${esc(typeName(q.type))}</span></div>`;
+    const head = `<div class="qmeta"><span class="tag">${esc(q.unitLabel || q.unit)}</span>${q.region && q.region !== '通論' ? `<span class="tag region">${esc(q.region)}</span>` : ''}<span class="tag soft">${esc(typeName(q.type))}</span></div>`;
+    // 各科自訂的題型（公民的並排辨析、計算題、價格與數量判斷…）
+    // 回傳 false 表示這題還是用一般選擇題介面
+    if (RENDERERS[q.type] && RENDERERS[q.type](el, q, ctx, done, head) !== false) return;
     if (Array.isArray(q.parts)) return renderChain(el, q, ctx, done, head);
     if (q.type === 'order') return renderOrder(el, q, ctx, done, head);
     if (q.type === 'match') return renderMatch(el, q, ctx, done, head);
@@ -112,7 +115,7 @@
         if (!sim && k === q.answer) b.classList.add('right');
       });
       el.querySelectorAll('[data-pick]').forEach(g => g.classList.add('done'));
-      if (!sim) showExplain(el, q, ok);
+      if (!sim) showExplain(el, q, ok, !ok && q.optionFeedback && q.optionFeedback[i] ? q.optionFeedback[i] : '');
       done({ ok, chosen: i });
     };
     el.querySelectorAll('.opt').forEach(b => b.onclick = () => choose(+b.dataset.i));
@@ -239,6 +242,8 @@
   const hasFigOpts = q => q.options && q.options.some(o => typeof o === 'object' && o.figure);
   const TYPE_NAME = { single: '單選題', click: '圖上點選', chain: '連鎖題組', clue: '線索猜地', order: '排序', match: '配對', decode: '原理解碼', compare: '跨區比較', transfer: '遷移題' };
   const typeName = t => TYPE_NAME[t] || '題目';
+  // 各科可以登記自己的題型：RENDERERS[type](el, q, ctx, done, head)、ANSWER_TEXT[type](q) → 正解文字
+  const RENDERERS = {}, ANSWER_TEXT = {};
 
   // ---------- 原理卡 ----------
   function cardHTML(concept) {
@@ -335,8 +340,9 @@
       renderItem(box, item.q, { mode }, r => {
         results.push({ q: item.q, r });
         const q = item.q;
-        if (q.parts) r.parts.forEach((ok, k) => track.record({ q: q.id, part: k, ok, c: q.parts[k].concepts || q.concepts, r: q.region, m: mode }));
+        if (q.parts && r.parts) r.parts.forEach((ok, k) => track.record({ q: q.id, part: k, ok, c: q.parts[k].concepts || q.concepts, r: q.region, m: mode }));
         else track.record({ q: q.id, ok: r.ok, c: q.concepts, r: q.region, m: mode });
+        if (opts.onAnswer) opts.onAnswer(q, r, mode);
         if (!r.ok && mode === 'practice') remedy(q);
         next.disabled = false;
         if (mode === 'sim') { idx === queue.length - 1 ? finish() : (idx++, show()); }
@@ -362,6 +368,7 @@
   // 模擬模式結束後：逐題顯示作答與解析
   function reviewList(results) {
     return results.map(({ q, r }, n) => {
+      if (ANSWER_TEXT[q.type]) return `<div class="rv ${r.ok ? 'good' : 'bad'}"><div class="rvh">${n + 1}. ${r.ok ? '○' : '×'} ${fmt(q.stem)}</div><div>正解：${ANSWER_TEXT[q.type](q)}</div><p>${fmt(q.explain)}</p>${freqLine(q)}</div>`;
       if (q.parts) {
         return `<div class="rv"><div class="rvh">${n + 1}. ${fmt(q.stem)}</div>${figure(q.figure)}${q.parts.map((p, k) => `<div class="rvp ${r.parts[k] ? 'good' : 'bad'}"><b>${k + 1}.</b> ${fmt(p.stem)}<div>正解：${optionHTML(p.options[p.answer])}</div><p>${fmt(p.explain)}</p></div>`).join('')}${freqLine(q)}</div>`;
       }
@@ -372,5 +379,5 @@
     }).join('');
   }
 
-  window.Quiz = { run, figure, cardHTML, reviewList, renderItem, typeName, shuffle };
+  window.Quiz = { run, figure, cardHTML, reviewList, renderItem, typeName, shuffle, RENDERERS, ANSWER_TEXT, TYPE_NAME, fmt, optsHTML, showExplain, freqLine };
 })();

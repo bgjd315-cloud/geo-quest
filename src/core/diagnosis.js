@@ -1,4 +1,4 @@
-// 學習診斷（三方資料合併）：會考真題作答＋地理原創題作答＋歷史原創題作答。
+// 學習診斷（資料合併）：會考真題作答＋地理、歷史、公民原創題作答。
 // 入口：#/x/diag（社會科首頁、會考真題）與家長頁的「學習診斷」分頁。可列印。
 // 需加強的觀念：真題＋原創題合計作答 ≥ 3 次且答對率 < 70%；優先度 ＝（1 − 答對率）×（1 ＋ 會考 5 年出現次數 ÷ 5）。
 (function () {
@@ -19,12 +19,19 @@
     比較: '先找出比較的項目（時間、地點、對象），再逐項列出相同與不同。',
     變遷與延續: '把同一件事的「之前」和「之後」並排，圈出改變了什麼、什麼沒變。',
     史料判讀: '先看出處與立場，再判斷一手或二手，最後才讀內容。',
-    歷史解釋: '分清「事實」和「看法」，找出作者用了哪些證據支持看法。'
+    歷史解釋: '分清「事實」和「看法」，找出作者用了哪些證據支持看法。',
+    概念辨析: '先把兩個容易混淆的概念並排，找出「只差一個條件」的地方，再回到題目找那個條件。',
+    規範判斷: '先分是民事、刑事還是行政，再找適用的法律或制度；只看規定，不做道德評論。',
+    經濟推理: '先找出誰在做選擇、放棄了什麼，再看價格或數量往哪個方向變；有數字就列式計算。',
+    圖表判讀: '先讀圖表的標題、單位和來源，再找變化趨勢，最後才連到公民概念。',
+    觀點評估: '把雙方的論點和依據分開，只判斷依據是否成立、和結論有沒有關係，不看立場。'
   };
+  const SUBJ_NAME = { geo: '地理', hist: '歷史', civ: '公民' };
+  const CARD_NAME = { geo: '原理卡', hist: '館藏卡', civ: '概念卡' };
 
   // ---------- 統計 ----------
   function collect() {
-    const pts = {}, skills = {}, subj = { geo: { xn: 0, xok: 0, sn: 0, sok: 0 }, hist: { xn: 0, xok: 0, sn: 0, sok: 0 } };
+    const pts = {}, skills = {}, subj = { geo: { xn: 0, xok: 0, sn: 0, sok: 0 }, hist: { xn: 0, xok: 0, sn: 0, sok: 0 }, civ: { xn: 0, xok: 0, sn: 0, sok: 0 } };
     const pt = k => pts[k] = pts[k] || { key: k, xn: 0, xok: 0, sn: 0, sok: 0, last: null, skills: {} };
     const sk = s => skills[s] = skills[s] || { n: 0, ok: 0, xn: 0, xok: 0 };
     const wrongAt = (p, ts, w) => { if (!p.last || ts > p.last.ts) p.last = Object.assign({ ts }, w); };
@@ -63,6 +70,22 @@
         for (const s of qs) { p.skills[s] = p.skills[s] || { n: 0, ok: 0 }; p.skills[s].n++; if (e.ok) p.skills[s].ok++; }
       }
     }
+    // 公民原創題（作答紀錄的 c 就是公民概念 id；能力看題目或小題的 skill）
+    const CD = window.CData;
+    if (CD && CD.anyQ) for (const e of window.Store.C.get().log) {
+      const q = CD.anyQ(e.q);
+      if (!q && !(e.c || []).length) continue;
+      subj.civ.sn++; if (e.ok) subj.civ.sok++;
+      const part = q && e.part != null && q.parts ? q.parts[e.part] : null;
+      const qs = list(part && part.skill ? part.skill : q ? q.skill : []);
+      for (const s of qs) { const v = sk(s); v.n++; if (e.ok) v.ok++; }
+      for (const c of e.c || []) {
+        if (!CD.conceptName[c]) continue;
+        const p = pt('civ:' + c); p.sn++; if (e.ok) p.sok++;
+        else wrongAt(p, e.ts || 0, { q, part: e.part });
+        for (const s of qs) { p.skills[s] = p.skills[s] || { n: 0, ok: 0 }; p.skills[s].n++; if (e.ok) p.skills[s].ok++; }
+      }
+    }
     for (const p of Object.values(pts)) {
       p.n = p.xn + p.sn; p.ok = p.xok + p.sok; p.acc = p.n ? p.ok / p.n : null;
       p.appear = X().count(p.key);
@@ -90,6 +113,7 @@
   function mnemonic(key) {
     const { subj, id } = X().split(key);
     if (subj === 'geo') { const c = window.Data.cards[id]; return c && c.tip ? c.tip : ''; }
+    if (subj === 'civ') { const c = window.CData && window.CData.cards[id]; return c && c.tip ? c.tip : ''; }
     const H = window.HData;
     for (const e of (X().kp[id] || {}).events || []) { const c = H && H.cards && H.cards[e]; if (c && c.tip) return c.tip; }
     return '';
@@ -101,11 +125,11 @@
   }
   function suggestHTML(p, compact) {
     const key = p.key, E = window.Exam;
-    const lv = X().siteLevel(key), sts = X().storiesOf(key), geo = X().split(key).subj === 'geo';
+    const lv = X().siteLevel(key), sts = X().storiesOf(key), sj = X().split(key).subj;
     const tip = mnemonic(key), s = skillOf(p), re = retestItems(key);
     return `<ol class="dg-steps">
-      <li><b>先補觀念</b>：<a href="${E.cardHref(key)}">${geo ? '原理卡' : '館藏卡'}・${esc(X().name(key))}</a>${tip ? `<br><span class="dg-tip">口訣：${esc(tip)}</span>` : ''}</li>
-      <li><b>再練原創題</b>：${lv ? `<a href="${lv.href}">${esc(lv.name)}</a>，建議做 8–10 題` : '網站還沒有這個觀念的原創題'}${sts.length ? `；故事：${sts.slice(0, 2).map(ch => `<a href="#/h/story/${encodeURIComponent(ch.id)}">${esc(ch.title || ch.id)}</a>`).join('、')}` : ''}</li>
+      <li><b>先補觀念</b>：<a href="${E.cardHref(key)}">${CARD_NAME[sj]}・${esc(X().name(key))}</a>${tip ? `<br><span class="dg-tip">口訣：${esc(tip)}</span>` : ''}</li>
+      <li><b>再練原創題</b>：${lv ? `<a href="${lv.href}">${esc(lv.name)}</a>，建議做 8–10 題` : '網站還沒有這個觀念的原創題'}${sts.length ? `；故事：${sts.slice(0, 2).map(ch => `<a href="${ch._href || '#/h/story/' + encodeURIComponent(ch.id)}">${esc(ch.title || ch.id)}</a>`).join('、')}` : ''}</li>
       <li><b>回測真題</b>：${X().count(key) ? `<a href="${E.keyHref(key)}">知識點練習（${X().count(key)} 題）</a>${re.length ? `，還沒做或做錯的有 ${re.length} 題${compact ? '' : `：${re.slice(0, 4).map(it => `${it.year} 年第 ${it.no} 題`).join('、')}${re.length > 4 ? '…' : ''}`}` : '，都做對過了'}` : '5 年會考沒有考過，練原創題就好'}</li>
       ${s && SKILL_TIPS[s] ? `<li><b>讀題方法（${esc(s)}）</b>：${esc(SKILL_TIPS[s])}</li>` : ''}</ol>`;
   }
@@ -114,7 +138,7 @@
     if (!w) return '—';
     const d = new Date(w.ts).toLocaleDateString('zh-TW');
     if (w.item) return `<a href="${window.Exam.keyHref(p.key)}">${esc(X().label(w.item))}</a>（${d}${w.a != null ? `，選 ${LET[w.a]}，正解 ${LET[w.item.answer]}` : '，未作答'}）`;
-    if (w.q) { const stem = w.part != null && w.q.parts ? w.q.parts[w.part].stem : w.q.stem; return `原創題 ${esc(w.q.id)}：${esc(String(stem || '').slice(0, 40))}…（${d}）`; }
+    if (w.q) { const stem = w.part != null && w.q.parts ? w.q.parts[w.part].stem : (w.q.stem || w.q.text); return `原創題 ${esc(w.q.id)}：${esc(String(stem || '').slice(0, 40))}…（${d}）`; }
     return '—';
   }
 
@@ -137,14 +161,14 @@
   function html() {
     const st = collect(), weak = weakPoints(st);
     const xlog = window.Store.X.get().log, sims = window.Store.X.get().sims;
-    const nAll = xlog.length + st.subj.geo.sn + st.subj.hist.sn;
+    const nAll = xlog.length + st.subj.geo.sn + st.subj.hist.sn + st.subj.civ.sn;
     const simYears = Object.keys(sims).filter(y => (sims[y] || []).length).sort();
     const weakSkills = Object.entries(st.skills).filter(([, v]) => v.n >= 3 && v.ok / v.n < 0.7).sort((a, b) => a[1].ok / a[1].n - b[1].ok / b[1].n);
     const today = new Date().toLocaleDateString('zh-TW');
-    const head = `<div class="dg-head"><h1>學習診斷</h1><p class="hint">${today}・合併「會考真題」與網站原創題（地理、歷史）的作答紀錄</p>
+    const head = `<div class="dg-head"><h1>學習診斷</h1><p class="hint">${today}・合併「會考真題」與網站原創題（地理、歷史、公民）的作答紀錄</p>
       <div class="row no-print"><button class="primary dg-print">列印報告</button>${simYears.length ? '' : '<a class="ghost btn" href="#/x">去做年度模擬</a>'}</div></div>`;
     if (nAll < 10) {
-      return `${head}<div class="dg-empty"><p>目前只有 ${nAll} 筆作答紀錄，還看不出哪裡需要加強。</p><p>建議先做一次<a href="#/x">年度模擬</a>（一整年的地理＋歷史，大約 40 分鐘），做完就能看到第一份診斷。平常在地理、歷史闖關的作答也會一起算進來。</p></div>`;
+      return `${head}<div class="dg-empty"><p>目前只有 ${nAll} 筆作答紀錄，還看不出哪裡需要加強。</p><p>建議先做一次<a href="#/x">年度模擬</a>（一整年的地理＋歷史，大約 40 分鐘），做完就能看到第一份診斷。平常在地理、歷史、公民闖關的作答也會一起算進來。</p></div>`;
     }
     const subjRow = (name, s) => `<div class="dg-subj"><b>${name}</b>${barRow('真題', s.xok, s.xn)}${barRow('原創題', s.sok, s.sn)}</div>`;
     const skillRows = skills => skills.map(s => { const v = st.skills[s] || { n: 0, ok: 0, xn: 0 }; return barRow(s, v.ok, v.n, v.n && v.xn < v.n ? `<em>（真題 ${v.xn}）</em>` : ''); }).join('');
@@ -152,15 +176,15 @@
       <section class="dg-sec"><h2 class="sec">一、總覽</h2>
         <h3>年度模擬分數</h3>
         ${simYears.length ? `<div class="dg-sims">${simYears.map(y => { const rs = sims[y], l = rs[rs.length - 1], b = rs.reduce((m, r) => r.score / r.total > m.score / m.total ? r : m, rs[0]); return `<div class="dg-sim"><b>${y} 年</b>${trendSVG(rs)}<small>最近 ${l.score}/${l.total}（${pct(l.score, l.total)}%）・最佳 ${pct(b.score, b.total)}%・${rs.length} 次</small></div>`; }).join('')}</div><p class="hint">虛線是 70% 的位置。</p>` : '<p class="hint">還沒做過年度模擬。做一次就能看到分數趨勢。</p>'}
-        <h3>地理與歷史答對率</h3>${subjRow('地理', st.subj.geo)}${subjRow('歷史', st.subj.hist)}
+        <h3>各科答對率</h3>${subjRow('地理', st.subj.geo)}${subjRow('歷史', st.subj.hist)}${subjRow('公民', st.subj.civ)}
         <h3>能力答對率</h3>
-        <div class="dg-skills"><div><h4>地理</h4>${skillRows(X().GEO_SKILLS)}<p class="hint">地理原創題沒有標能力，地理能力只看真題。</p></div><div><h4>歷史</h4>${skillRows(X().HIST_SKILLS)}</div></div>
+        <div class="dg-skills"><div><h4>地理</h4>${skillRows(X().GEO_SKILLS)}<p class="hint">地理原創題沒有標能力，地理能力只看真題。</p></div><div><h4>歷史</h4>${skillRows(X().HIST_SKILLS)}</div><div><h4>公民</h4>${skillRows(X().CIV_SKILLS)}</div></div>
         <p class="legend"><span class="c-g">≥80%</span><span class="c-y">60–79%</span><span class="c-r">&lt;60%</span></p>
       </section>
       <section class="dg-sec"><h2 class="sec">二、需加強的觀念</h2>
         <p class="hint">列入條件：真題和原創題合計作答至少 3 次、答對率低於 70%。排序＝（1 − 答對率）×（1 ＋ 會考 5 年出現次數 ÷ 5），常考的觀念排前面。</p>
         ${weak.length ? `<ol class="dg-weak">${weak.slice(0, 10).map(p => `<li class="dg-pt">
-          <div class="dg-pth"><b>${esc(X().name(p.key))}</b><span class="tag">${X().split(p.key).subj === 'geo' ? '地理' : '歷史'}</span>${X().chip(p.appear)}</div>
+          <div class="dg-pth"><b>${esc(X().name(p.key))}</b><span class="tag">${SUBJ_NAME[X().split(p.key).subj]}</span>${X().chip(p.appear)}</div>
           <div class="dg-acc">答對率 <b>${pct(p.ok, p.n)}%</b>（真題 ${p.xn ? `${p.xok}/${p.xn}` : '—'}・原創題 ${p.sn ? `${p.sok}/${p.sn}` : '—'}）</div>
           <div class="dg-last">最近一次答錯：${lastWrongHTML(p)}</div>
           <div class="dg-sug"><h4>加強建議</h4>${suggestHTML(p)}</div></li>`).join('')}</ol>${weak.length > 10 ? `<p class="hint">另有 ${weak.length - 10} 個觀念也低於 70%，先把上面這些補好。</p>` : ''}`

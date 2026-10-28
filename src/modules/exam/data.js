@@ -1,11 +1,13 @@
 // 會考真題資料：data/exam/manifest.json 列出的年度檔 → window.XData。
 // 列出但還沒寫好（讀不到）的年度檔會略過並在主控台警告，不影響其他功能。
-// 也載入 data/history/kp.json（歷史會考知識點），並統計每個知識點 5 年出現幾次。
+// 也載入 data/history/kp.json（歷史會考知識點），並統計每個知識點 5 年出現幾次。公民題（subject civ）的知識點是公民概念 id（civ:）。
 (function () {
   const XData = { years: [], items: [], byId: {}, groups: {}, kp: {}, kpList: [], appear: {}, appearYear: {}, missing: [], error: null };
   const GEO_SKILLS = ['讀圖', '計算', '原理應用', '區域比較', '跨科整合'];
   const HIST_SKILLS = ['時序', '因果', '比較', '變遷與延續', '史料判讀', '歷史解釋'];
-  XData.GEO_SKILLS = GEO_SKILLS; XData.HIST_SKILLS = HIST_SKILLS;
+  const CIV_SKILLS = ['概念辨析', '規範判斷', '經濟推理', '圖表判讀', '觀點評估'];
+  XData.GEO_SKILLS = GEO_SKILLS; XData.HIST_SKILLS = HIST_SKILLS; XData.CIV_SKILLS = CIV_SKILLS;
+  XData.SUBJ_NAME = { geo: '地理', hist: '歷史', civ: '公民' };
   const list = v => Array.isArray(v) ? v : v == null || v === '' ? [] : [v];
 
   XData.load = async function () {
@@ -20,8 +22,9 @@
     for (const r of files) {
       if (!r || !r.f || !Array.isArray(r.f.items)) continue;
       const y = r.f.year;
-      XData.years.push(y);
-      for (const g of r.f.groups || []) XData.groups[g.id] = g;
+      if (!XData.years.includes(y)) XData.years.push(y);
+      // 同一題組含不同科的小題時，公民檔沿用史地檔的題組 id：合併（先讀到的為主，補上缺的欄位）
+      for (const g of r.f.groups || []) XData.groups[g.id] = Object.assign({}, g, XData.groups[g.id] || {});
       for (const raw of r.f.items) {
         if (!raw || !raw.id || XData.byId[raw.id] || raw.status === '退回') continue;
         const it = Object.assign({}, raw, { year: raw.year || y, skill: list(raw.skill), concepts: list(raw.concepts), kp: list(raw.kp), eventIds: list(raw.eventIds) });
@@ -41,17 +44,21 @@
     return XData;
   };
 
-  // 一題的知識點鍵：地理用 concepts，歷史用 kp
+  // 一題的知識點鍵：地理用 concepts（geo:），歷史用 kp（hist:），公民用公民概念 id（civ:）
   function keysOf(it) {
-    return it.subject === 'hist' ? it.kp.map(k => 'hist:' + k) : it.concepts.map(c => 'geo:' + c);
+    if (it.subject === 'hist') return it.kp.map(k => 'hist:' + k);
+    if (it.subject === 'civ') return it.concepts.map(c => 'civ:' + c);
+    return it.concepts.map(c => 'geo:' + c);
   }
   XData.keysOf = keysOf;
   // 知識點鍵 ↔ 網址用的 id：網址只放 id，地理概念 id 與歷史 kp id 不會撞名（kp 是 tw01、ea14、x06 這種）
-  XData.keyOf = id => (window.Data && window.Data.conceptName && window.Data.conceptName[id]) ? 'geo:' + id : 'hist:' + id;
+  XData.keyOf = id => (window.Data && window.Data.conceptName && window.Data.conceptName[id]) ? 'geo:' + id
+    : (window.CData && window.CData.conceptName && window.CData.conceptName[id]) ? 'civ:' + id : 'hist:' + id;
   XData.split = key => { const i = key.indexOf(':'); return { subj: key.slice(0, i), id: key.slice(i + 1) }; };
   XData.name = key => {
     const { subj, id } = XData.split(key);
     if (subj === 'geo') return (window.Data.conceptName || {})[id] || id;
+    if (subj === 'civ') return ((window.CData || {}).conceptName || {})[id] || id;
     return (XData.kp[id] || { name: id }).name;
   };
   XData.count = key => XData.appear[key] || 0;
@@ -80,6 +87,15 @@
       const l = u && u.levels.find(l => l.id === best[0]);
       return { href: `#/play/${best[0]}/practice`, name: l ? `${u.island || u.name}・${l.name}` : best[0], n: best[1], unitHref: u ? '#/unit/' + u.id : null };
     }
+    if (subj === 'civ') {
+      const CD = window.CData;
+      if (!CD || !CD.live) return null;
+      for (const q of CD.live()) if (q.concepts.includes(id)) tally[q.unit] = (tally[q.unit] || 0) + 1;
+      const best = Object.entries(tally).sort((a, b) => b[1] - a[1])[0] || (CD.conceptUnit[id] ? [CD.conceptUnit[id], 0] : null);
+      if (!best) return null;
+      const u = CD.unitById[best[0]];
+      return u ? { href: best[1] ? `#/c/play/${u.id}/practice` : `#/c/u/${u.id}`, name: `${u.volume}・${u.title}`, n: best[1], unitHref: '#/c/u/' + u.id } : null;
+    }
     const H = window.HData;
     if (!H || !H.live) return null;
     for (const q of H.live()) if ((q.kp || []).includes(id)) tally[q.era] = (tally[q.era] || 0) + 1;
@@ -94,12 +110,14 @@
   XData.siteQuestions = key => {
     const { subj, id } = XData.split(key);
     if (subj === 'geo') return window.Data.live().filter(q => q.concepts.includes(id) && !/-boss$/.test(q.level));
+    if (subj === 'civ') return window.CData && window.CData.live ? window.CData.live().filter(q => q.concepts.includes(id)) : [];
     const H = window.HData;
     return H && H.live ? H.live().filter(q => (q.kp || []).includes(id)) : [];
   };
   // 歷史：事件和 kp 對應事件重疊的故事章節（家長確認過的）
   XData.storiesOf = key => {
     const { subj, id } = XData.split(key);
+    if (subj === 'civ') { const CD = window.CData; return CD && CD.chapters ? CD.chapters.filter(ch => CD.chapterPlayable(ch) && ch.concepts.includes(id)).map(ch => Object.assign({ _href: '#/c/story/' + encodeURIComponent(ch.id) }, ch)) : []; }
     const H = window.HData;
     if (subj !== 'hist' || !H || !H.chapters) return [];
     const evs = new Set((XData.kp[id] || {}).events || []);
@@ -141,6 +159,11 @@
   // 原創題（地理或歷史）：題目各觀念的最高次數。歷史題看 kp，再加上事件所屬的 kp
   XData.questionCount = q => {
     if (!q) return 0;
+    if (q._civ) {
+      const cs = new Set(q.concepts || []);
+      for (const p of q.parts || []) for (const c of p.concepts || []) cs.add(c);
+      return [...cs].reduce((m, c) => Math.max(m, XData.count('civ:' + c)), 0);
+    }
     if (q.era) {
       let m = 0;
       for (const k of q.kp || []) m = Math.max(m, XData.count('hist:' + k));
@@ -159,8 +182,11 @@
   //   歷史時代：題目 era ＝ 該時代，或題目 kp 的事件落在該時代；館區同理看 line
   // 高頻：同一組裡的前幾名（島嶼 3、遠征 3、時代 5、館區 1），和下一名同分就不算
   let AGG = null;
-  XData.share = n => XData.items.length ? n / XData.items.length * 100 : 0;
-  XData.pctText = n => { const p = XData.share(n); return p >= 10 || p === 0 ? Math.round(p) + '%' : p.toFixed(1) + '%'; };
+  // 分母：地理、歷史的區塊用史地題總數；公民的區塊用公民題總數（加入公民題後，史地的百分比不變）
+  const gh = () => XData.items.filter(it => it.subject !== 'civ').length;
+  const civN = () => XData.items.filter(it => it.subject === 'civ').length;
+  XData.share = (n, tot) => { tot = tot || gh(); return tot ? n / tot * 100 : 0; };
+  XData.pctText = (n, tot) => { const p = XData.share(n, tot); return p >= 10 || p === 0 ? Math.round(p) + '%' : p.toFixed(1) + '%'; };
   function hotOf(map, ids, k) {
     const v = ids.map(id => map[id].n).sort((a, b) => b - a);
     const cut = v[k] == null ? 0 : v[k];
@@ -168,7 +194,7 @@
   }
   function buildAgg() {
     const D = window.Data, H = window.HData;
-    const A = { unit: {}, level: {}, era: {}, wing: {} };
+    const A = { unit: {}, level: {}, era: {}, wing: {}, cunit: {}, cdom: {} };
     const geo = XData.items.filter(it => it.subject === 'geo'), hist = XData.items.filter(it => it.subject === 'hist');
     if (D && D.units) {
       const cu = D.conceptUnit || {};
@@ -196,6 +222,15 @@
       hotOf(A.era, H.eras.map(e => e.id), 5);
       hotOf(A.wing, H.lines.map(l => l.id), 1);
     }
+    // 公民：題目的 unit（或概念所屬單元）＝該單元；領域看 domain
+    const CD = window.CData, civ = XData.items.filter(it => it.subject === 'civ');
+    if (CD && CD.units && CD.units.length) {
+      const us = civ.map(it => new Set([it.unit].concat(it.concepts.map(c => CD.conceptUnit[c])).filter(Boolean)));
+      for (const u of CD.units) A.cunit[u.id] = { n: us.filter(s => s.has(u.id)).length, total: civ.length };
+      for (const d of CD.DOMAINS) A.cdom[d] = { n: civ.filter((it, i) => it.domain === d || [...us[i]].some(x => (CD.unitById[x] || {}).domain === d)).length, total: civ.length };
+      hotOf(A.cunit, CD.units.map(u => u.id), 5);
+      hotOf(A.cdom, CD.DOMAINS, 1);
+    }
     return A;
   }
   XData.agg = () => AGG || (AGG = buildAgg());
@@ -204,15 +239,17 @@
   XData.levelShare = id => aggOf('level', id);
   XData.eraShare = id => aggOf('era', id);
   XData.wingShare = id => aggOf('wing', id);
+  XData.civShare = (kind, id) => aggOf(kind === 'dom' ? 'cdom' : 'cunit', id);
   // 「會考出題率 X%」＋（前幾名）「高頻」
   XData.shareHTML = s => {
     if (!XData.items.length || !s) return '';
-    return `<span class="xsh" title="111–115 年會考地理、歷史共 ${XData.items.length} 題，有 ${s.n} 題考到這裡"><span class="xsh-t">會考出題率 ${XData.pctText(s.n)}</span>${s.hot ? '<span class="xhot">高頻</span>' : ''}</span>`;
+    const tot = s.total || gh();
+    return `<span class="xsh" title="111–115 年會考${s.total ? '公民' : '地理、歷史'}共 ${tot} 題，有 ${s.n} 題考到這裡"><span class="xsh-t">會考出題率 ${XData.pctText(s.n, tot)}</span>${s.hot ? '<span class="xhot">高頻</span>' : ''}</span>`;
   };
   // 圖例（考點分布頁、設定頁）
-  XData.legendHTML = () => `<div class="xf-legend"><p><b>會考出題率</b>：統計 111–115 年會考社會科的地理、歷史題（共 ${XData.items.length} 題），看每個觀念被考到幾題。</p>
+  XData.legendHTML = () => `<div class="xf-legend"><p><b>會考出題率</b>：統計 111–115 年會考社會科的地理、歷史${civN() ? '、公民' : ''}題（共 ${XData.items.length} 題${civN() ? `，其中公民 ${civN()} 題` : ''}），看每個觀念被考到幾題。</p>
     <ul>${TIERS.map(t => `<li>${XData.chip(t.min, { short: true })}<span>${esc0(t.desc)}</span></li>`).join('')}</ul>
-    <p class="hint">島嶼、關卡、時代、館區上的「會考出題率 X%」＝這 ${XData.items.length} 題中有幾 % 考到那裡；「高頻」是同一類裡考最多的幾個。</p></div>`;
+    <p class="hint">島嶼、關卡、時代、館區上的「會考出題率 X%」＝地理、歷史 ${gh()} 題中有幾 % 考到那裡${civN() ? `；公民的領域、單元＝公民 ${civN()} 題中的比例` : ''}；「高頻」是同一類裡考最多的幾個。</p></div>`;
 
   window.XData = XData;
 })();

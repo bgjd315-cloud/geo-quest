@@ -20,6 +20,16 @@ data['history/manifest.json'] = hman;
 for (const rel of [].concat(hman.events, hman.cards || [], hman.questions || [], hman.stories || [])) data['history/' + rel] = JSON.parse(read('data/history/' + rel));
 
 data['history/kp.json'] = JSON.parse(read('data/history/kp.json'));
+// 公民：data/civics/ 底下的檔案，鍵名加上 civics/；寫手還在寫、還不存在的檔先略過（網站會顯示「準備中」）
+const cman = JSON.parse(read('data/civics/manifest.json'));
+data['civics/manifest.json'] = cman;
+const cskip = [];
+for (const rel of [cman.concepts, cman.pairs, cman.characters].concat(cman.cards || [], cman.questions || [], cman.stories || [])) {
+  if (!rel) continue;
+  if (!fs.existsSync(path.join(ROOT, 'data/civics', rel))) { cskip.push(rel); continue; }
+  data['civics/' + rel] = JSON.parse(read('data/civics/' + rel));
+}
+if (cskip.length) console.warn(`⚠ 公民資料 ${cskip.length} 個檔案還不存在，先略過：${cskip.join('、')}`);
 // 會考真題：data/exam/manifest.json 列出的年度檔；還不存在的先略過（警告），網站會顯示「資料準備中」
 const xman = JSON.parse(read('data/exam/manifest.json'));
 data['exam/manifest.json'] = xman;
@@ -28,10 +38,12 @@ for (const rel of xman.files || []) {
   data['exam/' + rel] = JSON.parse(read('data/exam/' + rel));
 }
 
-// 插畫：地理 assets/web、歷史 assets/history/web；檔名不可重複
-const images = {};
-for (const dir of ['assets/web', 'assets/history/web']) {
+// 插畫：地理 assets/web、歷史 assets/history/web、公民 assets/civics/web（還沒有圖就略過）；檔名不可重複
+const images = {}, civicsImgs = [];
+for (const dir of ['assets/web', 'assets/history/web', 'assets/civics/web']) {
+  if (!fs.existsSync(path.join(ROOT, dir))) continue;
   for (const f of fs.readdirSync(path.join(ROOT, dir)).filter(f => f.endsWith('.webp'))) {
+    if (dir === 'assets/civics/web') civicsImgs.push(f.replace(/\.webp$/, ''));
     const name = f.replace(/\.webp$/, '');
     if (images[name]) { console.error(`插畫檔名重複：${dir}/${f}`); process.exit(1); }
     images[name] = 'data:image/webp;base64,' + fs.readFileSync(path.join(ROOT, dir, f)).toString('base64');
@@ -43,7 +55,7 @@ for (const dir of ['assets/web', 'assets/history/web']) {
 // （GitHub Pages 上 dist/ 和 assets/ 都在 repo 根目錄底下；本機雙擊 dist/index.html 也一樣讀得到）。
 const LIMIT = 25 * 1024 * 1024;
 const examImgs = new Set();
-for (const [k, f] of Object.entries(data)) if (/^exam\/\d+\.json$/.test(k)) {
+for (const [k, f] of Object.entries(data)) if (/^exam\/\d+c?\.json$/.test(k)) {
   for (const g of f.groups || []) if (g.img) examImgs.add(g.img);
   for (const it of f.items || []) if (it.img) examImgs.add(it.img);
 }
@@ -75,7 +87,8 @@ const stamp = `window.GEO_BUILD=${safe(new Date().toISOString())};`;
 const report = f => (fs.statSync(path.join(ROOT, f)).size / 1024 / 1024).toFixed(2);
 
 // 1. 網站首頁 index.html（GitHub Pages）：資料內嵌，不必再逐檔下載；插畫與會考截圖照常從 assets/ 讀
-fs.writeFileSync(path.join(ROOT, 'index.html'), page(`window.GEO_DATA=${safe(data)};${stamp}window.GEO_EXAM_BASE='';`));
+// GEO_CIVICS_IMGS：公民插畫實際存在的檔名（插畫還在陸續生成，沒有的圖網頁改用色塊，不去讀不存在的檔）
+fs.writeFileSync(path.join(ROOT, 'index.html'), page(`window.GEO_DATA=${safe(data)};${stamp}window.GEO_EXAM_BASE='';window.GEO_CIVICS_IMGS=${safe(civicsImgs)};`));
 // 2. 單一 HTML 檔 dist/index.html：連插畫也內嵌，離線雙擊就能開
 fs.mkdirSync(path.join(ROOT, 'dist'), { recursive: true });
 fs.writeFileSync(path.join(ROOT, 'dist/index.html'), page(`window.GEO_DATA=${safe(data)};window.GEO_IMAGES=${safe(images)};${stamp}${embedExam ? `window.GEO_EXAM_IMAGES=${safe(examImages)};` : `window.GEO_EXAM_BASE='../';`}`));

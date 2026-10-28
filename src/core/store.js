@@ -1,5 +1,5 @@
 // 進度儲存（localStorage）與共用資料讀取。
-// 地理進度沿用舊版的最上層欄位（格式不變，舊進度檔可直接匯入）；歷史進度放在 history 底下。
+// 地理進度沿用舊版的最上層欄位（格式不變，舊進度檔可直接匯入）；歷史進度放在 history、公民放在 civics 底下。
 // 單一 HTML 版會把所有資料檔放進 window.GEO_DATA、插畫放進 window.GEO_IMAGES；開發版用 fetch 讀 data/。
 (function () {
   const KEY = 'geoquest.v1';
@@ -7,11 +7,18 @@
   const blankHistory = () => ({ hero: null, log: [], levels: {}, recycle: {}, introSeen: false, stories: {}, cards: [] });
   // 會考真題：log 每題作答 {id, ok, ts, mode, a}；sims 年度模擬成績 {年: [{score,total,ts,secs}]}；recycle 真題錯題 {題id: {streak, since}}
   const blankExam = () => ({ log: [], sims: {}, recycle: {} });
-  const blank = () => ({ v: 1, hero: null, log: [], levels: {}, recycle: {}, review: {}, parentHash: null, introSeen: false, subject: null, history: blankHistory(), exam: blankExam() });
+  // 公民《青禾里》：log／levels／recycle 同歷史；stories 讀完的章；cards 收進公民筆記的概念 id；
+  // confusions 混淆紀錄 {混淆對id: {n 次數, since, last, cleared, clearedAt}}；sprint 衝刺模式 {date, ids, done}
+  const blankCivics = () => ({ log: [], levels: {}, recycle: {}, introSeen: false, stories: {}, cards: [], confusions: {}, sprint: null });
+  const blank = () => ({ v: 1, hero: null, log: [], levels: {}, recycle: {}, review: {}, parentHash: null, introSeen: false, subject: null, history: blankHistory(), exam: blankExam(), civics: blankCivics() });
   // 缺的欄位補上預設值（舊版存檔沒有 history、subject、exam）
   const normalize = o => {
     const s = Object.assign(blank(), o);
     s.history = Object.assign(blankHistory(), o && o.history);
+    const cv = Object.assign(blankCivics(), o && o.civics);
+    for (const k of ['log', 'cards']) if (!Array.isArray(cv[k])) cv[k] = [];
+    for (const k of ['levels', 'recycle', 'stories', 'confusions']) if (!cv[k] || typeof cv[k] !== 'object') cv[k] = {};
+    s.civics = cv;
     const x = (o && o.exam) || {};
     s.exam = { log: Array.isArray(x.log) ? x.log : [], sims: x.sims && typeof x.sims === 'object' ? x.sims : {}, recycle: x.recycle && typeof x.recycle === 'object' ? x.recycle : {} };
     return s;
@@ -78,6 +85,8 @@
     X,
     // 歷史進度
     H: track(() => load().history),
+    // 公民進度
+    C: track(() => load().civics),
     // 家長審題：覆寫題目狀態（兩科共用，題目 id 不重複；只存在這台裝置，可匯出給 Claude 寫回題庫）
     setReview(id, patch) {
       const s = load();
@@ -100,9 +109,11 @@
         if (!inc.subject) mem.subject = cur.subject;
         // 沒有會考真題紀錄的舊進度檔：保留這台裝置原本的真題紀錄
         if (!inc.exam) mem.exam = cur.exam;
+        // 沒有公民紀錄的舊進度檔：保留這台裝置原本的公民進度
+        if (!inc.civics) mem.civics = cur.civics;
         save();
-        const kept = [!inc.history && '歷史', !inc.exam && '會考真題'].filter(Boolean);
-        return kept.length ? `進度已匯入（舊版進度檔沒有${kept.join('、')}的紀錄，這部分維持不變）` : '進度已匯入（地理＋歷史＋會考真題）';
+        const kept = [!inc.history && '歷史', !inc.civics && '公民', !inc.exam && '會考真題'].filter(Boolean);
+        return kept.length ? `進度已匯入（舊版進度檔沒有${kept.join('、')}的紀錄，這部分維持不變）` : '進度已匯入（地理＋歷史＋公民＋會考真題）';
       }
       if (obj && obj.type === 'geo-quest-review') {
         const s = load();

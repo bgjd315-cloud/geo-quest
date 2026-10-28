@@ -127,6 +127,7 @@ geo-quest/
   - build.js：會考截圖全部內嵌後若 dist 不超過 25 MB 就內嵌，否則改從 `../assets/exam/` 讀（可用 `--embed-exam`／`--link-exam` 強制）；GitHub Pages 根目錄的開發版直接讀 `assets/exam/`，所以 `assets/exam/` 和 `data/exam/` 都要進 git。
 - 地理 `src/modules/geo/`：`geo.js` 共用運算（網頁與 validate 共用）、`charts.js` SVG 繪圖、`data.js`（window.Data）、`views.js` 首頁單元地圖、單元頁、弱點地圖
 - 歷史 `src/modules/history/`：`data.js`（window.HData，事件時間粗略換算年份）、`timeline.js` 時間長廊、`views.js` 選角、大廳、館區、作答、`history.css`（只在 body.subj-history 生效的暖色配色）
+- 公民 `src/modules/civics/`（#/c/…）：`data.js`（window.CData；讀 data/civics/manifest.json，讀不到的檔略過；題型名稱正規化：scenario 情境判斷、order 流程排序、compare→contrast 並排辨析、price 價格與數量判斷、calc 計算題、myth 迷思糾錯、view 觀點評估；狀態只要不是「退回」就上線）、`render.js`（登記到 Quiz.RENDERERS 的公民題型＋混淆紀錄、掌握、領域 × 能力統計 window.CivicsStats）、`views.js`（首頁、領域 #/c/d/<society|politics|law|economy|global>、單元 #/c/u/<c4-2>、闖關 #/c/play/<單元>/<practice|sim>、並排辨析 #/c/pair/<單元|all>、魔王 #/c/boss/<領域|cross>、案件分流 #/c/cases、公民筆記 #/c/notes、弱點 #/c/weak、衝刺 #/c/sprint、人物 #/c/people）、`story.js`（故事播放器 #/c/story/<章id>、家長頁「公民」分頁、路由與科目登記）、`civics.css`。進度在 store 的 `civics`（log、levels、recycle、stories、cards＝公民筆記、confusions＝混淆紀錄、sprint）。插畫 assets/civics/web/<名稱>.webp（civ_hub、civ_home、dom_*、aqing_*、char_*、boss_*、ch_c4_2…、civ_notebook、civ_cases），沒有的圖用程式畫的色塊與文字替代；build.js 會把實際存在的檔名寫進 index.html 的 GEO_CIVICS_IMGS。
 - 題目 `check` 欄位＝自動驗算設定（種類見 validate.js 的 runCheck）。新增圖表題盡量加上 check。
 - 資料檔一律列在 `data/manifest.json`，否則不會被載入，也不會被檢查。
 - 出題細節（題型、圖表欄位、check 種類、可用測站與國家清單）：`docs/出題規範.md`、`docs/_data_lists.md`。
@@ -200,4 +201,5 @@ geo-quest/
 - **新題目與新故事一律「待審」**（公民不比照歷史「先上線」）；送審分量每週題目 ≤20、故事 ≤2 章，三科合計 ≤40；三個不送審週次見需求。
 - 法律依全國法規資料庫現行條文，課本與現行法不一致→列待確認清單由家長決定；政治一律虛構名稱、不碰時事；國際組織以官網為準並註 checkedAt；無法確認的不出題。
 - 階段：C0 目錄與清單確認 → C1 法律＋政治（先試作 2 章）→ C2 社會＋經濟＋第六冊同步機制 → C3 衝刺模式（116/4/16 起）。
-- **C0 未經使用者確認前，不得出題或寫故事。**
+- **C0 已確認（115/10/29）：家長決定「一律依照課本，以免混淆孩子」**——課本與現行法不一致時以課本為準（酒駕罰鍰、最低工資 115 年數字、曝險少年「原則上先交少輔會」、公平會含囤積），不畫供需曲線，課本沒教的章節不做。詳見 公民_C0_確認清單.md 第九節。
+- **115/10/29 家長再決定：一至六冊直接全部完成並上線（確認），不分 C1／C2 階段、不限每週送審量、第六冊不等學校進度；並比照史地加入會考真題公民題。** 需求裡的「待審」「送審分量」「第六冊同步開放」「不送審週次」不再適用。

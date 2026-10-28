@@ -11,7 +11,7 @@
   function view(tab, topbar) {
     if (!parentOK) return login(topbar);
     tab = tab || 'progress';
-    const tabs = { progress: '進度', diag: '學習診斷', matrix: '弱點矩陣', wrong: '近期錯題', review: '審題' };
+    const tabs = Object.assign({ progress: '進度', diag: '學習診斷', matrix: '弱點矩陣', wrong: '近期錯題', review: '審題' }, SUBJ.civics && SUBJ.civics.parent && SUBJ.civics.parent.tab ? { civics: '公民' } : {});
     app().innerHTML = `${topbar('#/settings')}<div class="page parent"><h1>家長頁</h1>
       <nav class="tabs">${Object.entries(tabs).map(([k, v]) => `<a class="${k === tab ? 'on' : ''}" href="#/parent/${k}">${v}</a>`).join('')}</nav><div class="pbody"></div></div>`;
     const body = app().querySelector('.pbody');
@@ -20,6 +20,7 @@
     if (tab === 'wrong') wrong(body);
     if (tab === 'diag') window.Diagnosis.render(body);
     if (tab === 'review') review(body);
+    if (tab === 'civics') SUBJ.civics.parent.tab(body);
   }
 
   function login(topbar) {
@@ -58,7 +59,7 @@
     body.innerHTML = rows.map(({ k, e }) => {
       const P = SUBJ[k].parent, q = P.find ? P.find(e.q) : P.questions().find(x => x.id === e.q);
       if (!q) return '';
-      const stem = e.part != null ? q.parts[e.part].stem : q.stem;
+      const stem = e.part != null && q.parts ? q.parts[e.part].stem : q.stem;
       return `<div class="wrong-row"><small><span class="tag">${subjName(k)}</span> ${new Date(e.ts).toLocaleString('zh-TW')}・${esc(q.id)}${e.part != null ? ` 第${e.part + 1}小題` : ''}・${esc(P.tagsOf(e))}</small><div>${esc(stem)}</div></div>`;
     }).join('');
   }
@@ -110,6 +111,7 @@
         box.dataset.done = '1';
         const c = chs.find(x => x.id === d.dataset.id);
         box.innerHTML = P.storyPreviewHTML(c);
+        if (P.afterPreview) { P.afterPreview(box, c); return; }
         box.querySelectorAll('.sp-q').forEach(el => {
           const q = c.scenes[+el.dataset.k].question;
           window.Quiz.renderItem(el, q, { mode: 'practice' }, () => { });
@@ -169,6 +171,7 @@
 
   function answerKey(q) {
     const opt = o => typeof o === 'string' ? o : (o.text || '（圖）');
+    if (window.Quiz.ANSWER_TEXT[q.type]) return `<p><b>答案：</b>${window.Quiz.ANSWER_TEXT[q.type](q)}<br>${esc(q.explain || '')}</p>`;
     if (q.parts) return q.parts.map((p, k) => `<p><b>第${k + 1}小題答案：</b>${esc(opt(p.options[p.answer]))}<br>${esc(p.explain)}</p>`).join('');
     if (q.type === 'order') return `<p><b>答案：</b>${esc(q.answer.map(i => q.items[i]).join(' → '))}<br>${esc(q.explain)}</p>`;
     if (q.type === 'match') return `<p><b>答案：</b>${esc(q.left.map((l, i) => `${l} → ${q.right[q.answer[i]]}`).join('；'))}<br>${esc(q.explain)}</p>`;

@@ -395,6 +395,7 @@ function validate() {
   }
 
   validateExam();
+  validateCivics();
   return report(all);
 }
 
@@ -415,9 +416,16 @@ function validateExam() {
   const kps = new Set(((kpf && kpf.points) || []).map(p => p.id));
   const GEO_SK = new Set(['讀圖', '計算', '原理應用', '區域比較', '跨科整合']);
   const HIST_SK = new Set(['時序', '因果', '比較', '變遷與延續', '史料判讀', '歷史解釋']);
+  const CIV_SK = new Set(['概念辨析', '規範判斷', '經濟推理', '圖表判讀', '觀點評估']);
+  const cfp = path.join(DATA, 'civics/concepts.json');
+  const civ = fs.existsSync(cfp) ? JSON.parse(fs.readFileSync(cfp, 'utf8')) : { units: [] };
+  const civUnits = new Map(civ.units.map(u => [u.id, u])), civConcepts = new Set(civ.units.flatMap(u => (u.concepts || []).map(c => c.id)));
+  const pfp = path.join(DATA, 'civics/pairs.json');
+  const civPairs = new Set(fs.existsSync(pfp) ? JSON.parse(fs.readFileSync(pfp, 'utf8')).pairs.map(p => p.id) : []);
+  let civN = 0;
   const list = v => Array.isArray(v) ? v : v == null ? [] : [v];
   const imgOk = p => typeof p === 'string' && /^assets\/exam\//.test(p) && fs.existsSync(path.join(ROOT, p));
-  const seen = new Set();
+  const seen = new Set(), seenGroup = new Set();
   let n = 0, geo = 0, hist = 0, years = [];
   for (const rel of man.files) {
     const fp = path.join(DATA, 'exam', rel);
@@ -433,8 +441,10 @@ function validateExam() {
     for (const g of list(f.groups)) {
       const gid = g && g.id ? g.id : fid + '#group';
       if (!g || !g.id) { err(fid, '題組沒有 id'); continue; }
-      if (seen.has(g.id)) err(gid, 'id 重複');
-      seen.add(g.id); groups.set(g.id, g);
+      // 同一題組含不同科的小題：公民檔可以沿用史地檔的題組 id（網站會合併），但不可和題目 id 撞
+      if (seen.has(g.id) && !seenGroup.has(g.id)) err(gid, 'id 重複');
+      else if (groups.has(g.id)) err(gid, '同一個檔案裡題組 id 重複');
+      seen.add(g.id); seenGroup.add(g.id); groups.set(g.id, g);
       if (!imgOk(g.img)) err(gid, `題組圖片不存在：${g.img}`);
       if (!Array.isArray(g.range) || g.range.length !== 2 || !(g.range[0] <= g.range[1])) err(gid, 'range 必須是 [起題號, 迄題號]');
       if (!g.text) warn(gid, '題組沒有 text（搜尋與無障礙用）');
@@ -461,7 +471,7 @@ function validateExam() {
       if (!sk.length) err(id, 'skill 不可為空');
       if (!it.text) warn(id, '沒有 text（搜尋與無障礙用）');
       if (!String(it.explain || '').trim()) warn(id, '還沒有解析 explain');
-      for (const a of list(it.also)) if (!['geo', 'hist'].includes(a)) err(id, `also 只能是 geo／hist：${a}`);
+      for (const a of list(it.also)) if (!['geo', 'hist', 'civ'].includes(a)) err(id, `also 只能是 geo／hist／civ：${a}`);
       if (it.subject === 'geo') {
         geo++;
         if (!list(it.concepts).length) err(id, '地理題 concepts 不可為空');
@@ -477,13 +487,298 @@ function validateExam() {
         if (!it.era) warn(id, '歷史題沒有 era');
         for (const e of list(it.eventIds)) if (!events.has(e)) err(id, `事件「${e}」不在 events.json`);
         for (const s of sk) if (!HIST_SK.has(s)) err(id, `歷史 skill「${s}」不在六種能力內`);
-      } else err(id, `subject 只能是 geo 或 hist，目前是「${it.subject}」`);
+      } else if (it.subject === 'civ') {
+        // 公民題：依公民的分類（領域、冊、單元、概念、能力）檢查
+        civN++;
+        if (!['社會', '政治', '法律', '經濟', '全球關聯'].includes(it.domain)) err(id, `公民題 domain「${it.domain}」不是五個領域之一`);
+        if (!Number.isInteger(it.book) || it.book < 1 || it.book > 6) err(id, `公民題 book 必須是 1–6，目前是 ${it.book}`);
+        if (!civUnits.has(it.unit)) err(id, `公民題 unit「${it.unit}」不在 civics/concepts.json`);
+        else { const u = civUnits.get(it.unit); if (u.book !== it.book) warn(id, `book ${it.book} 和單元 ${it.unit} 的冊次 ${u.book} 不一致`); }
+        // 對不到課本概念的真題先不標（之後補概念），只提醒
+        if (!list(it.concepts).length) warn(id, '公民題還沒有對應的概念（concepts 是空的）');
+        for (const c of list(it.concepts)) if (!civConcepts.has(c)) err(id, `概念「${c}」不在 civics/concepts.json`);
+        if (it.confusablePair && !civPairs.has(it.confusablePair)) err(id, `confusablePair「${it.confusablePair}」不在 civics/pairs.json`);
+        for (const s of sk) if (!CIV_SK.has(s)) err(id, `公民 skill「${s}」不在五種能力內`);
+      } else err(id, `subject 只能是 geo、hist 或 civ，目前是「${it.subject}」`);
     }
     for (const gid of groups.keys()) if (!used.has(gid)) warn(gid, '題組沒有任何小題引用');
   }
-  console.log(`會考真題：${years.sort().join('、') || '（無）'} 年，共 ${n} 題（地理 ${geo}、歷史 ${hist}）`);
+  console.log(`會考真題：${[...new Set(years)].sort().join('、') || '（無）'} 年，共 ${n} 題（地理 ${geo}、歷史 ${hist}、公民 ${civN}）`);
 }
 const STATUS_X = new Set(['待審', '確認', '退回']);
+
+// ---------- 公民：data/civics/（需求 §十二，依家長 115/10/29 決定調整） ----------
+// 結構問題（缺標籤、id 不存在、法條格式、案件卡不完整、計算題算錯）是錯誤；風格（字數、迷思說話者集中、選項長度）是警告。
+// manifest 列出但還沒寫好的檔案只警告、略過（寫手還在寫）。
+const CIV_DOMAINS = ['社會', '政治', '法律', '經濟', '全球關聯'];
+const CIV_SKILLS = new Set(['概念辨析', '規範判斷', '經濟推理', '圖表判讀', '觀點評估']);
+// 條號：第12條、第12條之1、第153條第1項、第184條第1項第2款
+const ARTICLE = /^第\d+條(之\d+)?(第\d+項)?(第\d+款)?$/;
+// 「第1003-1條」是常見的簡寫，網站照樣顯示；檢查時只提醒改成「第1003條之1」
+const ARTICLE_DASH = /^第\d+-\d+條(第\d+項)?(第\d+款)?$/;
+const civRefDash = r => ARTICLE_DASH.test(typeof r === 'string' ? (r.match(/第.*$/) || [''])[0] : String((r && r.article) || '').trim());
+function civRefOk(r) {
+  if (civRefDash(r)) return true;
+  if (typeof r === 'string') { const m = r.match(/^(.+?)(第\d+條.*)$/); return !!(m && m[1].trim() && ARTICLE.test(m[2])); }
+  return !!(r && r.law && typeof r.article === 'string' && ARTICLE.test(r.article.trim()));
+}
+// 計算題的算式：「(500-300)×2」「機會成本＝300×2＝600」→ 取第一段能算的式子
+function evalFormula(f) {
+  const segs = String(f).replace(/[×xX＊]/g, '*').replace(/[÷／]/g, '/').replace(/[－−–]/g, '-').replace(/＋/g, '+').replace(/（/g, '(').replace(/）/g, ')')
+    .replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/,/g, '').split(/[=＝]/);
+  for (const seg of segs) {
+    const ex = seg.replace(/[^\d+\-*/().\s]/g, '').trim();
+    if (!/[+\-*/]/.test(ex) || !/\d/.test(ex) || /^[+*/]|[+\-*/]$/.test(ex)) continue;
+    try { const v = Function('"use strict";return (' + ex + ')')(); if (typeof v === 'number' && isFinite(v)) return v; } catch (e) { /* 換下一段 */ }
+  }
+  return null;
+}
+const numIn = s => { const m = String(s == null ? '' : s).replace(/,/g, '').match(/-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : null; };
+
+function validateCivics() {
+  const mp = path.join(DATA, 'civics/manifest.json');
+  if (!fs.existsSync(mp)) { warn('civics', '沒有 data/civics/manifest.json，略過公民檢查'); return; }
+  const man = readJSON('civics/manifest.json');
+  if (!man) return;
+  const soft = rel => { const p = path.join(DATA, 'civics', rel); if (!fs.existsSync(p)) { warn('civics/' + rel, '列在 manifest 但檔案還不存在，先略過'); return null; } return readJSON('civics/' + rel); };
+  const cf = readJSON('civics/' + (man.concepts || 'concepts.json')), pf = readJSON('civics/' + (man.pairs || 'pairs.json')), chf = readJSON('civics/' + (man.characters || 'characters.json'));
+  if (!cf || !pf || !chf) return;
+  const units = new Map(cf.units.map(u => [u.id, u]));
+  const concepts = new Map(cf.units.flatMap(u => (u.concepts || []).map(c => [c.id, u])));
+  const pairs = new Map(pf.pairs.map(p => [p.id, p]));
+  const chars = new Set(chf.characters.map(c => c.id));
+  for (const p of pf.pairs) for (const c of p.concepts) if (!concepts.has(c)) err('civics/pairs', `混淆對 ${p.id} 的概念「${c}」不在 concepts.json`);
+  const list = v => Array.isArray(v) ? v : v == null || v === '' ? [] : [v];
+  const STATUS = new Set(['待審', '確認', '退回']);
+  const seen = new Set();
+  const len = s => String(Array.isArray(s) ? s.join('') : s || '').replace(/\s/g, '').length;
+  const dashWarned = new Set();
+  const dashCheck = (id, refs) => { for (const r of refs) if (civRefDash(r)) { const t = typeof r === 'string' ? r : r.law + r.article; if (!dashWarned.has(id + t)) { dashWarned.add(id + t); warn(id, `條號「${t}」建議寫成「第○條之○」`); } } };
+
+  // 概念卡
+  const cardIds = new Set();
+  for (const rel of man.cards || []) {
+    const f = soft(rel); if (!f) continue;
+    for (const [k, c] of Object.entries(f.cards || {})) {
+      if (!concepts.has(k)) err('civics/' + rel, `概念卡「${k}」不在 concepts.json`);
+      if (!c || !c.text) err('civics/' + rel, `概念卡「${k}」沒有 text`);
+      cardIds.add(k);
+    }
+  }
+
+  // 一題的標籤（題庫題、魔王題組、故事嵌入題共用）
+  function checkTags(id, q, opt) {
+    opt = opt || {};
+    if (!CIV_DOMAINS.includes(q.domain)) err(id, `domain「${q.domain}」不是五個領域之一`);
+    if (!Number.isInteger(q.book) || q.book < 1 || q.book > 6) err(id, `book 必須是 1–6，目前是 ${q.book}`);
+    if (!q.unit && !opt.boss) err(id, '缺少 unit');
+    if (q.unit && !units.has(q.unit)) err(id, `unit「${q.unit}」不在 concepts.json`);
+    else if (q.unit && units.get(q.unit).book !== q.book && !opt.boss) err(id, `book ${q.book} 和單元 ${q.unit} 的冊次 ${units.get(q.unit).book} 不一致`);
+    if (!list(q.concepts).length) err(id, 'concepts 不可為空');
+    for (const c of list(q.concepts)) if (!concepts.has(c)) err(id, `概念「${c}」不在 concepts.json`);
+    if (!list(q.skill).length) err(id, '缺少 skill');
+    for (const s of list(q.skill)) if (!CIV_SKILLS.has(s)) err(id, `skill「${s}」不在五種能力內`);
+    if (q.confusablePair && !pairs.has(q.confusablePair)) err(id, `confusablePair「${q.confusablePair}」不在 pairs.json`);
+    for (const [k, v] of Object.entries(q.optionPairs || {})) {
+      if (v && !pairs.has(v)) err(id, `optionPairs 的「${v}」不在 pairs.json`);
+      if (!Array.isArray(q.options) || !(+k >= 0 && +k < q.options.length)) err(id, `optionPairs 的選項 ${k} 超出範圍`);
+    }
+    for (const c of q.optionConcepts || []) if (c && !concepts.has(c)) err(id, `optionConcepts 的「${c}」不在 concepts.json`);
+    if (q.status != null && !STATUS.has(q.status)) err(id, 'status 必須是 待審／確認／退回');
+    // 法律題要有法條（條號格式要對）；其他領域有寫 legalRefs 也要格式正確
+    const refs = list(q.legalRefs);
+    if (q.domain === '法律' && !refs.length && !opt.noRefs) err(id, '法律題要有 legalRefs（法規名稱與條號，例如「民法第12條」）');
+    for (const r of refs) if (!civRefOk(r)) err(id, `legalRefs 條號格式不對：${JSON.stringify(r)}（例：民法第12條、民法第153條第1項）`);
+    dashCheck(id, refs);
+    // 第六冊國際組織：家長決定依課本，查核日期只提醒
+    if (q.book === 6 && q.unit === 'c6-4' && !q.checkedAt) warn(id, '第六冊國際組織題建議填 checkedAt（查核日期）');
+    // 全球議題的數據：要有來源與年份（課本出處也可以）
+    if (q.domain === '全球關聯' && /\d+(\.\d+)?\s*(%|％|億|萬人|萬噸|公噸|℃)/.test(JSON.stringify([q.stem || '', q.options || []])) && !/\d{3,4}/.test(String(q.source || '') + String(q.dataSource || '')))
+      warn(id, '全球議題數據題要在 source 註明來源與年份（例：康軒國中公民 3下 第3課，或聯合國 2023）');
+  }
+  function checkChoiceQ(id, q) {
+    const opts = q.options;
+    if (!Array.isArray(opts) || opts.length < 2) { err(id, '選項至少要 2 個'); return; }
+    const texts = opts.map(o => typeof o === 'string' ? o : (o && o.text) || '');
+    let ans = q.answer;
+    if (!Number.isInteger(ans)) ans = opts.findIndex(o => o && o.correct === true);
+    if (!Number.isInteger(ans) || ans < 0 || ans >= opts.length) err(id, `答案 ${q.answer} 不在選項範圍`);
+    if (new Set(texts).size !== texts.length) err(id, '選項有重複');
+    if (!q.explain) err(id, '缺少解析 explain');
+    const L = texts.map(t => t.length);
+    if (ans >= 0 && L.every(v => v > 0)) { const o = Math.max(...L.filter((_, i) => i !== ans)); if (L[ans] > o * 1.3 && L[ans] - o >= 4) warn(id, `正解（${L[ans]} 字）明顯比其他選項長（最長 ${o} 字）`); }
+  }
+  function checkBody(id, q) {
+    const t = String(q.type || '');
+    if (Array.isArray(q.parts)) {
+      if (q.parts.length < 2) err(id, '有小題的題目至少要 2 小題');
+      q.parts.forEach((p, k) => {
+        const pid = `${id}#${k + 1}`;
+        checkChoiceQ(pid, p);
+        for (const c of list(p.concepts)) if (!concepts.has(c)) err(pid, `概念「${c}」不在 concepts.json`);
+        if (p.confusablePair && !pairs.has(p.confusablePair)) err(pid, `confusablePair「${p.confusablePair}」不在 pairs.json`);
+        for (const r of list(p.legalRefs)) if (!civRefOk(r)) err(pid, `legalRefs 條號格式不對：${JSON.stringify(r)}`);
+        if (p.formula) checkCalc(pid, p);
+      });
+      return;
+    }
+    if (t === 'order' || (Array.isArray(q.items) && Array.isArray(q.answer))) {
+      const n = (q.items || []).length, ok = Array.isArray(q.answer) && q.answer.length === n && [...q.answer].sort((a, b) => a - b).every((v, i) => v === i);
+      if (n < 2 || !ok) err(id, '排序題的答案必須是 items 的完整排列');
+      if (!q.explain) err(id, '缺少解析 explain');
+      return;
+    }
+    if (t === 'match') {
+      const ok = Array.isArray(q.answer) && q.answer.length === (q.left || []).length && q.answer.every(v => Number.isInteger(v) && v >= 0 && v < (q.right || []).length);
+      if (!ok) err(id, '配對題的答案必須讓每個左項對到右項');
+      if (!q.explain) err(id, '缺少解析 explain');
+      return;
+    }
+    const calc = /calc|計算/.test(t);
+    if (calc && !Array.isArray(q.options)) { if (numIn(q.answer) == null) err(id, '計算題（填答）的 answer 必須是數字'); if (!q.explain) err(id, '缺少解析 explain'); }
+    else if (/price|direction|價格/.test(t) && !Array.isArray(q.options)) { if (!(q.targets || q.ask || q.directions || q.rows || (q.answer && typeof q.answer === 'object'))) err(id, '價格與數量判斷題要有 targets（項目與方向）或選項'); }
+    else checkChoiceQ(id, q);
+    if (calc || q.formula) checkCalc(id, q);
+  }
+  // 計算題：情境數值要由程式驗算（formula 算出來的數要等於正解裡的數）
+  function checkCalc(id, q) {
+    if (!q.formula) { if (/情境數值/.test(JSON.stringify(q))) warn(id, '標示情境數值的計算題沒有 formula，無法自動驗算'); return; }
+    const v = evalFormula(q.formula);
+    const o = Array.isArray(q.options) ? q.options[q.answer] : null;
+    const ans = Array.isArray(q.options) ? numIn(typeof o === 'string' ? o : (o || {}).text) : numIn(q.answer);
+    if (v == null) warn(id, `formula「${q.formula}」算不出來，無法自動驗算`);
+    else if (ans == null) warn(id, '正解裡找不到數字，無法自動驗算');
+    else if (Math.abs(v - ans) > (q.tolerance || 0) + 1e-6) err(id, `自動驗算失敗：formula「${q.formula}」＝${v}，正解卻是 ${ans}`);
+  }
+
+  // 題庫、魔王題組、案件
+  let nq = 0, nb = 0, nc = 0;
+  const byConcept = {}, pairItems = {};
+  for (const rel of man.questions || []) {
+    const f = soft(rel); if (!f) continue;
+    const fid = 'civics/' + rel;
+    if (/cases\.json$/.test(rel)) {
+      for (const c of f.cases || f.questions || []) {
+        const id = c && c.id ? c.id : fid + '#case';
+        if (!c || !c.id) { err(fid, '有案件沒有 id'); continue; }
+        if (seen.has(c.id)) err(id, 'id 重複'); seen.add(c.id); nc++;
+        if (!(c.text || c.situation || c.scenario || c.stem)) err(id, '案件缺情境文字');
+        let kraw = c.eventType || c.caseType || c.kind || c.category || [];
+        if (kraw && typeof kraw === 'object' && !Array.isArray(kraw)) kraw = kraw.answer != null ? kraw.answer : [];
+        const kind = [].concat(kraw).map(k => String(k).replace(/事件|案件/g, ''));
+        if (!kind.length || !kind.every(k => ['民事', '刑事', '行政'].includes(k))) err(id, `事件類型必須是 民事／刑事／行政：${JSON.stringify(c.eventType || c.caseType || c.kind)}`);
+        const r = c.remedy && typeof c.remedy === 'object' && !Array.isArray(c.remedy) ? c.remedy : null;
+        const opts = (r && r.options) || c.remedyOptions || c.options;
+        let ans = r ? (r.answer != null ? r.answer : r.correct) : (c.remedyAnswer != null ? c.remedyAnswer : c.answer);
+        if (typeof ans === 'string' && Array.isArray(opts)) ans = opts.indexOf(ans);
+        if (!Array.isArray(opts) || opts.length < 2) err(id, '救濟途徑至少要 2 個選項');
+        else if (!Number.isInteger(ans) || ans < 0 || ans >= opts.length) err(id, '救濟途徑的正解不在選項範圍');
+        if (!(c.explain || c.explanation)) err(id, '缺少解析');
+        if (!list(c.legalRefs).length) err(id, '案件要有 legalRefs');
+        for (const x of list(c.legalRefs)) if (!civRefOk(x)) err(id, `legalRefs 條號格式不對：${JSON.stringify(x)}`);
+        for (const k of list(c.concepts)) if (!concepts.has(k)) err(id, `概念「${k}」不在 concepts.json`);
+      }
+      continue;
+    }
+    const boss = /boss[^/]*\.json$/.test(rel);
+    for (const q of f.questions || []) {
+      const id = q && q.id ? q.id : fid + '#q';
+      if (!q || !q.id) { err(fid, '有題目沒有 id'); continue; }
+      if (seen.has(q.id)) err(id, 'id 重複'); seen.add(q.id);
+      if (boss) nb++; else nq++;
+      if (!q.stem && !q.question) err(id, '缺少題幹 stem');
+      if (!boss && f.book != null && q.book !== f.book) err(id, `book ${q.book} 和檔案的第 ${f.book} 冊不一致`);
+      // 魔王題組的法條可以寫在小題裡
+      checkTags(id, q, { boss, noRefs: boss && Array.isArray(q.parts) && q.parts.some(p => list(p.legalRefs).length) });
+      if (boss && !Array.isArray(q.parts)) warn(id, '魔王題組通常要有 parts（一個情境連問）');
+      checkBody(id, q);
+      if (!boss) for (const c of list(q.concepts)) (byConcept[c] = byConcept[c] || []).push(q.id);
+      if (Array.isArray(q.parts)) { if (q.confusablePair) pairItems[q.confusablePair] = 1; for (const p of q.parts) if (p.confusablePair) pairItems[p.confusablePair] = 1; }
+    }
+  }
+
+  // 故事
+  const speakers = {};
+  let ns = 0;
+  for (const rel of man.stories || []) {
+    const f = soft(rel); if (!f) continue;
+    const ch = f.chapter || f;
+    const id = 'cstory:' + (ch.id || rel);
+    if (!ch.id) { err('civics/' + rel, '章節沒有 id'); continue; }
+    if (seen.has(id)) err(id, '章節 id 重複'); seen.add(id); ns++;
+    const dk = { 社會: 'society', 政治: 'politics', 法律: 'law', 經濟: 'economy', 全球關聯: 'global' }[ch.domain];
+    if (dk && !rel.startsWith(`stories/${dk}/`)) warn(id, `${ch.domain}的章節建議放在 stories/${dk}/`);
+    if (!ch.title) err(id, '缺少 title');
+    checkTags(id, Object.assign({}, ch, { skill: ch.skills || ch.skill, legalRefs: [] }), { noRefs: true });
+    if (!list(ch.skills).length) err(id, '缺少 skills');
+    for (const c of list(ch.characters)) if (!chars.has(c)) err(id, `角色「${c}」不在 characters.json`);
+    if (!list(ch.characters).length) err(id, 'characters 不可為空');
+    const pl = len(ch.paragraphs);
+    if (!pl) err(id, '缺少開場 paragraphs');
+    else if (pl < 250 || pl > 500) warn(id, `開場 ${pl} 字，需求建議 300–400 字`);
+    // 判斷點
+    const js = list(ch.judgment || ch.judgments);
+    if (!js.length) err(id, '缺少判斷點 judgment');
+    js.forEach((j, k) => {
+      const jid = `${id}#判斷點${k + 1}`;
+      if (!j.prompt) err(jid, '缺少 prompt');
+      const opts = j.options || [];
+      const right = opts.filter((o, i) => (o && o.correct === true) || i === j.answer).length;
+      if (opts.length < 2 || right !== 1) err(jid, `判斷點要 2 個以上選項、剛好一個正確（目前 ${right} 個）`);
+      if (!j.explain) err(jid, '判斷點缺少解析 explain');
+      for (const r of list(j.legalRefs)) if (!civRefOk(r)) err(jid, `legalRefs 條號格式不對：${JSON.stringify(r)}`);
+      if (j.confusablePair && !pairs.has(j.confusablePair)) err(jid, `confusablePair「${j.confusablePair}」不在 pairs.json`);
+    });
+    // 嵌入題（{lead, question, after}）
+    const qs = list(ch.questions);
+    if (!qs.length) err(id, '缺少嵌入題 questions');
+    else if (qs.length < 2 || qs.length > 4) warn(id, `嵌入題 ${qs.length} 題，指引建議 2–4 題`);
+    qs.forEach((s, k) => {
+      const q = s && s.question && typeof s.question === 'object' ? s.question : s;
+      const qid = q && q.id ? q.id : `${id}#嵌入題${k + 1}`;
+      if (!q) { err(qid, '嵌入題是空的'); return; }
+      if (q.id) { if (seen.has(q.id)) err(qid, 'id 重複'); seen.add(q.id); } else err(qid, '嵌入題沒有 id');
+      const full = Object.assign({ domain: ch.domain, book: ch.book, unit: ch.unit, concepts: ch.concepts, skill: list(ch.skills)[0] }, q);
+      checkTags(qid, full, { noRefs: true });
+      checkBody(qid, full);
+      if (Array.isArray(q.parts)) { if (q.confusablePair) pairItems[q.confusablePair] = 1; }
+    });
+    // 迷思糾錯
+    const m = ch.misconception;
+    if (!m) err(id, '缺少 misconception');
+    else {
+      const sp = m.speaker || m.character;
+      if (!sp) err(id, 'misconception 缺說話角色 speaker');
+      else if (!chars.has(sp)) err(id, `misconception 的說話角色「${sp}」不在 characters.json`);
+      else speakers[sp] = (speakers[sp] || 0) + 1;
+      if (!(m.quote || m.statement || m.text)) err(id, 'misconception 缺迷思句 quote');
+      if (!(m.correction || m.correct)) err(id, 'misconception 缺正確說法 correction');
+      if (!m.basis) err(id, 'misconception 缺依據 basis');
+      if (Array.isArray(m.options) && !(Number.isInteger(m.answer) && m.answer >= 0 && m.answer < m.options.length)) err(id, 'misconception 的 answer 不在選項範圍');
+      if (m.confusablePair && !pairs.has(m.confusablePair)) err(id, `misconception 的 confusablePair「${m.confusablePair}」不在 pairs.json`);
+      for (const c of list(m.concepts)) if (!concepts.has(c)) err(id, `misconception 的概念「${c}」不在 concepts.json`);
+    }
+    if (!list(ch.fictionNotes).length) err(id, '缺少 fictionNotes（虛構與真實說明）');
+    // 法條與案件卡
+    const refs = list(ch.legalRefs);
+    for (const r of refs) if (!civRefOk(r)) err(id, `legalRefs 條號格式不對：${JSON.stringify(r)}（例：民法第12條）`);
+    dashCheck(id, refs);
+    if (ch.domain === '法律') {
+      if (!refs.length) err(id, '法律單元故事要有 legalRefs');
+      const cc = ch.caseCard;
+      if (!cc) err(id, '法律單元故事要有 caseCard');
+      else for (const [k, n] of [['eventType', '事件類型'], ['authority', '主管機關'], ['procedure', '程序'], ['remedy', '救濟途徑'], ['outcome', '可能結果']]) if (!list(cc[k]).length) err(id, `caseCard 缺「${n}」（${k}）`);
+    }
+    if (!ch.comparison && !refs.length) warn(id, '沒有制度對照（comparison）也沒有 legalRefs');
+  }
+  // 每組混淆對至少一題並排辨析（有小題、標了 confusablePair）；題庫還沒寫時不檢查
+  if (nq) for (const p of pf.pairs) if (!pairItems[p.id]) warn('civics/pairs', `混淆對 ${p.id}（${p.labels.join('／')}）還沒有並排辨析題（網站會改用兩題同對的選擇題並排）`);
+  for (const [c, ids] of Object.entries(byConcept)) { if (ids.length < 2) warn(c, `公民概念只有 ${ids.length} 題，錯題回收時沒有題目可替換`); }
+  // 迷思句說話者：同一人超過 25% 的章節要警示
+  const tot = Object.values(speakers).reduce((a, b) => a + b, 0);
+  if (tot >= 4) for (const [k, v] of Object.entries(speakers)) if (v / tot > 0.25) warn('civics/stories', `迷思句說話者過度集中：${k} 說了 ${v} / ${tot} 章（超過 25%）`);
+  console.log(`公民：${units.size} 個單元、${concepts.size} 個概念、${pairs.size} 組混淆對；題目 ${nq} 題、魔王題組 ${nb} 組、案件 ${nc} 件、故事 ${ns} 章、概念卡 ${cardIds.size} 張`);
+}
 
 // ---------- 自動驗算：用程式重算答案，確保圖、數據與答案一致 ----------
 function runCheck(id, q, figure, files) {
