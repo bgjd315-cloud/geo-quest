@@ -1,0 +1,694 @@
+{
+ "version": 1,
+ "note": "會考歷史知識點：依六冊課文與會考常見題型整理，尚未對照歷屆會考試題標頻率",
+ "points": [
+  {
+   "id": "tw01",
+   "name": "史前三時代的工具與生活差異（打製石器→磨製石器、陶器、農耕→金屬器）",
+   "events": [
+    "tw-prehistory"
+   ],
+   "skill": "比較"
+  },
+  {
+   "id": "tw02",
+   "name": "原住民族名稱的演變與分類",
+   "events": [
+    "tw-indigenous"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "tw03",
+   "name": "大航海時代臺灣成為東亞貿易轉運站",
+   "events": [
+    "tw-haishang",
+    "tw-dutch"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "tw04",
+   "name": "荷蘭的統治與經濟：鹿皮、蔗糖、轉口貿易",
+   "events": [
+    "tw-dutch"
+   ],
+   "skill": "史料判讀"
+  },
+  {
+   "id": "tw05",
+   "name": "荷西競爭與原住民的互動、反抗（麻豆社、郭懷一）",
+   "events": [
+    "tw-spain",
+    "tw-1642",
+    "tw-madou",
+    "tw-guo"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "tw06",
+   "name": "鄭氏政權：反清基地、屯墾、文教",
+   "events": [
+    "tw-zheng"
+   ],
+   "skill": "歷史解釋"
+  },
+  {
+   "id": "tw07",
+   "name": "清初棄留爭議與「為防臺而治臺」（渡臺禁令、劃界封山）",
+   "events": [
+    "tw-1683",
+    "tw-fangtai"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "tw08",
+   "name": "行政區劃演變反映開發由南而北、由西而東",
+   "events": [
+    "tw-district"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "tw09",
+   "name": "拓墾與水利設施",
+   "events": [
+    "tw-irrigate"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "tw10",
+   "name": "行郊與兩岸對渡：米糖輸出、日用品輸入",
+   "events": [
+    "tw-jiao"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "tw11",
+   "name": "移民社會的械鬥、民變與信仰",
+   "events": [
+    "tw-revolt",
+    "tw-migrant"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "tw12",
+   "name": "開港通商：茶、糖、樟腦，經濟重心北移",
+   "events": [
+    "tw-ports"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "tw13",
+   "name": "西方宣教帶來的醫療與教育",
+   "events": [
+    "tw-mission"
+   ],
+   "skill": "歷史解釋"
+  },
+  {
+   "id": "tw14",
+   "name": "牡丹社事件、清法戰爭與清廷積極治臺、建省",
+   "events": [
+    "tw-mudan",
+    "tw-1884",
+    "tw-province"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "tw15",
+   "name": "平埔族漢化與遷徙、山地原住民受到的衝擊",
+   "events": [
+    "tw-pingpu"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "tw16",
+   "name": "日治殖民體制：總督專制、六三法、警察",
+   "events": [
+    "tw-63"
+   ],
+   "skill": "史料判讀"
+  },
+  {
+   "id": "tw17",
+   "name": "日治三階段統治政策的轉變",
+   "events": [
+    "tw-jp-stage"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "tw18",
+   "name": "武裝抗日轉為非武裝的政治社會運動",
+   "events": [
+    "tw-xilaian",
+    "tw-movement"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "tw19",
+   "name": "理蕃政策與霧社事件",
+   "events": [
+    "tw-lifan",
+    "tw-wushe"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "tw20",
+   "name": "日治經濟：基礎調查→工業日本農業臺灣→工業臺灣農業南洋",
+   "events": [
+    "tw-survey",
+    "tw-sugar-rice",
+    "tw-south"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "tw21",
+   "name": "差別待遇的殖民教育與社會文化變革",
+   "events": [
+    "tw-edu"
+   ],
+   "skill": "比較"
+  },
+  {
+   "id": "tw22",
+   "name": "皇民化運動的內容",
+   "events": [
+    "tw-kominka"
+   ],
+   "skill": "史料判讀"
+  },
+  {
+   "id": "tw23",
+   "name": "二二八事件的背景與影響",
+   "events": [
+    "tw-228"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "tw24",
+   "name": "戒嚴、白色恐怖到解嚴與民主化",
+   "events": [
+    "tw-martial",
+    "tw-formosa",
+    "tw-democracy"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "tw25",
+   "name": "兩岸關係：軍事對峙到交流",
+   "events": [
+    "tw-strait"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "tw26",
+   "name": "戰後外交處境：退出聯合國、中美斷交",
+   "events": [
+    "tw-diplomacy"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "tw27",
+   "name": "戰後經濟：土地改革→進口替代→出口導向→十大建設→高科技",
+   "events": [
+    "tw-land",
+    "tw-export"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "tw28",
+   "name": "戰後社會文化與多元族群",
+   "events": [
+    "tw-society"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "ea01",
+   "name": "封建與郡縣的差別",
+   "events": [
+    "ea-feudal",
+    "ea-qin"
+   ],
+   "skill": "比較"
+  },
+  {
+   "id": "ea02",
+   "name": "商鞅變法與秦的統一",
+   "events": [
+    "ea-shangyang",
+    "ea-qin"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "ea03",
+   "name": "選才制度的演變：察舉→九品官人之法→科舉",
+   "events": [
+    "ea-select"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "ea04",
+   "name": "絲路、佛教傳入與玄奘西行",
+   "events": [
+    "ea-silk",
+    "ea-buddhism"
+   ],
+   "skill": "歷史解釋"
+  },
+  {
+   "id": "ea05",
+   "name": "胡漢互動：永嘉之禍、孝文帝遷都",
+   "events": [
+    "ea-hu"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "ea06",
+   "name": "唐代天可汗與東亞文化圈",
+   "events": [
+    "ea-tang"
+   ],
+   "skill": "比較"
+  },
+  {
+   "id": "ea07",
+   "name": "怛羅斯之役與造紙術西傳",
+   "events": [
+    "ea-talas"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "ea08",
+   "name": "宋與遼金的關係：澶淵之盟、靖康之禍",
+   "events": [
+    "ea-liao-song",
+    "ea-jingkang"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "ea09",
+   "name": "蒙古帝國與元代四等人",
+   "events": [
+    "ea-mongol"
+   ],
+   "skill": "史料判讀"
+  },
+  {
+   "id": "ea10",
+   "name": "明代對外關係：鄭和下西洋與朝貢",
+   "events": [
+    "ea-ming",
+    "ea-zhenghe"
+   ],
+   "skill": "歷史解釋"
+  },
+  {
+   "id": "ea11",
+   "name": "天主教傳入：利瑪竇的傳教策略與清代禁教",
+   "events": [
+    "ea-ricci"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "ea12",
+   "name": "天朝體制與西方條約體制的衝突",
+   "events": [
+    "ea-opium"
+   ],
+   "skill": "比較"
+  },
+  {
+   "id": "ea13",
+   "name": "不平等條約的內容與影響",
+   "events": [
+    "ea-opium",
+    "ea-anglo-french",
+    "ea-1894",
+    "ea-boxer"
+   ],
+   "skill": "史料判讀"
+  },
+  {
+   "id": "ea14",
+   "name": "自強運動與明治維新的比較",
+   "events": [
+    "ea-selfstrength",
+    "ea-meiji",
+    "ea-1894"
+   ],
+   "skill": "比較"
+  },
+  {
+   "id": "ea15",
+   "name": "晚清改革與革命：戊戌變法→新政、立憲→辛亥革命",
+   "events": [
+    "ea-1898",
+    "ea-newpolicy",
+    "ea-1911"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "ea16",
+   "name": "晚清社會文化的變遷",
+   "events": [
+    "ea-qing-society"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "ea17",
+   "name": "民初政局：袁世凱與二十一條",
+   "events": [
+    "ea-yuan-sk"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "ea18",
+   "name": "新文化運動與五四運動",
+   "events": [
+    "ea-may4"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "ea19",
+   "name": "北伐、九一八到西安事變",
+   "events": [
+    "ea-northern",
+    "ea-1931"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "ea20",
+   "name": "中日戰爭與國共內戰",
+   "events": [
+    "ea-1937",
+    "ea-civil"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "ea21",
+   "name": "中華人民共和國：大躍進→文革→改革開放→六四",
+   "events": [
+    "ea-prc",
+    "ea-leap",
+    "ea-reform"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "ea22",
+   "name": "冷戰下的東亞：韓戰、越戰、中美關係",
+   "events": [
+    "ea-korea-vietnam",
+    "ea-us-china"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "ea23",
+   "name": "東南亞公約組織與東協的比較",
+   "events": [
+    "ea-sea"
+   ],
+   "skill": "比較"
+  },
+  {
+   "id": "ea24",
+   "name": "香港、澳門主權移交",
+   "events": [
+    "ea-hk"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "w01",
+   "name": "兩河流域與埃及文明的比較",
+   "events": [
+    "w-mesopotamia",
+    "w-egypt"
+   ],
+   "skill": "比較"
+  },
+  {
+   "id": "w02",
+   "name": "雅典與斯巴達的比較",
+   "events": [
+    "w-greece"
+   ],
+   "skill": "比較"
+  },
+  {
+   "id": "w03",
+   "name": "波希戰爭、亞歷山大東征與希臘化",
+   "events": [
+    "w-persian",
+    "w-alexander"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "w04",
+   "name": "羅馬由共和到帝國、分裂與滅亡",
+   "events": [
+    "w-rome"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "w05",
+   "name": "基督教的發展與分裂",
+   "events": [
+    "w-christian"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "w06",
+   "name": "伊斯蘭教與阿拉伯帝國的文化傳承",
+   "events": [
+    "w-islam"
+   ],
+   "skill": "歷史解釋"
+  },
+  {
+   "id": "w07",
+   "name": "拜占庭滅亡的影響",
+   "events": [
+    "w-byzantine"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "w08",
+   "name": "文藝復興與人文主義",
+   "events": [
+    "w-renaissance"
+   ],
+   "skill": "歷史解釋"
+  },
+  {
+   "id": "w09",
+   "name": "新航路開闢的動機與影響",
+   "events": [
+    "w-voyage"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "w10",
+   "name": "殖民對美洲、亞洲與澳洲的影響",
+   "events": [
+    "w-colony"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "w11",
+   "name": "宗教改革",
+   "events": [
+    "w-reformation"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "w12",
+   "name": "科學革命與科學方法",
+   "events": [
+    "w-science"
+   ],
+   "skill": "變遷與延續"
+  },
+  {
+   "id": "w13",
+   "name": "啟蒙思想家的主張",
+   "events": [
+    "w-enlight"
+   ],
+   "skill": "史料判讀"
+  },
+  {
+   "id": "w14",
+   "name": "美國獨立與憲法（三權分立）",
+   "events": [
+    "w-us"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "w15",
+   "name": "法國大革命與人權宣言",
+   "events": [
+    "w-france"
+   ],
+   "skill": "史料判讀"
+  },
+  {
+   "id": "w16",
+   "name": "拿破崙與維也納會議（正統原則）",
+   "events": [
+    "w-napoleon"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "w17",
+   "name": "民族主義：拉丁美洲獨立、德國與義大利統一",
+   "events": [
+    "w-latin",
+    "w-germany",
+    "w-italy"
+   ],
+   "skill": "比較"
+  },
+  {
+   "id": "w18",
+   "name": "帝國主義擴張與巴爾幹問題",
+   "events": [
+    "w-imperial",
+    "w-balkan"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "w19",
+   "name": "第一次世界大戰：原因、經過與巴黎和會",
+   "events": [
+    "w-ww1",
+    "w-paris"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "w20",
+   "name": "戰間期：俄國革命、經濟大恐慌、極權政治",
+   "events": [
+    "w-ussr",
+    "w-depression",
+    "w-fascism"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "w21",
+   "name": "第二次世界大戰與聯合國",
+   "events": [
+    "w-ww2",
+    "w-un"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "w22",
+   "name": "冷戰：兩極對抗、區域衝突、冷戰結束",
+   "events": [
+    "w-coldwar",
+    "w-mideast",
+    "w-space",
+    "w-1991"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "x01",
+   "name": "同時期三線對照（例：1624 荷蘭來臺、明末、歐洲大航海）",
+   "events": [
+    "tw-dutch",
+    "ea-ricci",
+    "w-voyage"
+   ],
+   "skill": "時序"
+  },
+  {
+   "id": "x02",
+   "name": "西力衝擊下的三地比較：臺灣開港、晚清變革、明治維新",
+   "events": [
+    "tw-ports",
+    "ea-selfstrength",
+    "ea-meiji"
+   ],
+   "skill": "比較"
+  },
+  {
+   "id": "x03",
+   "name": "二戰對三線的影響：皇民化、中日戰爭、世界大戰",
+   "events": [
+    "tw-kominka",
+    "ea-1937",
+    "w-ww2"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "x04",
+   "name": "冷戰對臺灣與東亞的影響",
+   "events": [
+    "tw-strait",
+    "ea-korea-vietnam",
+    "w-coldwar"
+   ],
+   "skill": "因果"
+  },
+  {
+   "id": "x05",
+   "name": "紀年換算：西元、世紀、年號、民國、干支",
+   "events": [],
+   "skill": "時序"
+  },
+  {
+   "id": "x06",
+   "name": "史料判讀：第一手與第二手史料、立場與可信度",
+   "events": [],
+   "skill": "史料判讀"
+  }
+ ]
+}
