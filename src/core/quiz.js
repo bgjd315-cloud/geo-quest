@@ -238,7 +238,8 @@
     const c = window.Data.cards[concept];
     const name = window.Data.conceptName[concept] || concept;
     if (!c) return `<div class="card"><h3>${esc(name)}</h3><p>這個概念的原理卡還在準備中。</p></div>`;
-    return `<div class="card"><div class="card-kicker">原理卡</div><h3>${esc(c.title || name)}</h3>${figure(c.figure)}<p>${fmt(c.text)}</p>${c.tip ? `<p class="tip">${fmt(c.tip)}</p>` : ''}</div>`;
+    const xn = window.XData && window.XData.count ? window.XData.count('geo:' + concept) : 0;
+    return `<div class="card"><div class="card-kicker">原理卡${xn ? `<span class="x-badge">會考 5 年出現 ${xn} 次</span>` : ''}</div><h3>${esc(c.title || name)}</h3>${figure(c.figure)}<p>${fmt(c.text)}</p>${c.tip ? `<p class="tip">${fmt(c.tip)}</p>` : ''}</div>`;
   }
 
   // ---------- 一場闖關 ----------

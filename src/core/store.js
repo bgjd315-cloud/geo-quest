@@ -5,9 +5,17 @@
   const KEY = 'geoquest.v1';
   // stories：故事章節完成紀錄 {章id: {done, ts}}；cards：故事解鎖的館藏卡（事件 id）
   const blankHistory = () => ({ hero: null, log: [], levels: {}, recycle: {}, introSeen: false, stories: {}, cards: [] });
-  const blank = () => ({ v: 1, hero: null, log: [], levels: {}, recycle: {}, review: {}, parentHash: null, introSeen: false, subject: null, history: blankHistory() });
-  // 缺的欄位補上預設值（舊版存檔沒有 history、subject）
-  const normalize = o => { const s = Object.assign(blank(), o); s.history = Object.assign(blankHistory(), o && o.history); return s; };
+  // 會考真題：log 每題作答 {id, ok, ts, mode, a}；sims 年度模擬成績 {年: [{score,total,ts,secs}]}；recycle 真題錯題 {題id: {streak, since}}
+  const blankExam = () => ({ log: [], sims: {}, recycle: {} });
+  const blank = () => ({ v: 1, hero: null, log: [], levels: {}, recycle: {}, review: {}, parentHash: null, introSeen: false, subject: null, history: blankHistory(), exam: blankExam() });
+  // 缺的欄位補上預設值（舊版存檔沒有 history、subject、exam）
+  const normalize = o => {
+    const s = Object.assign(blank(), o);
+    s.history = Object.assign(blankHistory(), o && o.history);
+    const x = (o && o.exam) || {};
+    s.exam = { log: Array.isArray(x.log) ? x.log : [], sims: x.sims && typeof x.sims === 'object' ? x.sims : {}, recycle: x.recycle && typeof x.recycle === 'object' ? x.recycle : {} };
+    return s;
+  };
   let mem = null;
 
   function load() {
@@ -46,8 +54,28 @@
     finishLevel(id, score, total, mode) { finishIn(get(), id, score, total, mode); save(); }
   });
 
+  // 會考真題的作答紀錄：錯題回收以「題目」為單位，連續答對兩次才移出（和網站錯題回收同一規則）
+  const X = {
+    get: () => load().exam,
+    record(entry) {
+      const x = load().exam;
+      const e = Object.assign({ ts: Date.now() }, entry);
+      x.log.push(e);
+      if (x.log.length > 5000) x.log = x.log.slice(-5000);
+      if (!e.ok) x.recycle[e.id] = { streak: 0, since: e.ts };
+      else if (x.recycle[e.id]) { x.recycle[e.id].streak += 1; if (x.recycle[e.id].streak >= 2) delete x.recycle[e.id]; }
+      save();
+    },
+    finishSim(year, score, total, secs) {
+      const x = load().exam;
+      (x.sims[year] = x.sims[year] || []).push({ score, total, ts: Date.now(), secs });
+      save();
+    }
+  };
+
   const Store = Object.assign(track(load), {
     save,
+    X,
     // 歷史進度
     H: track(() => load().history),
     // 家長審題：覆寫題目狀態（兩科共用，題目 id 不重複；只存在這台裝置，可匯出給 Claude 寫回題庫）
@@ -70,8 +98,11 @@
         // 舊版進度檔只有地理：這台裝置原本的歷史進度與科目選擇保留
         if (!inc.history) mem.history = cur.history;
         if (!inc.subject) mem.subject = cur.subject;
+        // 沒有會考真題紀錄的舊進度檔：保留這台裝置原本的真題紀錄
+        if (!inc.exam) mem.exam = cur.exam;
         save();
-        return inc.history ? '進度已匯入（地理＋歷史）' : '進度已匯入（舊版進度檔只有地理；歷史進度維持不變）';
+        const kept = [!inc.history && '歷史', !inc.exam && '會考真題'].filter(Boolean);
+        return kept.length ? `進度已匯入（舊版進度檔沒有${kept.join('、')}的紀錄，這部分維持不變）` : '進度已匯入（地理＋歷史＋會考真題）';
       }
       if (obj && obj.type === 'geo-quest-review') {
         const s = load();

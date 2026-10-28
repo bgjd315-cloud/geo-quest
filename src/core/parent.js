@@ -4,18 +4,21 @@
   const S = () => window.Store.get();
   const SUBJ = window.Subjects;
   const subjName = k => SUBJ[k].name;
+  // 有家長頁內容的科目（會考真題沒有審題，診斷另有分頁）
+  const keys = () => Object.keys(SUBJ).filter(k => SUBJ[k].parent);
 
   let parentOK = false;
   function view(tab, topbar) {
     if (!parentOK) return login(topbar);
     tab = tab || 'progress';
-    const tabs = { progress: '進度', matrix: '弱點矩陣', wrong: '近期錯題', review: '審題' };
+    const tabs = { progress: '進度', diag: '學習診斷', matrix: '弱點矩陣', wrong: '近期錯題', review: '審題' };
     app().innerHTML = `${topbar('#/settings')}<div class="page parent"><h1>家長頁</h1>
       <nav class="tabs">${Object.entries(tabs).map(([k, v]) => `<a class="${k === tab ? 'on' : ''}" href="#/parent/${k}">${v}</a>`).join('')}</nav><div class="pbody"></div></div>`;
     const body = app().querySelector('.pbody');
     if (tab === 'progress') progress(body);
-    if (tab === 'matrix') body.innerHTML = Object.keys(SUBJ).filter(k => SUBJ[k].parent.matrixHTML).map(k => `<h2>${subjName(k)}</h2>${SUBJ[k].parent.matrixHTML()}`).join('');
+    if (tab === 'matrix') body.innerHTML = keys().filter(k => SUBJ[k].parent.matrixHTML).map(k => `<h2>${subjName(k)}</h2>${SUBJ[k].parent.matrixHTML()}`).join('');
     if (tab === 'wrong') wrong(body);
+    if (tab === 'diag') window.Diagnosis.render(body);
     if (tab === 'review') review(body);
   }
 
@@ -39,7 +42,7 @@
   }
 
   function progress(body) {
-    body.innerHTML = Object.keys(SUBJ).map(k => {
+    body.innerHTML = keys().map(k => {
       const P = SUBJ[k].parent, log = P.log();
       const days = [...new Set(log.map(e => new Date(e.ts).toISOString().slice(0, 10)))];
       return `<h2>${subjName(k)}《${esc(SUBJ[k].title)}》</h2>
@@ -49,7 +52,7 @@
 
   // 兩科的錯題混在一起，依時間由新到舊
   function wrong(body) {
-    const rows = Object.keys(SUBJ).flatMap(k => SUBJ[k].parent.log().filter(e => !e.ok).slice(-30).map(e => ({ k, e })))
+    const rows = keys().flatMap(k => SUBJ[k].parent.log().filter(e => !e.ok).slice(-30).map(e => ({ k, e })))
       .sort((a, b) => b.e.ts - a.e.ts).slice(0, 30);
     if (!rows.length) { body.innerHTML = '<p class="empty">最近沒有錯題。</p>'; return; }
     body.innerHTML = rows.map(({ k, e }) => {
@@ -66,7 +69,7 @@
     const st = q => window.Loader.status(q);
     // 題目／故事章節切換（只有提供 stories 的科目才有）
     const kindNav = P => P.stories ? `<nav class="tabs kind-tabs"><a href="javascript:void 0" data-kind="q" class="${filter.kind !== 'story' ? 'on' : ''}">題目</a><a href="javascript:void 0" data-kind="story" class="${filter.kind === 'story' ? 'on' : ''}">故事章節（${P.stories().length} 章・待審 ${P.stories().filter(c => P.storyStatus(c) === '待審').length}）</a></nav>` : '';
-    const subjNav = () => `<nav class="tabs subj-tabs">${Object.keys(SUBJ).map(k => `<a href="javascript:void 0" data-k="${k}" class="${k === filter.subj ? 'on' : ''}">${subjName(k)}（${SUBJ[k].parent.questions().length} 題・待審 ${SUBJ[k].parent.questions().filter(q => st(q) === '待審').length}）</a>`).join('')}</nav>`;
+    const subjNav = () => `<nav class="tabs subj-tabs">${keys().map(k => `<a href="javascript:void 0" data-k="${k}" class="${k === filter.subj ? 'on' : ''}">${subjName(k)}（${SUBJ[k].parent.questions().length} 題・待審 ${SUBJ[k].parent.questions().filter(q => st(q) === '待審').length}）</a>`).join('')}</nav>`;
     const bindNav = () => {
       body.querySelectorAll('.subj-tabs a').forEach(a => a.onclick = () => { filter = { subj: a.dataset.k, status: '待審', group: '', kind: 'q' }; draw(); });
       body.querySelectorAll('.kind-tabs a').forEach(a => a.onclick = () => { filter = Object.assign({}, filter, { kind: a.dataset.kind, group: '', status: '待審' }); draw(); });

@@ -19,6 +19,15 @@ const hman = JSON.parse(read('data/history/manifest.json'));
 data['history/manifest.json'] = hman;
 for (const rel of [].concat(hman.events, hman.cards || [], hman.questions || [], hman.stories || [])) data['history/' + rel] = JSON.parse(read('data/history/' + rel));
 
+data['history/kp.json'] = JSON.parse(read('data/history/kp.json'));
+// 會考真題：data/exam/manifest.json 列出的年度檔；還不存在的先略過（警告），網站會顯示「資料準備中」
+const xman = JSON.parse(read('data/exam/manifest.json'));
+data['exam/manifest.json'] = xman;
+for (const rel of xman.files || []) {
+  if (!fs.existsSync(path.join(ROOT, 'data/exam', rel))) { console.warn(`⚠ 會考真題 data/exam/${rel} 還不存在，先略過`); continue; }
+  data['exam/' + rel] = JSON.parse(read('data/exam/' + rel));
+}
+
 // 插畫：地理 assets/web、歷史 assets/history/web；檔名不可重複
 const images = {};
 for (const dir of ['assets/web', 'assets/history/web']) {
@@ -29,11 +38,28 @@ for (const dir of ['assets/web', 'assets/history/web']) {
   }
 }
 
+// 會考題目截圖（assets/exam/<年>/*.webp）：只收資料檔有引用的圖。
+// 全部內嵌後若超過 25 MB，改成不內嵌：dist/index.html 用相對路徑 ../assets/exam/… 讀圖
+// （GitHub Pages 上 dist/ 和 assets/ 都在 repo 根目錄底下；本機雙擊 dist/index.html 也一樣讀得到）。
+const LIMIT = 25 * 1024 * 1024;
+const examImgs = new Set();
+for (const [k, f] of Object.entries(data)) if (/^exam\/\d+\.json$/.test(k)) {
+  for (const g of f.groups || []) if (g.img) examImgs.add(g.img);
+  for (const it of f.items || []) if (it.img) examImgs.add(it.img);
+}
+const missingImg = [...examImgs].filter(p => !fs.existsSync(path.join(ROOT, p)));
+if (missingImg.length) console.warn(`⚠ 會考題目圖片缺 ${missingImg.length} 張：${missingImg.slice(0, 5).join('、')}`);
+const imgBytes = [...examImgs].filter(p => fs.existsSync(path.join(ROOT, p))).reduce((s, p) => s + fs.statSync(path.join(ROOT, p)).size, 0);
+const baseBytes = Buffer.byteLength(JSON.stringify(data)) + Buffer.byteLength(JSON.stringify(images)) + 400 * 1024;
+const embedExam = process.argv.includes('--embed-exam') || (!process.argv.includes('--link-exam') && baseBytes + Math.ceil(imgBytes * 4 / 3) < LIMIT);
+const examImages = {};
+if (embedExam) for (const p of examImgs) if (fs.existsSync(path.join(ROOT, p))) examImages[p] = 'data:image/webp;base64,' + fs.readFileSync(path.join(ROOT, p)).toString('base64');
+
 // JSON 內嵌到 <script> 時，避免出現 </script>
 const safe = o => JSON.stringify(o).replace(/</g, '\\u003c');
 let html = read('index.html');
 html = html.replace(/<link rel="stylesheet" href="(src\/[^"]+)">/g, (_, p) => `<style>\n${read(p)}\n</style>`);
-html = html.replace('<!--DATA-->', () => `<script>window.GEO_DATA=${safe(data)};window.GEO_IMAGES=${safe(images)};window.GEO_BUILD=${safe(new Date().toISOString())};</script>`);
+html = html.replace('<!--DATA-->', () => `<script>window.GEO_DATA=${safe(data)};window.GEO_IMAGES=${safe(images)};window.GEO_BUILD=${safe(new Date().toISOString())};${embedExam ? `window.GEO_EXAM_IMAGES=${safe(examImages)};` : `window.GEO_EXAM_BASE='../';`}</script>`);
 html = html.replace(/<script src="(src\/[^"]+)"><\/script>/g, (_, p) => `<script>\n${read(p)}\n</script>`);
 
 fs.mkdirSync(path.join(ROOT, 'dist'), { recursive: true });
@@ -41,3 +67,4 @@ const out = path.join(ROOT, 'dist/index.html');
 fs.writeFileSync(out, html);
 const mb = (fs.statSync(out).size / 1024 / 1024).toFixed(2);
 console.log(`\n已產生 dist/index.html（${mb} MB）：可直接雙擊開啟，也可以部署到 GitHub Pages。`);
+console.log(embedExam ? `會考題目圖片 ${examImgs.size} 張已內嵌。` : `會考題目圖片 ${examImgs.size} 張（${(imgBytes / 1024 / 1024).toFixed(1)} MB）沒有內嵌：dist/index.html 從 ../assets/exam/ 讀圖，部署時 assets/exam/ 要一起進 git。`);

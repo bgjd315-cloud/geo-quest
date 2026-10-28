@@ -135,8 +135,20 @@
         ${u.boss ? `<div class="level boss ${allDone ? '' : 'dim'}">${u.boss.image ? `<img src="${D().img(u.boss.image)}" alt="">` : coverHTML(u)}<div class="linfo"><b>${isExp(u) ? '區域魔王關' : '魔王關'}</b><span>${esc(u.boss.name)}</span><small>${allDone ? `${cnt(u.boss.id)} 題` : '完成前面的關卡後挑戰'}</small></div><div class="lbtn">${allDone ? `<a class="primary btn" href="#/play/${u.boss.id}/practice">挑戰</a><a class="ghost btn" href="#/play/${u.boss.id}/sim">模擬</a>` : ''}</div></div>` : ''}
       </div>
       <a class="ghost btn wide" href="#/play/${u.id}-all/sim">單元模擬測驗（計時 20 題）</a>
+      ${examKpHTML(u)}
     </div>`;
   };
+
+  // 這座島（或遠征區域）的觀念在會考 5 年出現幾次（N > 0 才列；點了練那個觀念的真題）
+  function examKpHTML(u) {
+    const XD = window.XData;
+    if (!XD || !XD.count) return '';
+    const ids = new Set(((D().concepts.units.find(x => x.id === u.id) || {}).concepts || []).map(c => c.id));
+    const lv = new Set(u.levels.map(l => l.id).concat(u.boss ? [u.boss.id] : []));
+    for (const q of D().live()) if (lv.has(q.level)) q.concepts.forEach(c => ids.add(c));
+    const ks = [...ids].map(c => [c, XD.count('geo:' + c)]).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
+    return ks.length ? `<div class="x-kps"><span class="x-kps-h">會考 5 年出現</span>${ks.map(([c, n]) => `<a class="x-kpchip" href="#/x/kp/${encodeURIComponent(c)}">${esc(D().conceptName[c] || c)}<b>${n} 次</b></a>`).join('')}</div>` : '';
+  }
 
   function levelInfo(lid) {
     for (const u of D().units) {

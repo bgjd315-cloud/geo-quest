@@ -394,8 +394,96 @@ function validate() {
     console.log(`歷史：${eras.size} 個分期、${events.size} 件事件、${hn} 題；故事 ${sn} 章（嵌入題 ${sq} 題）${missingCh.length ? `，尚未寫：${missingCh.join('、')}` : ''}`);
   }
 
+  validateExam();
   return report(all);
 }
+
+// ---------- 會考真題：data/exam/（格式見 docs/會考真題檢測設計.md「資料格式」） ----------
+// 結構問題是錯誤；缺解析是警告。manifest 列出但還沒寫好的年度檔只警告、略過（子代理還在寫）。
+function validateExam() {
+  const mp = path.join(DATA, 'exam/manifest.json');
+  if (!fs.existsSync(mp)) { warn('exam', '沒有 data/exam/manifest.json，略過會考真題檢查'); return; }
+  const man = readJSON('exam/manifest.json');
+  if (!man) return;
+  if (!Array.isArray(man.files)) { err('exam/manifest', 'files 必須是陣列'); return; }
+  const concepts = readJSON('concepts.json'), units = readJSON('units.json');
+  const hman = readJSON('history/manifest.json');
+  const hev = hman && readJSON('history/' + hman.events), kpf = readJSON('history/kp.json');
+  const conceptIds = new Set((concepts ? concepts.units : []).flatMap(u => u.concepts.map(c => c.id)));
+  const scopes = new Set((units ? units.units : []).map(u => u.id));
+  const eras = new Set(((hev && hev.eras) || []).map(e => e.id)), events = new Set(((hev && hev.events) || []).map(e => e.id));
+  const kps = new Set(((kpf && kpf.points) || []).map(p => p.id));
+  const GEO_SK = new Set(['讀圖', '計算', '原理應用', '區域比較', '跨科整合']);
+  const HIST_SK = new Set(['時序', '因果', '比較', '變遷與延續', '史料判讀', '歷史解釋']);
+  const list = v => Array.isArray(v) ? v : v == null ? [] : [v];
+  const imgOk = p => typeof p === 'string' && /^assets\/exam\//.test(p) && fs.existsSync(path.join(ROOT, p));
+  const seen = new Set();
+  let n = 0, geo = 0, hist = 0, years = [];
+  for (const rel of man.files) {
+    const fp = path.join(DATA, 'exam', rel);
+    if (!fs.existsSync(fp)) { warn('exam/' + rel, '列在 manifest 但檔案還不存在，先略過'); continue; }
+    let f;
+    try { f = JSON.parse(fs.readFileSync(fp, 'utf8')); } catch (e) { err('exam/' + rel, `不是合法的 JSON：${e.message}`); continue; }
+    const fid = 'exam/' + rel;
+    if (!Number.isInteger(f.year)) err(fid, 'year 必須是整數年份');
+    if (!f.source) err(fid, '缺少 source（出處）');
+    if (!Array.isArray(f.items)) { err(fid, 'items 必須是陣列'); continue; }
+    years.push(f.year);
+    const groups = new Map();
+    for (const g of list(f.groups)) {
+      const gid = g && g.id ? g.id : fid + '#group';
+      if (!g || !g.id) { err(fid, '題組沒有 id'); continue; }
+      if (seen.has(g.id)) err(gid, 'id 重複');
+      seen.add(g.id); groups.set(g.id, g);
+      if (!imgOk(g.img)) err(gid, `題組圖片不存在：${g.img}`);
+      if (!Array.isArray(g.range) || g.range.length !== 2 || !(g.range[0] <= g.range[1])) err(gid, 'range 必須是 [起題號, 迄題號]');
+      if (!g.text) warn(gid, '題組沒有 text（搜尋與無障礙用）');
+    }
+    const used = new Set(), nos = new Set();
+    for (const it of f.items) {
+      const id = it && it.id ? it.id : fid + '#item';
+      if (!it || !it.id) { err(fid, '有題目沒有 id'); continue; }
+      if (seen.has(it.id)) err(id, 'id 重複');
+      seen.add(it.id); n++;
+      if (it.year !== f.year) err(id, `year ${it.year} 和檔案的 ${f.year} 不一致`);
+      if (!Number.isInteger(it.no) || it.no < 1 || it.no > 80) err(id, `題號 no 不合理：${it.no}`);
+      else if (nos.has(it.no)) err(id, `題號 ${it.no} 重複`);
+      nos.add(it.no);
+      if (!Number.isInteger(it.answer) || it.answer < 0 || it.answer > 3) err(id, `answer 必須是 0–3，目前是 ${it.answer}`);
+      if (!imgOk(it.img)) err(id, `題目圖片不存在：${it.img}`);
+      if (it.status && !STATUS_X.has(it.status)) err(id, `status 必須是 待審／確認／退回`);
+      if (it.group != null) {
+        const g = groups.get(it.group);
+        if (!g) err(id, `題組「${it.group}」不在這個檔案的 groups`);
+        else { used.add(it.group); if (Array.isArray(g.range) && (it.no < g.range[0] || it.no > g.range[1])) err(id, `題號 ${it.no} 不在題組 ${it.group} 的範圍 ${g.range.join('–')}`); }
+      }
+      const sk = list(it.skill);
+      if (!sk.length) err(id, 'skill 不可為空');
+      if (!it.text) warn(id, '沒有 text（搜尋與無障礙用）');
+      if (!String(it.explain || '').trim()) warn(id, '還沒有解析 explain');
+      for (const a of list(it.also)) if (!['geo', 'hist'].includes(a)) err(id, `also 只能是 geo／hist：${a}`);
+      if (it.subject === 'geo') {
+        geo++;
+        if (!list(it.concepts).length) err(id, '地理題 concepts 不可為空');
+        for (const c of list(it.concepts)) if (!conceptIds.has(c)) err(id, `概念「${c}」不在 concepts.json`);
+        if (it.scope && !scopes.has(it.scope)) err(id, `scope「${it.scope}」不是 units.json 的單元或區域 id`);
+        if (!it.scope) warn(id, '地理題沒有 scope');
+        for (const s of sk) if (!GEO_SK.has(s)) err(id, `地理 skill「${s}」不在五種能力內`);
+      } else if (it.subject === 'hist') {
+        hist++;
+        if (!list(it.kp).length) err(id, '歷史題 kp 不可為空');
+        for (const k of list(it.kp)) if (!kps.has(k)) err(id, `知識點「${k}」不在 history/kp.json`);
+        if (it.era && !eras.has(it.era)) err(id, `era「${it.era}」不在 events.json 的分期`);
+        if (!it.era) warn(id, '歷史題沒有 era');
+        for (const e of list(it.eventIds)) if (!events.has(e)) err(id, `事件「${e}」不在 events.json`);
+        for (const s of sk) if (!HIST_SK.has(s)) err(id, `歷史 skill「${s}」不在六種能力內`);
+      } else err(id, `subject 只能是 geo 或 hist，目前是「${it.subject}」`);
+    }
+    for (const gid of groups.keys()) if (!used.has(gid)) warn(gid, '題組沒有任何小題引用');
+  }
+  console.log(`會考真題：${years.sort().join('、') || '（無）'} 年，共 ${n} 題（地理 ${geo}、歷史 ${hist}）`);
+}
+const STATUS_X = new Set(['待審', '確認', '退回']);
 
 // ---------- 自動驗算：用程式重算答案，確保圖、數據與答案一致 ----------
 function runCheck(id, q, figure, files) {

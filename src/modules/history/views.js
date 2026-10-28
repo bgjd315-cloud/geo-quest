@@ -66,11 +66,20 @@
         const n = H().liveOfEra(era.id).length, r = P().levels[era.id];
         return `<details class="era" ${n ? 'open' : ''}><summary><b>${esc(era.name)}</b><span class="era-time">${esc(era.time)}</span><span class="tag soft">${esc(era.lessons)}</span>${n ? `<span class="tag">${n} 題</span>` : '<span class="tag wait">籌備中</span>'}</summary>
           ${n ? `<div class="row"><a class="primary btn" href="#/h/play/${era.id}/practice">整理這個櫃子</a><a class="ghost btn" href="#/h/play/${era.id}/sim">模擬</a>${r ? `<small>最佳 ${Math.round(r.best * 100)}%</small>` : ''}</div>` : ''}
+          ${xkpHTML(era.id)}
           <ul class="ev-list">${eventsOfEra(era.id).map(e => { const k = H().liveOfEvent(e.id).length; return `<li><span class="ev-time">${esc(e.time === '—' ? '—' : e.time)}</span><span class="ev-name">${esc(e.name)}</span>${k ? `<span class="tag">${k} 題</span>` : '<span class="tag wait">籌備中</span>'}</li>`; }).join('')}</ul>
         </details>`;
       }).join('')}</div>
     </div>`;
   };
+
+  // 時代櫃子裡的會考知識點：「會考 5 年出現 N 次」（N > 0 才列，點了練那個知識點的真題）
+  function xkpHTML(eraId) {
+    const XD = window.XData;
+    if (!XD || !XD.kpOfEra) return '';
+    const ks = XD.kpOfEra(eraId).map(p => [p, XD.count('hist:' + p.id)]).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
+    return ks.length ? `<div class="x-kps"><span class="x-kps-h">會考 5 年出現</span>${ks.map(([p, n]) => `<a class="x-kpchip" href="#/x/kp/${encodeURIComponent(p.id)}" title="${esc(p.name)}">${esc(p.name.length > 14 ? p.name.slice(0, 14) + '…' : p.name)}<b>${n} 次</b></a>`).join('')}</div>` : '';
+  }
 
   views.timeline = () => {
     app().innerHTML = `${topbar('#/h')}<div class="page timeline"><h1>時間長廊</h1>
@@ -99,7 +108,10 @@
     if (!era) return `<div class="card"><p>這張館藏卡還在準備中。</p></div>`;
     const c = ev && H().cards[ev.id];
     const body = c ? `<p>${esc(c.text).replace(/\n/g, '<br>')}</p>${c.tip ? `<p class="tip">${esc(c.tip)}</p>` : ''}` : '';
-    return `<div class="card"><div class="card-kicker">館藏卡</div><h3>${esc(c ? c.title : ev ? ev.name : era.name)}</h3><p>${esc(ev ? ev.time : era.time)}・${esc(era.name)}</p>${body}${ev ? `<div class="chips">${ev.themes.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}</div>`;
+    // 會考知識點：這個事件屬於哪些 kp，5 年出現幾次（只列出現過的）
+    const xk = ev && window.XData && window.XData.kpOfEvent ? window.XData.kpOfEvent(ev.id).map(p => [p, window.XData.count('hist:' + p.id)]).filter(([, n]) => n) : [];
+    const xb = xk.length ? `<p class="x-badge-line">${xk.map(([p, n]) => `<span class="x-badge" title="${esc(p.name)}">會考 5 年出現 ${n} 次</span><small>${esc(p.name)}</small>`).join('<br>')}</p>` : '';
+    return `<div class="card"><div class="card-kicker">館藏卡</div><h3>${esc(c ? c.title : ev ? ev.name : era.name)}</h3><p>${esc(ev ? ev.time : era.time)}・${esc(era.name)}</p>${body}${ev ? `<div class="chips">${ev.themes.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}${xb}</div>`;
   }
 
   views.result = (sum, line) => {
@@ -370,7 +382,7 @@
     name: '歷史', title: '時光檔案館', home: '#/h', cover: () => H().img('hist_hall'),
     blurb: '見習檔案員和石虎阿斑，把被時間蛀蟲咬亂的檔案歸回正確的年代，讓時間長廊重新亮燈。',
     load: () => H().load().catch(e => { H().error = e.message; console.warn('歷史資料載入失敗', e); }),
-    route, parent,
+    route, parent, card: cardHTML,
     hero: { label: '檔案員', img: h => H().img(`arch_${h}_idle`), get: () => P().hero, set: h => window.Store.H.set({ hero: h }) },
     about: '歷史事件與分期依康軒國中歷史課本整理。插畫為故事用原創圖。'
   };
