@@ -1,0 +1,55 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #3A2C20; overflow: hidden; }
+    #s12-phone { position: absolute; left: 1180px; top: 70px; width: 480px; height: 960px; border-radius: 56px; background: #3A2C20; padding: 22px; box-shadow: 0 18px 40px rgba(70,40,10,.3); }
+    #s12-screen { position: relative; width: 436px; height: 916px; border-radius: 36px; overflow: hidden; background: #F1E6CF; }
+    .s12-shot { position: absolute; left: 0; top: 0; width: 436px; height: 916px; object-fit: cover; object-position: top; }
+    #s12-tap { position: absolute; left: 0; top: 0; width: 90px; height: 90px; border-radius: 50%; border: 8px solid #C48A2C; }
+    .s12-verb { position: absolute; left: 150px; top: 330px; width: 960px; }
+    .s12-verb h2 { font-size: 104px; font-weight: 700; letter-spacing: .03em; }
+    .s12-verb p { font-size: 48px; margin-top: 40px; line-height: 1.55; color: #6B5844; }
+    .s12-verb b { color: #94631A; }
+    #s12-b, #s12-c, #s12-d, #s12-e, #s12-f, #s12-v2, #s12-v3, #s12-v4, #s12-v5, #s12-tap { opacity: 0; }
+    .s12-verb small { display: block; font-size: 34px; margin-top: 26px; color: #8a7558; }
+  </style>
+  <div id="root" data-composition-id="s12" data-width="1920" data-height="1080">
+    <div id="s12-v1" class="s12-verb"><h2>會考真題 <b>111–115</b></h2><p>歷史 86 題照原卷呈現，<br>年度模擬計時練</p></div>
+    <div id="s12-v2" class="s12-verb"><h2>知識點<b>練習</b></h2><p>同一個觀念，<br>5 年的真題一起練</p></div>
+    <div id="s12-v3" class="s12-verb"><h2>考點<b>分布</b></h2><p>高頻考點排行，<br>先補最常考的</p></div>
+    <div id="s12-v4" class="s12-verb"><h2>學習<b>診斷</b></h2><p>列出需要加強的觀念，<br>附上一步步的加強建議</p></div>
+    <div id="s12-v5" class="s12-verb"><h2>家長<b>頁</b></h2><p>各館進度、近期錯題、<br>弱點矩陣，一頁看完</p></div>
+    <div id="s12-phone">
+      <div id="s12-screen">
+        <img id="s12-a" class="s12-shot" src="assets/screens/27_exam_home.png" alt="" />
+        <img id="s12-b" class="s12-shot" src="assets/screens/28_exam_kp.png" alt="" />
+        <img id="s12-c" class="s12-shot" src="assets/screens/29_exam_stats.png" alt="" />
+        <img id="s12-d" class="s12-shot" src="assets/screens/31_diag2.png" alt="" />
+        <img id="s12-e" class="s12-shot" src="assets/screens/32_parent.png" alt="" />
+        <img id="s12-f" class="s12-shot" src="assets/screens/33_parent_hist.png" alt="" />
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const shot = (id, t) => tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, t);
+    const verbIn = (id, t) => {
+      tl.fromTo(id + " h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "power2.inOut" }, t);
+      tl.fromTo(id + " p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, t + 0.25);
+    };
+    tl.fromTo("#s12-phone", { y: 900 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+    verbIn("#s12-v1", 0.2);
+    const T = 2.4;
+    ["b", "c", "d", "e"].forEach((k, i) => {
+      const t = T * (i + 1);
+      tl.to(`#s12-v${i + 1}`, { opacity: 0, duration: 0.2 }, t - 0.2);
+      shot(`#s12-${k}`, t);
+      tl.set(`#s12-v${i + 2}`, { opacity: 1 }, t);
+      verbIn(`#s12-v${i + 2}`, t);
+    });
+    shot("#s12-f", 10.3);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 11.72);
+    window.__timelines["s12"] = tl;
+  </script>
+</template>

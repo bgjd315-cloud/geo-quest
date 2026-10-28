@@ -1,0 +1,71 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    #s7-phone { position: absolute; left: 1180px; top: 70px; width: 480px; height: 960px; border-radius: 56px; background: #2F3A40; padding: 22px; box-shadow: 0 18px 40px rgba(47,58,64,.28); }
+    #s7-screen { position: relative; width: 436px; height: 916px; border-radius: 36px; overflow: hidden; background: #F6F1E7; }
+    .s7-shot { position: absolute; left: 0; top: 0; width: 436px; height: 916px; object-fit: cover; object-position: top; }
+    #s7-no { position: absolute; left: 1560px; top: 140px; width: 200px; height: 200px; border-radius: 50%; background: #B4533F; color: #fff; font-size: 110px; font-weight: 700; display: grid; place-items: center; }
+    #s7-text { position: absolute; left: 150px; top: 130px; width: 960px; }
+    #s7-text h2 { font-size: 104px; font-weight: 700; letter-spacing: .04em; }
+    #s7-text h2 b { color: #3D7A80; }
+    #s7-steps { margin-top: 40px; }
+    .s7-step { display: flex; align-items: center; gap: 26px; margin-top: 22px; padding: 16px 26px; border-radius: 22px; background: rgba(255,253,248,.7); border: 4px solid #e2dacb; }
+    .s7-step i { font-style: normal; width: 74px; height: 74px; border-radius: 50%; display: grid; place-items: center; font-size: 42px; font-weight: 700; color: #fff; background: #9aa3a6; flex: none; }
+    .s7-step span { font-size: 50px; font-weight: 700; }
+    .s7-step small { font-size: 34px; color: #5f686d; margin-left: auto; }
+    #s7-rec { margin-top: 46px; padding: 26px 30px; border-radius: 22px; background: #fffdf8; border: 4px solid #C48A2C; }
+    #s7-rec h3 { font-size: 50px; font-weight: 700; color: #94631A; }
+    #s7-rec p { font-size: 40px; margin-top: 8px; color: #4a575d; display: flex; align-items: center; gap: 18px; }
+    #s7-rec p b { color: #2F3A40; }
+    .s7-ck { width: 64px; height: 64px; border-radius: 50%; background: #3D7A80; color: #fff; display: grid; place-items: center; font-size: 40px; font-weight: 700; }
+    #s7-b, #s7-c, #s7-d, #s7-no, #s7-rec, #s7-k1, #s7-k2 { opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="s7" data-width="1920" data-height="1080">
+    <div id="s7-text">
+      <h2>答錯，先回<b>原理</b></h2>
+      <div id="s7-steps">
+        <div id="s7-s1" class="s7-step"><i>1</i><span>原理卡</span><small>看懂為什麼</small></div>
+        <div id="s7-s2" class="s7-step"><i>2</i><span>通論基本題</span><small>確認原理</small></div>
+        <div id="s7-s3" class="s7-step"><i>3</i><span>回到同一區域</span><small>再試一題</small></div>
+      </div>
+      <div id="s7-rec"><h3>錯題回收</h3><p>同觀念換一題，<b>連對兩次</b>才過關 <span id="s7-k1" class="s7-ck">✓</span><span id="s7-k2" class="s7-ck">✓</span></p></div>
+    </div>
+    <div id="s7-phone">
+      <div id="s7-screen">
+        <img id="s7-a" class="s7-shot" src="assets/screens/09_region_wrong.png" alt="" />
+        <img id="s7-b" class="s7-shot" src="assets/screens/10_card.png" alt="" />
+        <img id="s7-c" class="s7-shot" src="assets/screens/11_basic.png" alt="" />
+        <img id="s7-d" class="s7-shot" src="assets/screens/12_back_region.png" alt="" />
+      </div>
+    </div>
+    <div id="s7-no">✗</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const shot = (id, t) => tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, t);
+    const on = (id, t) => {
+      tl.to(id, { borderColor: "#3D7A80", backgroundColor: "rgba(255,253,248,1)", duration: 0.25 }, t);
+      tl.to(id + " i", { backgroundColor: "#3D7A80", duration: 0.25 }, t);
+      tl.fromTo(id + " i", { scale: 1.4 }, { scale: 1, duration: 0.33, ease: "back.out(2)" }, t);
+    };
+    const off = (id, t) => tl.to(id, { borderColor: "#e2dacb", backgroundColor: "rgba(255,253,248,.7)", duration: 0.25 }, t);
+    tl.fromTo("#s7-phone", { y: 900 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+    tl.fromTo("#s7-text h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 0.15);
+    ["#s7-s1", "#s7-s2", "#s7-s3"].forEach((id, i) => tl.fromTo(id, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.6 + i * 0.15));
+    // 區域題答錯
+    tl.fromTo("#s7-no", { scale: 2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.33, ease: "back.out(2)" }, 0.8);
+    tl.to("#s7-no", { opacity: 0, duration: 0.25 }, 1.9);
+    // ① 原理卡 ② 通論基本題 ③ 回到同一區域
+    on("#s7-s1", 2.1); shot("#s7-b", 2.1);
+    off("#s7-s1", 4.0); on("#s7-s2", 4.0); shot("#s7-c", 4.0);
+    off("#s7-s2", 5.6); on("#s7-s3", 5.6); shot("#s7-d", 5.6);
+    // 錯題回收：連對兩次
+    tl.fromTo("#s7-rec", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 7.0);
+    tl.fromTo("#s7-k1", { opacity: 0, scale: 2 }, { opacity: 1, scale: 1, duration: 0.33, ease: "back.out(2)" }, 8.0);
+    tl.fromTo("#s7-k2", { opacity: 0, scale: 2 }, { opacity: 1, scale: 1, duration: 0.33, ease: "back.out(2)" }, 8.5);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 10.22);
+    window.__timelines["s7"] = tl;
+  </script>
+</template>

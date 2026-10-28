@@ -1,0 +1,56 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    #s10-phone { position: absolute; left: 1180px; top: 70px; width: 480px; height: 960px; border-radius: 56px; background: #2F3A40; padding: 22px; box-shadow: 0 18px 40px rgba(47,58,64,.28); }
+    #s10-screen { position: relative; width: 436px; height: 916px; border-radius: 36px; overflow: hidden; background: #F6F1E7; }
+    .s10-shot { position: absolute; left: 0; top: 0; width: 436px; height: 916px; object-fit: cover; object-position: top; }
+    .s10-long { position: absolute; left: 0; top: 0; width: 436px; }
+    #s10-text { position: absolute; left: 150px; top: 140px; width: 980px; }
+    #s10-text h2 { font-size: 104px; font-weight: 700; letter-spacing: .04em; }
+    #s10-text h2 b { color: #3D7A80; }
+    #s10-text > p { font-size: 44px; margin-top: 22px; color: #4a575d; }
+    #s10-text > p b { color: #94631A; }
+    .s10-row { margin-top: 30px; padding: 20px 30px; border-radius: 22px; border-left: 12px solid #d8d0c0; background: rgba(255,253,248,.7); }
+    .s10-row h3 { font-size: 50px; font-weight: 700; }
+    .s10-row p { font-size: 36px; margin-top: 4px; color: #4a575d; }
+    #s10-b, #s10-c, #s10-d { opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="s10" data-width="1920" data-height="1080">
+    <div id="s10-text">
+      <h2>會考<b>真題</b></h2>
+      <p>111–115 年地理題 <b>95</b> 題，照原卷呈現</p>
+      <div id="s10-r1" class="s10-row"><h3>年度模擬</h3><p>整年一回，計時作答</p></div>
+      <div id="s10-r2" class="s10-row"><h3>知識點練習</h3><p>同一觀念，五年真題一起練</p></div>
+      <div id="s10-r3" class="s10-row"><h3>考點分布</h3><p>哪些觀念最常考，一張表看清楚</p></div>
+    </div>
+    <div id="s10-phone">
+      <div id="s10-screen">
+        <img id="s10-a" class="s10-shot" src="assets/screens/15_exam_home.png" alt="" />
+        <img id="s10-b" class="s10-shot" src="assets/screens/16_exam_sim.png" alt="" />
+        <img id="s10-c" class="s10-shot" src="assets/screens/17_exam_kp.png" alt="" />
+        <img id="s10-d" class="s10-long" src="assets/screens/18_stats_top.png" alt="" />
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const shot = (id, t) => tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, t);
+    const on = (id, t) => tl.to(id, { borderLeftColor: "#3D7A80", backgroundColor: "rgba(255,253,248,1)", duration: 0.25 }, t);
+    const off = (id, t) => tl.to(id, { borderLeftColor: "#d8d0c0", backgroundColor: "rgba(255,253,248,.7)", duration: 0.25 }, t);
+    tl.fromTo("#s10-phone", { y: 900 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+    tl.fromTo("#s10-text h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 0.15);
+    tl.fromTo("#s10-text > p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.45);
+    ["#s10-r1", "#s10-r2", "#s10-r3"].forEach((id, i) => tl.fromTo(id, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.7 + i * 0.15));
+    // 年度模擬（計時）
+    on("#s10-r1", 1.9); shot("#s10-b", 1.9);
+    // 知識點練習
+    off("#s10-r1", 4.1); on("#s10-r2", 4.1); shot("#s10-c", 4.1);
+    // 考點分布：捲到「知識點 × 年份」表（CSS 1207 → 影片 1350）
+    off("#s10-r2", 6.2); on("#s10-r3", 6.2); shot("#s10-d", 6.2);
+    tl.fromTo("#s10-d", { y: 0 }, { y: -1350, duration: 1.6, ease: "power2.inOut" }, 6.9);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 8.72);
+    window.__timelines["s10"] = tl;
+  </script>
+</template>

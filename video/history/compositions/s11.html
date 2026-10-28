@@ -1,0 +1,42 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #3A2C20; overflow: hidden; }
+    #s11-text { position: absolute; left: 140px; top: 250px; width: 900px; }
+    #s11-text h2 { font-size: 92px; font-weight: 700; letter-spacing: .03em; line-height: 1.25; }
+    #s11-text h2 b { color: #94631A; }
+    #s11-text p { font-size: 44px; margin-top: 34px; line-height: 1.55; color: #6B5844; }
+    #s11-legend { margin-top: 40px; display: flex; gap: 16px; }
+    #s11-legend span { font-size: 36px; font-weight: 700; border-radius: 30px; padding: 4px 24px; border: 3px solid; }
+    .s11-crop { position: absolute; left: 1110px; border-radius: 18px; box-shadow: 0 12px 28px rgba(70,40,10,.22); }
+    .s11-lab { position: absolute; left: 1700px; font-size: 32px; font-weight: 700; color: #FBF5E8; background: #5A3A1E; border-radius: 26px; padding: 4px 20px; }
+    .s11-ring { position: absolute; border: 6px solid #C48A2C; border-radius: 16px; box-shadow: 0 0 18px rgba(232,170,70,.6); }
+  </style>
+  <div id="root" data-composition-id="s11" data-width="1920" data-height="1080">
+    <div id="s11-text"><h2>哪裡常考，<br><b>一眼看出</b></h2><p>依 111–115 年會考統計，<br>出題率標在館區、時代櫃子<br>和館藏卡上</p>
+      <div id="s11-legend"><span style="color:#a8442c; border-color:#d9876f; background:#f8e1d8;">高</span><span style="color:#8a5a10; border-color:#d6aa5a; background:#f7e6c3;">中</span><span style="color:#3f6b44; border-color:#8fb894; background:#e3efe1;">低</span><span style="color:#6d6a66; border-color:#b8b2aa; background:#ecebe8;">未考</span></div></div>
+    <img id="s11-c1" class="s11-crop" src="assets/img/crop_wing.png" alt="" style="top:78px; width:720px; height:270px;" />
+    <img id="s11-c2" class="s11-crop" src="assets/img/crop_era.png" alt="" style="top:372px; width:720px; height:360px;" />
+    <img id="s11-c3" class="s11-crop" src="assets/img/crop_card.png" alt="" style="top:756px; width:710px; height:245px;" />
+    <div id="s11-l1" class="s11-lab" style="top:92px;">館區</div>
+    <div id="s11-l2" class="s11-lab" style="top:467px; left:1630px;">時代櫃子</div>
+    <div id="s11-l3" class="s11-lab" style="top:866px; left:1500px;">館藏卡</div>
+    <div id="s11-r1" class="s11-ring" style="left:1437px; top:290px; width:261px; height:50px;"></div>
+    <div id="s11-r2" class="s11-ring" style="left:1322px; top:679px; width:458px; height:56px;"></div>
+    <div id="s11-r3" class="s11-ring" style="left:1229px; top:791px; width:252px; height:54px;"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#s11-text h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 0.1);
+    tl.fromTo("#s11-text p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.5);
+    tl.fromTo("#s11-legend span", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", stagger: 0.12 }, 1.0);
+    [1, 2, 3].forEach((i, k) => {
+      tl.fromTo(`#s11-c${i}`, { opacity: 0, x: 80 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 0.3 + k * 0.3);
+      tl.fromTo(`#s11-l${i}`, { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0.6 + k * 0.3);
+      tl.fromTo(`#s11-r${i}`, { opacity: 0, scale: 1.3 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 1.6 + k * 0.45);
+    });
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 4.72);
+    window.__timelines["s11"] = tl;
+  </script>
+</template>

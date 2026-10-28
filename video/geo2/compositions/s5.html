@@ -1,0 +1,93 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    .s5-head { position: absolute; left: 0; top: 70px; width: 1920px; text-align: center; font-size: 96px; font-weight: 700; letter-spacing: .06em; }
+    .s5-head b { color: #94631A; }
+    .s5-foot { position: absolute; left: 0; top: 860px; width: 1920px; text-align: center; font-size: 46px; color: #4a575d; }
+    .s5-foot b { color: #3D7A80; }
+    .s5-card { position: absolute; width: 420px; height: 250px; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 26px rgba(47,58,64,.18); }
+    .s5-card img { width: 100%; height: 100%; object-fit: cover; }
+    .s5-card span { position: absolute; left: 16px; bottom: 12px; font-size: 34px; font-weight: 700; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+    .s5-card em { position: absolute; right: 12px; top: 12px; font-style: normal; font-size: 30px; font-weight: 700; color: #fff; background: #94631A; border-radius: 999px; padding: 4px 18px; }
+    .s5-mist { position: absolute; inset: 0; background: rgba(250,248,242,.86); }
+    #s5-c7 { box-shadow: 0 0 0 6px #C48A2C, 0 10px 26px rgba(47,58,64,.18); }
+    #s5-strip { position: absolute; left: 0; top: 300px; height: 420px; }
+    .s5-reg { position: absolute; top: 0; width: 520px; height: 293px; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 26px rgba(47,58,64,.18); }
+    .s5-reg img { width: 100%; height: 100%; object-fit: cover; }
+    .s5-reg span { position: absolute; left: 16px; bottom: 12px; font-size: 36px; font-weight: 700; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+    #s5-total { position: absolute; left: 0; top: 150px; width: 1920px; text-align: center; }
+    #s5-num { font-size: 280px; font-weight: 700; color: #94631A; line-height: 1; }
+    #s5-num small { font-size: 110px; color: #2F3A40; margin-left: 20px; }
+    #s5-total p { font-size: 50px; margin-top: 30px; color: #4a575d; }
+    #s5-types { position: absolute; left: 260px; top: 700px; width: 1400px; display: flex; flex-wrap: wrap; justify-content: center; gap: 22px 22px; }
+    .s5-t { font-size: 42px; font-weight: 700; padding: 12px 30px; border-radius: 999px; background: #fffdf8; border: 4px solid #3D7A80; color: #2F3A40; }
+    #s5-tlabel { position: absolute; left: 0; top: 615px; width: 1920px; text-align: center; font-size: 50px; font-weight: 700; color: #3D7A80; }
+    #s5-h2, #s5-f2, #s5-strip, #s5-total, #s5-tlabel { opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="s5" data-width="1920" data-height="1080">
+    <div id="s5-h1" class="s5-head"><b>7</b> 座通論島</div>
+    <div id="s5-grid">
+      <div class="s5-card" id="s5-c1" style="left:75px; top:250px;"><img src="assets/img/cover_compass.webp" alt="" /><span>羅盤島．地圖與位置</span><div class="s5-mist"></div></div>
+      <div class="s5-card" id="s5-c2" style="left:525px; top:250px;"><img src="assets/img/cover_cloud.webp" alt="" /><span>雲頂島．天氣與氣候</span><div class="s5-mist"></div></div>
+      <div class="s5-card" id="s5-c3" style="left:975px; top:250px;"><img src="assets/img/cover_rift.webp" alt="" /><span>裂谷島．地形與海岸</span><div class="s5-mist"></div></div>
+      <div class="s5-card" id="s5-c4" style="left:1425px; top:250px;"><img src="assets/img/cover_spring.webp" alt="" /><span>泉源島．水文</span><div class="s5-mist"></div></div>
+      <div class="s5-card" id="s5-c5" style="left:300px; top:540px;"><img src="assets/img/cover_lights.webp" alt="" /><span>燈火島．人口</span><div class="s5-mist"></div></div>
+      <div class="s5-card" id="s5-c6" style="left:750px; top:540px;"><img src="assets/img/cover_market.webp" alt="" /><span>市集島．聚落與產業</span><div class="s5-mist"></div></div>
+      <div class="s5-card" id="s5-c7" style="left:1200px; top:540px;"><img src="assets/img/cover_home.webp" alt="" /><span>歸鄉島．地名與農業</span><em>第六冊</em><div class="s5-mist"></div></div>
+    </div>
+    <div id="s5-f1" class="s5-foot">第六冊新增 <b>歸鄉島</b>：臺灣的地名文化、農業與食品安全</div>
+    <div id="s5-h2" class="s5-head"><b>12</b> 條遠征航線</div>
+    <div id="s5-strip">
+      <div class="s5-reg" style="left:0px;"><img src="assets/img/exp_cn.webp" alt="" /><span>中國</span></div>
+      <div class="s5-reg" style="left:560px;"><img src="assets/img/exp_nea.webp" alt="" /><span>東北亞</span></div>
+      <div class="s5-reg" style="left:1120px;"><img src="assets/img/exp_sea.webp" alt="" /><span>東南亞</span></div>
+      <div class="s5-reg" style="left:1680px;"><img src="assets/img/exp_sa.webp" alt="" /><span>南亞</span></div>
+      <div class="s5-reg" style="left:2240px;"><img src="assets/img/exp_wana.webp" alt="" /><span>西亞與北非</span></div>
+      <div class="s5-reg" style="left:2800px;"><img src="assets/img/exp_ssa.webp" alt="" /><span>漠南非洲</span></div>
+      <div class="s5-reg" style="left:3360px;"><img src="assets/img/exp_eu.webp" alt="" /><span>歐洲</span></div>
+      <div class="s5-reg" style="left:3920px;"><img src="assets/img/exp_ru.webp" alt="" /><span>俄羅斯</span></div>
+      <div class="s5-reg" style="left:4480px;"><img src="assets/img/exp_na.webp" alt="" /><span>北美洲</span></div>
+      <div class="s5-reg" style="left:5040px;"><img src="assets/img/exp_la.webp" alt="" /><span>中南美洲</span></div>
+      <div class="s5-reg" style="left:5600px;"><img src="assets/img/exp_oc.webp" alt="" /><span>大洋洲</span></div>
+      <div class="s5-reg" style="left:6160px;"><img src="assets/img/exp_polar.webp" alt="" /><span>兩極地區</span></div>
+    </div>
+    <div id="s5-f2" class="s5-foot">第三至五冊：把通論原理帶到世界各區</div>
+    <div id="s5-total"><div id="s5-num"><span id="s5-count">588</span><small>題</small></div><p>康軒第一至六冊．會考地理全範圍</p></div>
+    <div id="s5-tlabel">9 種題型</div>
+    <div id="s5-types">
+      <span class="s5-t">單選題</span><span class="s5-t">圖上點選</span><span class="s5-t">連鎖題組</span><span class="s5-t">線索猜地</span><span class="s5-t">排序</span>
+      <span class="s5-t">配對</span><span class="s5-t">原理解碼</span><span class="s5-t">跨區比較</span><span class="s5-t">遷移題</span>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // 七島：卡片進場，迷霧一張張散開；第七座（第六冊）最後亮
+    tl.fromTo("#s5-h1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0);
+    for (let i = 1; i <= 7; i++) {
+      tl.fromTo(`#s5-c${i}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.1 + i * 0.06);
+      tl.to(`#s5-c${i} .s5-mist`, { opacity: 0, duration: 0.35, ease: "power1.out" }, 0.8 + (i - 1) * 0.3 + (i === 7 ? 0.3 : 0));
+    }
+    tl.fromTo("#s5-f1", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 2.9);
+    tl.to(["#s5-h1", "#s5-grid", "#s5-f1"], { opacity: 0, duration: 0.25 }, 4.45);
+    // 十二航線：膠捲橫向移動
+    tl.set(["#s5-h2", "#s5-strip"], { opacity: 1 }, 4.7);
+    tl.fromTo("#s5-h2", { y: 30 }, { y: 0, duration: 0.45, ease: "power3.out" }, 4.7);
+    tl.fromTo("#s5-strip", { x: 1920 }, { x: -(6680 - 1840), duration: 2.6, ease: "power1.inOut" }, 4.7);
+    tl.fromTo("#s5-f2", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 5.0);
+    tl.to(["#s5-h2", "#s5-strip", "#s5-f2"], { opacity: 0, duration: 0.25 }, 7.25);
+    // 588 題＋9 種題型
+    tl.set("#s5-total", { opacity: 1 }, 7.5);
+    tl.fromTo("#s5-num", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.8)" }, 7.5);
+    const counter = { v: 0 };
+    tl.fromTo(counter, { v: 0 }, { v: 588, duration: 0.8, ease: "power2.out", onUpdate: () => {
+      const el = document.getElementById("s5-count"); if (el) el.textContent = Math.round(counter.v);
+    } }, 7.5);
+    tl.fromTo("#s5-total p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 7.9);
+    tl.fromTo("#s5-tlabel", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 8.2);
+    gsap.utils.toArray("#s5-types .s5-t").forEach((el, i) => tl.fromTo(el, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2)" }, 8.3 + i * 0.07));
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 10.72);
+    window.__timelines["s5"] = tl;
+  </script>
+</template>

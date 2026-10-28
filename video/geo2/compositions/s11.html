@@ -1,0 +1,61 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    #s11-phone { position: absolute; left: 1180px; top: 70px; width: 480px; height: 960px; border-radius: 56px; background: #2F3A40; padding: 22px; box-shadow: 0 18px 40px rgba(47,58,64,.28); }
+    #s11-screen { position: relative; width: 436px; height: 916px; border-radius: 36px; overflow: hidden; background: #F6F1E7; }
+    .s11-long { position: absolute; left: 0; top: 0; width: 436px; }
+    #s11-head { position: absolute; left: 150px; top: 130px; width: 980px; }
+    #s11-head h2 { font-size: 104px; font-weight: 700; letter-spacing: .04em; }
+    #s11-head h2 b { color: #3D7A80; }
+    #s11-head p { font-size: 44px; margin-top: 18px; color: #4a575d; }
+    #s11-rows { position: absolute; left: 150px; top: 400px; width: 980px; }
+    .s11-row { margin-top: 30px; padding: 20px 30px; border-radius: 22px; border-left: 12px solid #3D7A80; background: #fffdf8; }
+    .s11-row h3 { font-size: 52px; font-weight: 700; }
+    .s11-row p { font-size: 38px; margin-top: 4px; color: #4a575d; }
+    #s11-paper { position: absolute; left: 150px; top: 420px; width: 420px; height: 560px; overflow: hidden; background: #fff; border-radius: 6px; box-shadow: 0 16px 34px rgba(47,58,64,.25); }
+    #s11-paper img { position: absolute; left: 0; top: 0; width: 420px; }
+    .s11-lab { position: absolute; left: 640px; width: 480px; }
+    .s11-lab h3 { font-size: 52px; font-weight: 700; color: #3D7A80; }
+    .s11-lab p { font-size: 38px; margin-top: 8px; line-height: 1.5; color: #4a575d; }
+    #s11-l1 { top: 470px; }
+    #s11-l2 { top: 720px; }
+    #s11-paper, #s11-l1, #s11-l2, #s11-parent { opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="s11" data-width="1920" data-height="1080">
+    <div id="s11-head"><h2>學習<b>診斷</b></h2><p>合併會考真題和原創題的作答紀錄</p></div>
+    <div id="s11-rows">
+      <div id="s11-r1" class="s11-row"><h3>需加強的觀念</h3><p>答對率低、會考又常考的排前面</p></div>
+      <div id="s11-r2" class="s11-row"><h3>加強建議</h3><p>原理卡 → 原創題 → 回測真題</p></div>
+    </div>
+    <div id="s11-paper"><img src="assets/screens/20_diag_print_full.png" alt="" /></div>
+    <div id="s11-l1" class="s11-lab"><h3>可列印</h3><p>一鍵印出報告</p></div>
+    <div id="s11-l2" class="s11-lab"><h3>家長頁</h3><p>進度、弱點矩陣<br>近期錯題</p></div>
+    <div id="s11-phone">
+      <div id="s11-screen">
+        <img id="s11-diag" class="s11-long" src="assets/screens/19_diag_full.png" alt="" />
+        <img id="s11-parent" class="s11-long" src="assets/screens/21_parent_full.png" alt="" />
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#s11-phone", { y: 900 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+    tl.fromTo("#s11-head h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 0.15);
+    tl.fromTo("#s11-head p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.45);
+    tl.fromTo("#s11-r1", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.8);
+    tl.fromTo("#s11-r2", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 1.0);
+    // 捲到「二、需加強的觀念」（CSS 1440 → 影片 1610）
+    tl.fromTo("#s11-diag", { y: 0 }, { y: -1610, duration: 1.6, ease: "power2.inOut" }, 1.0);
+    tl.to("#s11-rows", { opacity: 0, duration: 0.25 }, 4.0);
+    // 列印報告（瀏覽器列印版面）
+    tl.fromTo("#s11-paper", { opacity: 0, y: 160, rotation: -6 }, { opacity: 1, y: 0, rotation: -2, duration: 0.6, ease: "power3.out" }, 4.2);
+    tl.fromTo("#s11-l1", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 4.5);
+    // 家長頁
+    tl.fromTo("#s11-parent", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 5.9);
+    tl.fromTo("#s11-l2", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 5.9);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 8.22);
+    window.__timelines["s11"] = tl;
+  </script>
+</template>

@@ -1,0 +1,40 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #3A2C20; overflow: hidden; }
+    #s1-nest { position: absolute; left: 900px; top: 60px; width: 960px; height: 960px; border-radius: 26px; object-fit: cover; box-shadow: 0 18px 40px rgba(70,40,10,.3); }
+    #s1-dim { position: absolute; left: 900px; top: 60px; width: 960px; height: 960px; border-radius: 26px; background: radial-gradient(ellipse at 45% 40%, rgba(40,22,8,0) 30%, rgba(40,22,8,.45) 100%); }
+    #s1-text { position: absolute; left: 140px; top: 250px; width: 720px; }
+    #s1-text h2 { font-size: 96px; font-weight: 700; letter-spacing: .03em; line-height: 1.25; }
+    #s1-text p { font-size: 48px; margin-top: 36px; color: #6B5844; line-height: 1.5; }
+    .s1-scrap { position: absolute; padding: 14px 26px; background: #FBF5E8; border: 2px solid #D9C49C; border-radius: 6px; font-size: 38px; font-weight: 700; color: #5A3A1E; box-shadow: 0 8px 18px rgba(70,40,10,.25); white-space: nowrap; }
+    .s1-scrap small { display: block; font-size: 24px; font-weight: 400; color: #8a6d4c; }
+    #s1-worm { position: absolute; left: 420px; top: 690px; width: 330px; }
+  </style>
+  <div id="root" data-composition-id="s1" data-width="1920" data-height="1080">
+    <img id="s1-nest" src="assets/img/hist_boss.webp" alt="" />
+    <div id="s1-dim"></div>
+    <div id="s1-text"><h2>一夜之間，<br>檔案全亂了</h2><p>時間蛀蟲把史料咬得<br>前後顛倒</p></div>
+    <div id="s1-sc1" class="s1-scrap" style="left:1000px; top:150px;">清代地契<small>夾進日治報紙</small></div>
+    <div id="s1-sc2" class="s1-scrap" style="left:1480px; top:240px;">羅馬錢幣<small>滾到宋朝櫃子</small></div>
+    <div id="s1-sc3" class="s1-scrap" style="left:1150px; top:820px;">荷蘭商船日誌<small>混進冷戰檔案</small></div>
+    <img id="s1-worm" src="assets/img/hist_worm.webp" alt="" />
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#s1-nest", { scale: 1.05 }, { scale: 1, duration: 4.4, ease: "sine.out" }, 0);
+    tl.fromTo("#s1-text h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.6, ease: "power2.inOut" }, 0.35);
+    tl.fromTo("#s1-text p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1.2);
+    // 被咬亂的檔案：一張張翻飛出來，歪歪斜斜停住
+    [["#s1-sc1", 0.5, -9], ["#s1-sc2", 1.0, 7], ["#s1-sc3", 1.5, -5]].forEach(([id, t, r]) => {
+      tl.fromTo(id, { opacity: 0, y: 80, rotation: r * 4, scale: 0.7 }, { opacity: 1, y: 0, rotation: r, scale: 1, duration: 0.7, ease: "back.out(1.6)" }, t);
+      tl.to(id, { y: -14, rotation: r * 1.4, duration: 1.6, ease: "sine.inOut" }, t + 0.7);
+    });
+    // 蛀蟲從左下鑽出來，一伸一縮往前爬
+    tl.fromTo("#s1-worm", { x: -420, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, ease: "power2.out" }, 1.6);
+    tl.to("#s1-worm", { scaleX: 1.08, scaleY: 0.93, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 5 }, 2.8);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 4.22);
+    window.__timelines["s1"] = tl;
+  </script>
+</template>

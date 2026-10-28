@@ -1,0 +1,36 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #3A2C20; overflow: hidden; }
+    #s13-left { position: absolute; left: 160px; top: 230px; width: 1040px; }
+    #s13-left h1 { font-size: 160px; font-weight: 700; letter-spacing: .1em; white-space: nowrap; }
+    #s13-left h2 { font-size: 56px; font-weight: 400; color: #7A4E2D; margin-top: 10px; letter-spacing: .06em; }
+    #s13-pills { margin-top: 70px; display: flex; gap: 22px; }
+    #s13-pills span { font-size: 44px; font-weight: 700; color: #5A3A1E; background: #FBF5E8; border: 3px solid #C48A2C; border-radius: 40px; padding: 10px 32px; box-shadow: 0 6px 14px rgba(70,40,10,.12); }
+    #s13-qrbox { position: absolute; left: 1300px; top: 250px; width: 470px; height: 470px; border-radius: 28px; background: #fff; padding: 35px; box-shadow: 0 18px 40px rgba(70,40,10,.22); }
+    #s13-qr { width: 400px; height: 400px; }
+    #s13-aban { position: absolute; left: 1600px; top: 70px; width: 270px; }
+    #s13-scan { position: absolute; left: 1300px; top: 750px; width: 470px; text-align: center; font-size: 38px; color: #7A4E2D; font-weight: 700; }
+  </style>
+  <div id="root" data-composition-id="s13" data-width="1920" data-height="1080">
+    <div id="s13-left">
+      <h1>時光檔案館</h1>
+      <h2>國中歷史闖關．會考自學</h2>
+      <div id="s13-pills"><span>手機直接開</span><span>不用登入</span><span>離線也能玩</span></div>
+    </div>
+    <div id="s13-qrbox"><img id="s13-qr" src="assets/img/qr.png" alt="" /></div>
+    <div id="s13-scan">掃描，開始整理檔案</div>
+    <img id="s13-aban" src="assets/img/aban_happy.webp" alt="" />
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#s13-left h1", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.65, ease: "power2.inOut" }, 0.15);
+    tl.fromTo("#s13-left h2", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.7);
+    tl.fromTo("#s13-qrbox", { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.8)" }, 0.9);
+    tl.fromTo("#s13-aban", { x: 300, y: -200, rotation: 15, opacity: 0 }, { x: 0, y: 0, rotation: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 1.2);
+    tl.fromTo("#s13-pills span", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", stagger: 0.18 }, 1.5);
+    tl.fromTo("#s13-scan", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 2.1);
+    window.__timelines["s13"] = tl;
+  </script>
+</template>

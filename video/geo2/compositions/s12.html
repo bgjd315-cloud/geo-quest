@@ -1,0 +1,37 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    #s12-phone { position: absolute; left: 1180px; top: 70px; width: 480px; height: 960px; border-radius: 56px; background: #2F3A40; padding: 22px; box-shadow: 0 18px 40px rgba(47,58,64,.28); }
+    #s12-screen { position: relative; width: 436px; height: 916px; border-radius: 36px; overflow: hidden; background: #F6F1E7; }
+    .s12-shot { position: absolute; left: 0; top: 0; width: 436px; height: 916px; object-fit: cover; object-position: top; }
+    #s12-head { position: absolute; left: 150px; top: 150px; font-size: 104px; font-weight: 700; letter-spacing: .04em; }
+    #s12-head b { color: #3D7A80; }
+    #s12-grid { position: absolute; left: 150px; top: 380px; width: 960px; display: grid; grid-template-columns: 1fr 1fr; gap: 34px; }
+    .s12-t { height: 230px; border-radius: 26px; background: #fffdf8; border: 5px solid #3D7A80; display: grid; place-items: center; text-align: center; box-shadow: 0 10px 24px rgba(47,58,64,.12); }
+    .s12-t b { display: block; font-size: 60px; font-weight: 700; }
+    .s12-t small { display: block; font-size: 34px; color: #5f686d; margin-top: 8px; }
+    #s12-t4 { border-color: #C48A2C; }
+  </style>
+  <div id="root" data-composition-id="s12" data-width="1920" data-height="1080">
+    <div id="s12-head">打開就<b>能玩</b></div>
+    <div id="s12-grid">
+      <div id="s12-t1" class="s12-t"><div><b>手機直接開</b><small>不用安裝 App</small></div></div>
+      <div id="s12-t2" class="s12-t"><div><b>不用登入</b><small>沒有帳號、不收資料</small></div></div>
+      <div id="s12-t3" class="s12-t"><div><b>離線也能玩</b><small>單一檔案，不連網也能開</small></div></div>
+      <div id="s12-t4" class="s12-t"><div><b>進度可匯出</b><small>換裝置帶著走</small></div></div>
+    </div>
+    <div id="s12-phone">
+      <div id="s12-screen"><img id="s12-a" class="s12-shot" src="assets/screens/22_settings.png" alt="" /></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#s12-phone", { y: 900 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+    tl.fromTo("#s12-head", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 0.15);
+    ["#s12-t1", "#s12-t2", "#s12-t3", "#s12-t4"].forEach((id, i) => tl.fromTo(id, { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.33, ease: "back.out(2)" }, 0.6 + i * 0.4));
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 4.22);
+    window.__timelines["s12"] = tl;
+  </script>
+</template>

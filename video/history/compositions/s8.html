@@ -1,0 +1,33 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #3A2C20; overflow: hidden; }
+    #s8-head { position: absolute; left: 0; top: 70px; width: 1920px; text-align: center; font-size: 92px; font-weight: 700; letter-spacing: .05em; }
+    #s8-head b { color: #94631A; }
+    #s8-head small { display: block; font-size: 44px; font-weight: 400; color: #6B5844; margin-top: 12px; }
+    .s8-file { position: absolute; top: 340px; width: 540px; height: 620px; background: #FBF5E8; border-radius: 6px 22px 22px 22px; box-shadow: 0 12px 28px rgba(70,40,10,.2); }
+    .s8-tab { position: absolute; left: 0; top: -54px; height: 58px; padding: 0 28px; border-radius: 16px 16px 0 0; background: #FBF5E8; font-size: 34px; font-weight: 700; color: #7A4E2D; line-height: 58px; }
+    .s8-pic { width: 540px; height: 250px; overflow: hidden; border-radius: 0 22px 0 0; }
+    .s8-pic img { width: 100%; height: 100%; object-fit: cover; }
+    .s8-file h3 { font-size: 54px; font-weight: 700; margin: 26px 34px 0; }
+    .s8-file p { font-size: 34px; color: #6B5844; margin: 12px 34px 0; line-height: 1.5; }
+    .s8-n { position: absolute; left: 34px; bottom: 26px; font-size: 34px; font-weight: 700; color: #FBF5E8; background: #7A4E2D; border-radius: 30px; padding: 4px 22px; }
+  </style>
+  <div id="root" data-composition-id="s8" data-width="1920" data-height="1080">
+    <div id="s8-head">故事三線．<b>29</b> 章<small>讀故事，順便把歷史讀懂</small></div>
+    <div id="s8-f1" class="s8-file" style="left:120px;"><div class="s8-tab">臺灣館　F1–F10</div><div class="s8-pic"><img src="assets/img/wing_tw.webp" alt="" /></div>
+      <h3>林家的五代人</h3><p>一只家書箱，<br>從大員港寫到戰後</p><span class="s8-n">10 章</span></div>
+    <div id="s8-f2" class="s8-file" style="left:690px;"><div class="s8-tab">東亞館　T1–T8</div><div class="s8-pic"><img src="assets/img/wing_ea.webp" alt="" /></div>
+      <h3>東亞館的旅行箱</h3><p>一只瓷碗和舊物，<br>走過千年的旅程</p><span class="s8-n">9 章</span></div>
+    <div id="s8-f3" class="s8-file" style="left:1260px;"><div class="s8-tab">世界館　I1–I10</div><div class="s8-pic"><img src="assets/img/wing_w.webp" alt="" /></div>
+      <h3>時空調查局</h3><p>跟著葛老師辦案：<br>讓證物自己說話</p><span class="s8-n">10 章</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#s8-head", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0);
+    ["#s8-f1", "#s8-f2", "#s8-f3"].forEach((id, i) => tl.fromTo(id, { opacity: 0, y: 80, rotation: i === 1 ? 0 : (i ? 3 : -3) }, { opacity: 1, y: 0, rotation: 0, duration: 0.55, ease: "power3.out" }, 0.3 + i * 0.3));
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 4.22);
+    window.__timelines["s8"] = tl;
+  </script>
+</template>

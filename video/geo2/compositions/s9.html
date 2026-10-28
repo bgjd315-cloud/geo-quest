@@ -1,0 +1,54 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    #s9-phone { position: absolute; left: 1180px; top: 70px; width: 480px; height: 960px; border-radius: 56px; background: #2F3A40; padding: 22px; box-shadow: 0 18px 40px rgba(47,58,64,.28); }
+    #s9-screen { position: relative; width: 436px; height: 916px; border-radius: 36px; overflow: hidden; background: #F6F1E7; }
+    .s9-long { position: absolute; left: 0; top: 0; width: 436px; }
+    .s9-shot { position: absolute; left: 0; top: 0; width: 436px; height: 916px; object-fit: cover; object-position: top; }
+    .s9-verb { position: absolute; left: 150px; top: 150px; width: 980px; }
+    .s9-verb h2 { font-size: 104px; font-weight: 700; letter-spacing: .04em; }
+    .s9-verb h2 b { color: #3D7A80; }
+    .s9-verb > p { font-size: 46px; margin-top: 30px; line-height: 1.55; color: #4a575d; }
+    #s9-zoom { position: absolute; left: 150px; top: 560px; width: 800px; height: 336px; overflow: hidden; border-radius: 22px; border: 6px solid #C48A2C; background: #F6F1E7; box-shadow: 0 14px 30px rgba(47,58,64,.22); }
+    #s9-zoom img { display: block; width: 100%; }
+    .s9-mode { margin-top: 36px; padding: 22px 30px; border-radius: 22px; background: #fffdf8; border-left: 12px solid #3D7A80; }
+    .s9-mode h3 { font-size: 52px; font-weight: 700; }
+    .s9-mode p { font-size: 40px; margin-top: 6px; color: #4a575d; }
+    #s9-m2 { border-left-color: #C48A2C; }
+    #s9-v2, #s9-sim, #s9-zoom { opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="s9" data-width="1920" data-height="1080">
+    <div id="s9-v1" class="s9-verb"><h2>弱點地圖<b>指路</b></h2><p>概念 × 區域，哪一格偏紅<br>點那一格，就練那一組</p></div>
+    <div id="s9-zoom"><img src="assets/screens/z_weak_rows.png" alt="" /></div>
+    <div id="s9-v2" class="s9-verb"><h2>兩種<b>模式</b></h2>
+      <div id="s9-m1" class="s9-mode"><h3>練習模式</h3><p>不計時，答完馬上看解析</p></div>
+      <div id="s9-m2" class="s9-mode"><h3>模擬模式</h3><p>計時作答，交卷後才看解析</p></div>
+    </div>
+    <div id="s9-phone">
+      <div id="s9-screen">
+        <img id="s9-weak" class="s9-long" src="assets/screens/14_weak_full.png" alt="" />
+        <img id="s9-sim" class="s9-shot" src="assets/screens/13_sim_mode.png" alt="" />
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#s9-phone", { y: 900 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+    tl.fromTo("#s9-v1 h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 0.15);
+    tl.fromTo("#s9-v1 > p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.45);
+    // 捲到矩陣（CSS 380 px → 影片 425 px）
+    tl.fromTo("#s9-weak", { y: 0 }, { y: -425, duration: 1.4, ease: "power2.inOut" }, 1.0);
+    tl.fromTo("#s9-zoom", { opacity: 0, scale: 0.8, transformOrigin: "100% 50%" }, { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" }, 2.0);
+    tl.to(["#s9-v1", "#s9-zoom"], { opacity: 0, duration: 0.25 }, 4.15);
+    // 練習／模擬
+    tl.fromTo("#s9-sim", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 4.3);
+    tl.set("#s9-v2", { opacity: 1 }, 4.35);
+    tl.fromTo("#s9-v2 h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 4.35);
+    tl.fromTo("#s9-m1", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 4.65);
+    tl.fromTo("#s9-m2", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 4.85);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 7.22);
+    window.__timelines["s9"] = tl;
+  </script>
+</template>

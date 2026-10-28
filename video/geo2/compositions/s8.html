@@ -1,0 +1,65 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    #s8-phone { position: absolute; left: 1180px; top: 70px; width: 480px; height: 960px; border-radius: 56px; background: #2F3A40; padding: 22px; box-shadow: 0 18px 40px rgba(47,58,64,.28); }
+    #s8-screen { position: relative; width: 436px; height: 916px; border-radius: 36px; overflow: hidden; background: #F6F1E7; }
+    .s8-long { position: absolute; left: 0; top: 0; width: 436px; }
+    #s8-text { position: absolute; left: 150px; top: 120px; width: 980px; }
+    #s8-text h2 { font-size: 104px; font-weight: 700; letter-spacing: .04em; }
+    #s8-text h2 b { color: #3D7A80; }
+    #s8-text > p { font-size: 44px; margin-top: 22px; color: #4a575d; }
+    #s8-leg { display: flex; gap: 20px; margin-top: 30px; }
+    .s8-l { font-size: 38px; padding: 10px 24px; border-radius: 16px; background: #fffdf8; border: 3px solid #e2dacb; display: flex; align-items: center; gap: 12px; }
+    .s8-l b { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; font-size: 32px; }
+    .s8-hi b { background: #F6D9D3; color: #9C3B2A; border: 3px solid #C9776A; }
+    .s8-mid b { background: #F7E8C2; color: #7A5410; border: 3px solid #D6B25E; }
+    .s8-lo b { background: #DDEBDD; color: #3D6B46; border: 3px solid #8DB394; }
+    .s8-cap { position: absolute; left: 150px; font-size: 40px; font-weight: 700; color: #3D7A80; }
+    .s8-zoom { position: absolute; left: 150px; width: 800px; overflow: hidden; border-radius: 22px; border: 6px solid #C48A2C; background: #F6F1E7; box-shadow: 0 14px 30px rgba(47,58,64,.22); }
+    .s8-zoom img { display: block; width: 100%; }
+    #s8-z1 { top: 660px; height: 296px; }
+    #s8-z2 { top: 660px; height: 245px; }
+    #s8-c1, #s8-c2 { top: 600px; }
+    #s8-unit, #s8-z1, #s8-z2, #s8-c1, #s8-c2 { opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="s8" data-width="1920" data-height="1080">
+    <div id="s8-text">
+      <h2>會考出題率<b>標出來</b></h2>
+      <p>統計 111–115 年會考 181 題</p>
+      <div id="s8-leg">
+        <span class="s8-l s8-hi"><b>高</b>5 題以上</span>
+        <span class="s8-l s8-mid"><b>中</b>2–4 題</span>
+        <span class="s8-l s8-lo"><b>低</b>1 題</span>
+      </div>
+    </div>
+    <div id="s8-c1" class="s8-cap">每座島：占會考題幾 %</div>
+    <div id="s8-z1" class="s8-zoom"><img src="assets/screens/z_home_island.png" alt="" /></div>
+    <div id="s8-c2" class="s8-cap">每一關：也標出題率</div>
+    <div id="s8-z2" class="s8-zoom"><img src="assets/screens/z_unit_level.png" alt="" /></div>
+    <div id="s8-phone">
+      <div id="s8-screen">
+        <img id="s8-home" class="s8-long" src="assets/screens/02_home_full.webp" alt="" style="top: -928px;" />
+        <img id="s8-unit" class="s8-long" src="assets/screens/03_unit_climate_full.png" alt="" style="top: -257px;" />
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#s8-phone", { y: 900 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+    tl.fromTo("#s8-text h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 0.15);
+    tl.fromTo("#s8-text > p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.45);
+    gsap.utils.toArray("#s8-leg .s8-l").forEach((el, i) => tl.fromTo(el, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.33, ease: "back.out(2)" }, 0.75 + i * 0.15));
+    // 放大鏡①：首頁島嶼卡（羅盤島 會考出題率 15% 高頻）
+    tl.fromTo("#s8-c1", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 1.3);
+    tl.fromTo("#s8-z1", { opacity: 0, scale: 0.8, transformOrigin: "100% 50%" }, { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" }, 1.3);
+    tl.to(["#s8-c1", "#s8-z1"], { opacity: 0, duration: 0.25 }, 3.35);
+    // 換到雲頂島：關卡出題率
+    tl.fromTo("#s8-unit", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 3.4);
+    tl.fromTo("#s8-c2", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 3.6);
+    tl.fromTo("#s8-z2", { opacity: 0, scale: 0.8, transformOrigin: "100% 50%" }, { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" }, 3.6);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 5.72);
+    window.__timelines["s8"] = tl;
+  </script>
+</template>

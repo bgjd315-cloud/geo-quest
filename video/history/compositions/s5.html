@@ -1,0 +1,116 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #3A2C20; overflow: hidden; }
+    .s5-head { position: absolute; left: 0; top: 80px; width: 1920px; text-align: center; font-size: 92px; font-weight: 700; letter-spacing: .05em; }
+    .s5-head b { color: #94631A; }
+    .s5-head small { display: block; font-size: 46px; font-weight: 400; color: #6B5844; margin-top: 14px; letter-spacing: .04em; }
+    /* A 三個館區 */
+    .s5-wing { position: absolute; top: 340px; width: 540px; }
+    .s5-wing .pic { width: 540px; height: 304px; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 26px rgba(70,40,10,.22); }
+    .s5-wing img { width: 100%; height: 100%; object-fit: cover; }
+    .s5-wing h3 { font-size: 64px; font-weight: 700; margin-top: 26px; text-align: center; }
+    .s5-wing p { font-size: 38px; color: #6B5844; text-align: center; margin-top: 8px; }
+    .s5-wing p b { color: #7A4E2D; }
+    /* B 二十一個時代櫃子 */
+    #s5-B, #s5-C, #s5-D { opacity: 0; }
+    .s5-row { position: absolute; left: 110px; height: 132px; }
+    .s5-row .lab { position: absolute; left: 0; top: 0; width: 170px; height: 132px; display: grid; place-items: center; font-size: 40px; font-weight: 700; color: #FBF5E8; background: #5A3A1E; border-radius: 14px; }
+    .s5-tile { position: absolute; top: 0; width: 186px; height: 132px; border-radius: 12px; background: #E6D6B6; border: 2px solid #CDB58A; display: grid; place-items: center; text-align: center; font-size: 27px; line-height: 1.3; padding: 8px 10px; color: #8a7558; }
+    .s5-tile i { position: absolute; left: 50%; bottom: 10px; width: 46px; height: 8px; margin-left: -23px; border-radius: 4px; background: #B79E74; }
+    .s5-glow { position: absolute; inset: -2px; border-radius: 12px; background: #FBF5E8; border: 2px solid #C48A2C; box-shadow: 0 0 22px rgba(232,170,70,.55); opacity: 0; }
+    .s5-tile span { position: relative; z-index: 1; }
+    .s5-tile i { z-index: 1; }
+    /* C 675 題 */
+    #s5-C { position: absolute; left: 0; top: 250px; width: 1920px; text-align: center; }
+    #s5-num { font-size: 300px; font-weight: 700; color: #94631A; line-height: 1; }
+    #s5-num small { font-size: 120px; color: #3A2C20; margin-left: 20px; }
+    #s5-C p { font-size: 52px; margin-top: 50px; color: #6B5844; }
+    /* D 會考能力 */
+    .s5-skill { position: absolute; width: 420px; height: 150px; border-radius: 20px; background: #FBF5E8; border: 4px solid #7A4E2D; display: grid; place-items: center; font-size: 64px; font-weight: 700; color: #5A3A1E; box-shadow: 0 10px 22px rgba(70,40,10,.16); }
+    #s5-nope { position: absolute; left: 0; top: 760px; width: 1920px; text-align: center; font-size: 48px; color: #6B5844; }
+    #s5-nope s { color: #9a8468; text-decoration-thickness: 4px; }
+  </style>
+  <div id="root" data-composition-id="s5" data-width="1920" data-height="1080">
+    <div id="s5-A">
+      <div class="s5-head" id="s5-hA"><b>三個</b>館區<small>康軒國中歷史第一至六冊</small></div>
+      <div class="s5-wing" id="s5-w1" style="left:120px;"><div class="pic"><img src="assets/img/wing_tw.webp" alt="" /></div><h3>臺灣館</h3><p><b>第一、二冊</b>．臺灣史</p></div>
+      <div class="s5-wing" id="s5-w2" style="left:690px;"><div class="pic"><img src="assets/img/wing_ea.webp" alt="" /></div><h3>東亞館</h3><p><b>第三、四冊</b>．中國與東亞史</p></div>
+      <div class="s5-wing" id="s5-w3" style="left:1260px;"><div class="pic"><img src="assets/img/wing_w.webp" alt="" /></div><h3>世界館</h3><p><b>第五、六冊</b>．世界史</p></div>
+    </div>
+    <div id="s5-B">
+      <div class="s5-head"><b>21</b> 個時代櫃子</div>
+      <div class="s5-row" style="top:330px;"><div class="lab">臺灣館</div>
+        <div class="s5-tile" style="left:200px;"><div class="s5-glow"></div><span>史前與<br>原住民族</span><i></i></div>
+        <div class="s5-tile" style="left:400px;"><div class="s5-glow"></div><span>大航海<br>時代</span><i></i></div>
+        <div class="s5-tile" style="left:600px;"><div class="s5-glow"></div><span>清帝國<br>時期</span><i></i></div>
+        <div class="s5-tile" style="left:800px;"><div class="s5-glow"></div><span>日治<br>時期</span><i></i></div>
+        <div class="s5-tile" style="left:1000px;"><div class="s5-glow"></div><span>戰後</span><i></i></div>
+      </div>
+      <div class="s5-row" style="top:490px;"><div class="lab">東亞館</div>
+        <div class="s5-tile" style="left:200px;"><div class="s5-glow"></div><span>商周</span><i></i></div>
+        <div class="s5-tile" style="left:400px;"><div class="s5-glow"></div><span>秦漢至<br>隋唐</span><i></i></div>
+        <div class="s5-tile" style="left:600px;"><div class="s5-glow"></div><span>宋元</span><i></i></div>
+        <div class="s5-tile" style="left:800px;"><div class="s5-glow"></div><span>明清</span><i></i></div>
+        <div class="s5-tile" style="left:1000px;"><div class="s5-glow"></div><span>晚清</span><i></i></div>
+        <div class="s5-tile" style="left:1200px;"><div class="s5-glow"></div><span>中華民國<br>早期</span><i></i></div>
+        <div class="s5-tile" style="left:1400px;"><div class="s5-glow"></div><span>中日戰爭<br>國共內戰</span><i></i></div>
+        <div class="s5-tile" style="left:1600px;"><div class="s5-glow"></div><span>當代東亞<br>東南亞</span><i></i></div>
+      </div>
+      <div class="s5-row" style="top:650px;"><div class="lab">世界館</div>
+        <div class="s5-tile" style="left:200px;"><div class="s5-glow"></div><span>古代文明</span><i></i></div>
+        <div class="s5-tile" style="left:400px;"><div class="s5-glow"></div><span>古希臘<br>古羅馬</span><i></i></div>
+        <div class="s5-tile" style="left:600px;"><div class="s5-glow"></div><span>普世宗教<br>中古世界</span><i></i></div>
+        <div class="s5-tile" style="left:800px;"><div class="s5-glow"></div><span>近代早期</span><i></i></div>
+        <div class="s5-tile" style="left:1000px;"><div class="s5-glow"></div><span>啟蒙與<br>民主革命</span><i></i></div>
+        <div class="s5-tile" style="left:1200px;"><div class="s5-glow"></div><span>民族國家</span><i></i></div>
+        <div class="s5-tile" style="left:1400px;"><div class="s5-glow"></div><span>帝國主義<br>兩次大戰</span><i></i></div>
+        <div class="s5-tile" style="left:1600px;"><div class="s5-glow"></div><span>冷戰與<br>多元世局</span><i></i></div>
+      </div>
+      <div id="s5-Bnote" style="position:absolute; left:0; top:850px; width:1920px; text-align:center; font-size:46px; color:#6B5844;">整理好一個櫃子，長廊就亮一段燈</div>
+    </div>
+    <div id="s5-C"><div id="s5-num"><span id="s5-count">675</span><small>題</small></div><p>從史前到冷戰，每一題都對應課本與會考知識點</p></div>
+    <div id="s5-D">
+      <div class="s5-head">練的是<b>會考能力</b><small>依會考常考的六種能力出題</small></div>
+      <div id="s5-k1" class="s5-skill" style="left:270px; top:380px;">時序</div>
+      <div id="s5-k2" class="s5-skill" style="left:750px; top:380px;">因果</div>
+      <div id="s5-k3" class="s5-skill" style="left:1230px; top:380px;">比較</div>
+      <div id="s5-k4" class="s5-skill" style="left:270px; top:570px;">變遷與延續</div>
+      <div id="s5-k5" class="s5-skill" style="left:750px; top:570px;">史料判讀</div>
+      <div id="s5-k6" class="s5-skill" style="left:1230px; top:570px;">歷史解釋</div>
+      <div id="s5-nope">不靠死背年代，靠讀懂史料</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // A 三個館區 0–4.0
+    tl.fromTo("#s5-hA", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0);
+    ["#s5-w1", "#s5-w2", "#s5-w3"].forEach((id, i) => tl.fromTo(id, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.3 + i * 0.25));
+    tl.to("#s5-A", { opacity: 0, duration: 0.25 }, 3.9);
+    // B 二十一個櫃子 4.15–6.9：一格格亮燈
+    tl.set("#s5-B", { opacity: 1 }, 4.15);
+    tl.fromTo("#s5-B .s5-head", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 4.15);
+    tl.fromTo("#s5-B .s5-row", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", stagger: 0.12 }, 4.25);
+    tl.fromTo("#s5-B .s5-glow", { opacity: 0 }, { opacity: 1, duration: 0.18, ease: "power1.out", stagger: 0.055 }, 4.8);
+    tl.fromTo("#s5-B .s5-tile", { color: "#8a7558" }, { color: "#3A2C20", duration: 0.18, stagger: 0.055 }, 4.8);
+    tl.fromTo("#s5-Bnote", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 5.3);
+    tl.to("#s5-B", { opacity: 0, duration: 0.25 }, 6.75);
+    // C 675 題 7.0–8.7
+    tl.set("#s5-C", { opacity: 1 }, 7.0);
+    tl.fromTo("#s5-num", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.8)" }, 7.0);
+    const counter = { v: 0 };
+    tl.fromTo(counter, { v: 0 }, { v: 675, duration: 0.8, ease: "power2.out", onUpdate: () => {
+      const el = document.getElementById("s5-count"); if (el) el.textContent = Math.round(counter.v);
+    } }, 7.0);
+    tl.fromTo("#s5-C p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 7.5);
+    tl.to("#s5-C", { opacity: 0, duration: 0.25 }, 8.35);
+    // D 會考能力 8.6–11.5：一格格蓋章
+    tl.set("#s5-D", { opacity: 1 }, 8.6);
+    tl.fromTo("#s5-D .s5-head", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 8.6);
+    for (let i = 1; i <= 6; i++) tl.fromTo(`#s5-k${i}`, { scale: 1.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2)" }, 8.9 + (i - 1) * 0.17);
+    tl.fromTo("#s5-nope", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 9.7);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 11.22);
+    window.__timelines["s5"] = tl;
+  </script>
+</template>

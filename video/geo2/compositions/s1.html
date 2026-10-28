@@ -1,0 +1,31 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    #s1-atlas { position: absolute; left: 1040px; top: 40px; width: 750px; height: 1000px; border-radius: 24px; object-fit: cover; box-shadow: 0 18px 40px rgba(47,58,64,.22); }
+    .s1-fog { position: absolute; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,.95), rgba(255,255,255,.7) 45%, rgba(255,255,255,0)); }
+    #s1-text { position: absolute; left: 150px; top: 380px; width: 820px; }
+    #s1-text h2 { font-size: 110px; font-weight: 700; letter-spacing: .04em; }
+    #s1-text p { font-size: 52px; margin-top: 36px; color: #4a575d; }
+  </style>
+  <div id="root" data-composition-id="s1" data-width="1920" data-height="1080">
+    <img id="s1-atlas" src="assets/img/home_atlas.webp" alt="" />
+    <div id="s1-fog1" class="s1-fog" style="left:900px; top:120px; width:1100px; height:520px;"></div>
+    <div id="s1-fog2" class="s1-fog" style="left:900px; top:470px; width:1000px; height:480px;"></div>
+    <div id="s1-fog3" class="s1-fog" style="left:950px; top:760px; width:950px; height:380px;"></div>
+    <div id="s1-text"><h2>一陣迷霧吹過</h2><p>地圖冊上的島，全都淡了</p></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#s1-atlas", { opacity: 0.55, scale: 1.04 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" }, 0);
+    [["#s1-fog1", 0.3], ["#s1-fog2", 0.7], ["#s1-fog3", 1.1]].forEach(([id, t]) => {
+      tl.fromTo(id, { x: -700, opacity: 0 }, { x: 0, opacity: 0.92, duration: 2.2, ease: "sine.inOut" }, t);
+      tl.to(id, { x: 120, duration: 1.2, ease: "sine.inOut" }, t + 2.2);
+    });
+    tl.fromTo("#s1-text h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.6, ease: "power2.inOut" }, 0.6);
+    tl.fromTo("#s1-text p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1.6);
+    tl.to("#s1-text", { opacity: 0, duration: 0.25 }, 4.2);
+    window.__timelines["s1"] = tl;
+  </script>
+</template>

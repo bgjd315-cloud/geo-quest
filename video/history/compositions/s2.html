@@ -1,0 +1,48 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #3A2C20; overflow: hidden; }
+    #s2-hall { position: absolute; left: 860px; top: 250px; width: 1000px; height: 563px; border-radius: 24px; overflow: hidden; box-shadow: 0 18px 40px rgba(70,40,10,.28); }
+    #s2-hall img { width: 100%; height: 100%; object-fit: cover; }
+    .s2-dark { position: absolute; top: 0; height: 100%; background: rgba(28,16,6,.62); }
+    .s2-lamp { position: absolute; width: 220px; height: 220px; margin: -110px 0 0 -110px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,214,140,.75), rgba(255,200,110,.25) 55%, rgba(255,200,110,0)); }
+    #s2-text { position: absolute; left: 140px; top: 110px; width: 700px; }
+    #s2-text h2 { font-size: 96px; font-weight: 700; letter-spacing: .03em; line-height: 1.2; }
+    #s2-text p { font-size: 46px; margin-top: 30px; color: #6B5844; line-height: 1.5; }
+    #s2-hero { position: absolute; left: 180px; top: 520px; height: 540px; }
+    #s2-aban { position: absolute; left: 480px; top: 720px; width: 330px; }
+    #s2-name { position: absolute; left: 520px; top: 680px; font-size: 34px; font-weight: 700; color: #5A3A1E; background: #FBF5E8; border-radius: 30px; padding: 4px 22px; box-shadow: 0 4px 10px rgba(70,40,10,.18); }
+  </style>
+  <div id="root" data-composition-id="s2" data-width="1920" data-height="1080">
+    <div id="s2-hall">
+      <img src="assets/img/hist_corridor.webp" alt="" />
+      <div id="s2-d1" class="s2-dark" style="left:0; width:334px;"></div>
+      <div id="s2-d2" class="s2-dark" style="left:333px; width:334px;"></div>
+      <div id="s2-d3" class="s2-dark" style="left:666px; width:334px;"></div>
+      <div id="s2-l1" class="s2-lamp" style="left:240px; top:62px;"></div>
+      <div id="s2-l2" class="s2-lamp" style="left:500px; top:150px;"></div>
+      <div id="s2-l3" class="s2-lamp" style="left:770px; top:62px;"></div>
+    </div>
+    <div id="s2-text"><h2>你是<br>見習檔案員</h2><p>把史料歸回正確的年代，<br>長廊就一段段重新亮燈</p></div>
+    <img id="s2-hero" data-layout-allow-overflow src="assets/img/arch_girl_idle.webp" alt="" />
+    <img id="s2-aban" src="assets/img/aban_happy.webp" alt="" />
+    <div id="s2-name">石虎阿斑</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#s2-hall", { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 0);
+    tl.fromTo("#s2-text h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 0.2);
+    tl.fromTo("#s2-text p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.8);
+    tl.fromTo("#s2-hero", { y: 600 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0.4);
+    tl.fromTo("#s2-aban", { x: 500, y: -260, rotation: 20, opacity: 0 }, { x: 0, y: 0, rotation: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 1.0);
+    tl.fromTo("#s2-name", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 1.5);
+    // 長廊一段段亮燈
+    [1, 2, 3].forEach((i, k) => {
+      tl.fromTo(`#s2-d${i}`, { opacity: 1 }, { opacity: 0, duration: 0.45, ease: "power2.out" }, 2.0 + k * 0.55);
+      tl.fromTo(`#s2-l${i}`, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2)" }, 2.0 + k * 0.55);
+    });
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 4.22);
+    window.__timelines["s2"] = tl;
+  </script>
+</template>

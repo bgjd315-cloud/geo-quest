@@ -1,0 +1,62 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    #s6-phone { position: absolute; left: 1180px; top: 70px; width: 480px; height: 960px; border-radius: 56px; background: #2F3A40; padding: 22px; box-shadow: 0 18px 40px rgba(47,58,64,.28); }
+    #s6-screen { position: relative; width: 436px; height: 916px; border-radius: 36px; overflow: hidden; background: #F6F1E7; }
+    .s6-shot { position: absolute; left: 0; top: 0; width: 436px; height: 916px; object-fit: cover; object-position: top; }
+    #s6-tap { position: absolute; left: 0; top: 0; width: 90px; height: 90px; border-radius: 50%; border: 8px solid #3D7A80; }
+    #s6-ok { position: absolute; left: 1560px; top: 140px; width: 200px; height: 200px; border-radius: 50%; background: #3D7A80; color: #fff; font-size: 110px; font-weight: 700; display: grid; place-items: center; }
+    #s6-text { position: absolute; left: 150px; top: 100px; width: 960px; }
+    #s6-text h2 { font-size: 110px; font-weight: 700; letter-spacing: .04em; }
+    #s6-text h2 b { color: #3D7A80; }
+    #s6-text > p { font-size: 46px; margin-top: 30px; color: #4a575d; }
+    .s6-row { margin-top: 26px; padding: 16px 30px; border-radius: 22px; border-left: 12px solid #d8d0c0; background: rgba(255,253,248,.7); }
+    .s6-row h3 { font-size: 46px; font-weight: 700; }
+    .s6-row p { font-size: 36px; margin-top: 6px; color: #4a575d; }
+    #s6-b, #s6-c, #s6-d, #s6-ok, #s6-tap { opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="s6" data-width="1920" data-height="1080">
+    <div id="s6-text">
+      <h2>讀懂<b>真的</b>圖</h2>
+      <p>圖表由程式依真實資料畫出</p>
+      <div id="s6-r1" class="s6-row"><h3>溫雨圖</h3><p>中央氣象署、WMO 1991–2020 平年值</p></div>
+      <div id="s6-r2" class="s6-row"><h3>等高線圖</h3><p>點出最高點；練習用虛構地形會標明</p></div>
+      <div id="s6-r3" class="s6-row"><h3>人口金字塔</h3><p>聯合國《世界人口展望 2024》</p></div>
+    </div>
+    <div id="s6-phone">
+      <div id="s6-screen">
+        <img id="s6-a" class="s6-shot" src="assets/screens/05_climo_q.png" alt="" />
+        <img id="s6-b" class="s6-shot" src="assets/screens/06_climo_ok.png" alt="" />
+        <img id="s6-c" class="s6-shot" src="assets/screens/07_contour.png" alt="" />
+        <img id="s6-d" class="s6-shot" src="assets/screens/08_pyramid.png" alt="" />
+      </div>
+    </div>
+    <div id="s6-tap"></div>
+    <div id="s6-ok">✓</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const shot = (id, t) => tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, t);
+    const on = (id, t) => tl.to(id, { borderLeftColor: "#3D7A80", backgroundColor: "rgba(255,253,248,1)", duration: 0.25 }, t);
+    const off = (id, t) => tl.to(id, { borderLeftColor: "#d8d0c0", backgroundColor: "rgba(255,253,248,.7)", duration: 0.25 }, t);
+    tl.fromTo("#s6-phone", { y: 900 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+    tl.fromTo("#s6-text h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 0.15);
+    tl.fromTo("#s6-text > p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.45);
+    ["#s6-r1", "#s6-r2", "#s6-r3"].forEach((id, i) => tl.fromTo(id, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.7 + i * 0.15));
+    // ① 溫雨圖：點正解（截圖時記錄的座標 CSS (146, 680) → 影片 (1365, 852)）→ 答對解析
+    on("#s6-r1", 1.0);
+    tl.fromTo("#s6-tap", { x: 1365 - 45, y: 852 - 45, scale: 1.8, opacity: 0 }, { x: 1365 - 45, y: 852 - 45, scale: 1, opacity: 1, duration: 0.2, ease: "power2.out" }, 1.9)
+      .to("#s6-tap", { opacity: 0, duration: 0.2 }, 2.25);
+    shot("#s6-b", 2.3);
+    tl.fromTo("#s6-ok", { scale: 2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.33, ease: "back.out(2)" }, 2.4);
+    tl.to("#s6-ok", { opacity: 0, duration: 0.25 }, 3.4);
+    // ② 等高線
+    off("#s6-r1", 3.7); on("#s6-r2", 3.7); shot("#s6-c", 3.7);
+    // ③ 人口金字塔
+    off("#s6-r2", 5.8); on("#s6-r3", 5.8); shot("#s6-d", 5.8);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 7.72);
+    window.__timelines["s6"] = tl;
+  </script>
+</template>

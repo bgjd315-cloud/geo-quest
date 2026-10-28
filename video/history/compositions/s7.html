@@ -1,0 +1,67 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #3A2C20; overflow: hidden; }
+    #s7-phone { position: absolute; left: 1180px; top: 70px; width: 480px; height: 960px; border-radius: 56px; background: #3A2C20; padding: 22px; box-shadow: 0 18px 40px rgba(70,40,10,.3); }
+    #s7-screen { position: relative; width: 436px; height: 916px; border-radius: 36px; overflow: hidden; background: #F1E6CF; }
+    .s7-shot { position: absolute; left: 0; top: 0; width: 436px; height: 916px; object-fit: cover; object-position: top; }
+    #s7-tap { position: absolute; left: 0; top: 0; width: 90px; height: 90px; border-radius: 50%; border: 8px solid #C48A2C; }
+    #s7-x { position: absolute; left: 1560px; top: 150px; width: 190px; height: 190px; border-radius: 50%; background: #A8553A; color: #fff; font-size: 110px; font-weight: 700; display: grid; place-items: center; }
+    #s7-box { position: absolute; left: 150px; top: 720px; width: 420px; padding: 18px 20px; border-radius: 18px; background: #FBF5E8; border: 4px solid #C48A2C; text-align: center; font-size: 36px; font-weight: 700; color: #5A3A1E; box-shadow: 0 10px 22px rgba(70,40,10,.2); }
+    #s7-box small { display: block; font-size: 28px; font-weight: 400; color: #6B5844; margin-top: 6px; }
+    .s7-verb { position: absolute; left: 150px; top: 330px; width: 980px; }
+    .s7-verb h2 { font-size: 100px; font-weight: 700; letter-spacing: .03em; }
+    .s7-verb p { font-size: 48px; margin-top: 40px; line-height: 1.55; color: #6B5844; }
+    .s7-verb b { color: #94631A; }
+    #s7-b, #s7-c, #s7-d, #s7-v2, #s7-v3, #s7-tap, #s7-x, #s7-box { opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="s7" data-width="1920" data-height="1080">
+    <div id="s7-v1" class="s7-verb"><h2>一個時代，<b>一個櫃子</b></h2><p>整理櫃子裡的檔案：<br>每次 10 題，練習或模擬</p></div>
+    <div id="s7-v2" class="s7-verb"><h2>放錯了？<b>先看解析</b></h2><p>弄懂為什麼錯，<br>這份檔案收進「待修復」</p></div>
+    <div id="s7-v3" class="s7-verb"><h2>換個樣子<b>再出現</b></h2><p>同一件事換一題再考，<br>修好兩次才歸檔</p></div>
+    <div id="s7-phone">
+      <div id="s7-screen">
+        <img id="s7-a" class="s7-shot" src="assets/screens/05_wing_eras.png" alt="" />
+        <img id="s7-b" class="s7-shot" src="assets/screens/10_play_q.png" alt="" />
+        <img id="s7-c" class="s7-shot" src="assets/screens/11_play_wrong.png" alt="" />
+        <img id="s7-d" class="s7-shot" src="assets/screens/12_play_recycle.png" alt="" />
+      </div>
+    </div>
+    <div id="s7-tap"></div>
+    <div id="s7-x">✕</div>
+    <div id="s7-box">待修復檔案<small>修好 2 次歸檔</small></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const shot = (id, t) => tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, t);
+    const verbIn = (id, t) => {
+      tl.fromTo(id + " h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, t);
+      tl.fromTo(id + " p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, t + 0.3);
+    };
+    const verbOut = (id, t) => tl.to(id, { opacity: 0, duration: 0.2 }, t);
+    const tap = (x, y, t) => tl.fromTo("#s7-tap", { x: x - 45, y: y - 45, scale: 1.8, opacity: 0 }, { x: x - 45, y: y - 45, scale: 1, opacity: 1, duration: 0.2, ease: "power2.out" }, t)
+      .to("#s7-tap", { opacity: 0, duration: 0.2 }, t + 0.35);
+    tl.fromTo("#s7-phone", { y: 900 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+    verbIn("#s7-v1", 0.25);
+    // 點「整理這個櫃子」→ 題目
+    tap(1310, 304, 1.6);
+    shot("#s7-b", 1.95);
+    // 點錯的選項 → 解析
+    verbOut("#s7-v1", 3.2);
+    tap(1365, 590, 3.2);
+    shot("#s7-c", 3.55);
+    tl.fromTo("#s7-x", { scale: 2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.33, ease: "back.out(2)" }, 3.6);
+    tl.to("#s7-x", { opacity: 0, duration: 0.25 }, 4.5);
+    tl.set("#s7-v2", { opacity: 1 }, 3.4);
+    verbIn("#s7-v2", 3.4);
+    tl.fromTo("#s7-box", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(1.8)" }, 4.8);
+    // 錯題回收：換一題同一事件的題目
+    verbOut("#s7-v2", 5.6);
+    shot("#s7-d", 5.65);
+    tl.set("#s7-v3", { opacity: 1 }, 5.8);
+    verbIn("#s7-v3", 5.8);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 7.72);
+    window.__timelines["s7"] = tl;
+  </script>
+</template>
