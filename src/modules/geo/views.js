@@ -72,6 +72,10 @@
   }
   const title = u => u.island || u.name;
   const hasLive = u => { const ids = u.levels.map(l => l.id); return D().live().some(q => ids.includes(q.level)); };
+  // 會考出題率（算法在 exam/data.js 的 XData，全站共用）
+  const XD = () => window.XData && window.XData.shareHTML ? window.XData : null;
+  const unitShareHTML = u => XD() ? XD().shareHTML(XD().unitShare(u.id)) : '';
+  const levelShareHTML = l => XD() ? XD().shareHTML(XD().levelShare(l.id)) : '';
 
   // ---------- 頁面 ----------
   const views = {};
@@ -119,7 +123,7 @@
 
   function unitCard(u) {
     const p = unitProgress(u), open = hasLive(u);
-    return `<a class="unit-card ${open ? '' : 'closed'} ${isExp(u) ? 'expcard' : ''}" href="${open ? '#/unit/' + u.id : 'javascript:void 0'}">${coverHTML(u)}<div><b>${isExp(u) ? '' : u.no + '．'}${esc(title(u))}</b><span>${esc(isExp(u) ? u.volume + '・區域遠征' : u.name)}</span><div class="bar"><i style="width:${Math.round((p || 0) * 100)}%"></i></div><small>${open ? `進度 ${Math.round((p || 0) * 100)}%` : '即將開放'}</small></div></a>`;
+    return `<a class="unit-card ${open ? '' : 'closed'} ${isExp(u) ? 'expcard' : ''}" href="${open ? '#/unit/' + u.id : 'javascript:void 0'}">${coverHTML(u)}<div><b>${isExp(u) ? '' : u.no + '．'}${esc(title(u))}</b><span>${esc(isExp(u) ? u.volume + '・區域遠征' : u.name)}</span><div class="bar"><i style="width:${Math.round((p || 0) * 100)}%"></i></div><small>${open ? `進度 ${Math.round((p || 0) * 100)}%` : '即將開放'}</small>${unitShareHTML(u)}</div></a>`;
   }
 
   views.unit = (id) => {
@@ -130,8 +134,9 @@
     const allDone = u.levels.every(l => S().levels[l.id] && S().levels[l.id].done);
     app().innerHTML = `${topbar('#/')}<div class="page unit">
       <div class="cover ${isExp(u) ? 'expcover' : ''}">${coverHTML(u)}<h1>${esc(title(u))}<small>${esc(isExp(u) ? u.volume + '・區域遠征' : u.name)}</small></h1></div>
+      <p class="unit-xsh">${unitShareHTML(u)}</p>
       ${bird(esc(u.story))}
-      <div class="levels">${u.levels.map((l, i) => { const r = S().levels[l.id]; return `<div class="level">${coverHTML(u, isExp(u) ? 'map' : l.banner)}<div class="linfo"><b>第 ${i + 1} 關</b><span>${esc(l.name)}</span><small>${cnt(l.id)} 題可練習${r ? `・最佳 ${Math.round(r.best * 100)}%` : ''}</small></div><div class="lbtn"><a class="primary btn" href="#/play/${l.id}/practice">練習</a><a class="ghost btn" href="#/play/${l.id}/sim">模擬</a></div></div>`; }).join('')}
+      <div class="levels">${u.levels.map((l, i) => { const r = S().levels[l.id]; return `<div class="level">${coverHTML(u, isExp(u) ? 'map' : l.banner)}<div class="linfo"><b>第 ${i + 1} 關</b><span>${esc(l.name)}</span><small>${cnt(l.id)} 題可練習${r ? `・最佳 ${Math.round(r.best * 100)}%` : ''}</small>${levelShareHTML(l)}</div><div class="lbtn"><a class="primary btn" href="#/play/${l.id}/practice">練習</a><a class="ghost btn" href="#/play/${l.id}/sim">模擬</a></div></div>`; }).join('')}
         ${u.boss ? `<div class="level boss ${allDone ? '' : 'dim'}">${u.boss.image ? `<img src="${D().img(u.boss.image)}" alt="">` : coverHTML(u)}<div class="linfo"><b>${isExp(u) ? '區域魔王關' : '魔王關'}</b><span>${esc(u.boss.name)}</span><small>${allDone ? `${cnt(u.boss.id)} 題` : '完成前面的關卡後挑戰'}</small></div><div class="lbtn">${allDone ? `<a class="primary btn" href="#/play/${u.boss.id}/practice">挑戰</a><a class="ghost btn" href="#/play/${u.boss.id}/sim">模擬</a>` : ''}</div></div>` : ''}
       </div>
       <a class="ghost btn wide" href="#/play/${u.id}-all/sim">單元模擬測驗（計時 20 題）</a>
@@ -139,15 +144,15 @@
     </div>`;
   };
 
-  // 這座島（或遠征區域）的觀念在會考 5 年出現幾次（N > 0 才列；點了練那個觀念的真題）
+  // 這座島（或遠征區域）的觀念在會考的出題率（考過的才列；點了練那個觀念的真題）
   function examKpHTML(u) {
     const XD = window.XData;
-    if (!XD || !XD.count) return '';
+    if (!XD || !XD.chip) return '';
     const ids = new Set(((D().concepts.units.find(x => x.id === u.id) || {}).concepts || []).map(c => c.id));
     const lv = new Set(u.levels.map(l => l.id).concat(u.boss ? [u.boss.id] : []));
     for (const q of D().live()) if (lv.has(q.level)) q.concepts.forEach(c => ids.add(c));
     const ks = [...ids].map(c => [c, XD.count('geo:' + c)]).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
-    return ks.length ? `<div class="x-kps"><span class="x-kps-h">會考 5 年出現</span>${ks.map(([c, n]) => `<a class="x-kpchip" href="#/x/kp/${encodeURIComponent(c)}">${esc(D().conceptName[c] || c)}<b>${n} 次</b></a>`).join('')}</div>` : '';
+    return ks.length ? `<div class="x-kps"><span class="x-kps-h">這裡的會考考點</span>${ks.map(([c, n]) => `<a class="x-kpchip" href="#/x/kp/${encodeURIComponent(c)}">${esc(D().conceptName[c] || c)}${XD.chip(n, { short: true })}<small class="x-kpn">${n} 題</small></a>`).join('')}</div>` : '';
   }
 
   function levelInfo(lid) {
@@ -214,7 +219,7 @@
     const color = v => v == null ? 'none' : v >= 0.8 ? 'g' : v >= 0.6 ? 'y' : 'r';
     let h = `<div class="mx-wrap"><table class="mx"><thead><tr><th>概念</th>${regions.map(r => `<th>${esc(r)}</th>`).join('')}<th>掌握</th></tr></thead><tbody>`;
     for (const { c } of rows) {
-      h += `<tr><th>${esc(c.name)}</th>`;
+      h += `<tr><th>${esc(c.name)}${XD() ? XD().chipKey('geo:' + c.id, { short: true }) : ''}</th>`;
       for (const r of regions) {
         const has = live.some(q => q.region === r && q.concepts.includes(c.id));
         const v = st.cell[c.id + '|' + r];
@@ -223,7 +228,7 @@
       }
       h += `<td>${mastered(c.id) ? '★' : ''}</td></tr>`;
     }
-    h += '</tbody></table></div><p class="legend"><span class="c-g">≥80%</span><span class="c-y">60–79%</span><span class="c-r">&lt;60%</span><span class="c-none">還沒練</span>★＝通論題與區域題都答對過</p>';
+    h += '</tbody></table></div><p class="legend"><span class="c-g">≥80%</span><span class="c-y">60–79%</span><span class="c-r">&lt;60%</span><span class="c-none">還沒練</span>★＝通論題與區域題都答對過</p>' + (XD() ? `<p class="legend">概念後面的小標籤＝會考出題率：${XD().TIERS.map(t => XD().chip(t.min, { short: true }) + esc(t.min >= 5 ? '5 題以上' : t.min === 2 ? '2–4 題' : t.min === 1 ? '1 題' : '沒考過')).join('　')}</p>` : '');
     return h;
   }
 

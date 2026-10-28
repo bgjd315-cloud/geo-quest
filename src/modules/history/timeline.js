@@ -131,7 +131,7 @@
       const n = H().liveOfEvent(ev.id).length;
       sheet.hidden = false;
       sheet.innerHTML = `<button class="ghost tl-close" aria-label="關閉">×</button>
-        <div class="card-kicker">${esc(line.wing)}・館藏卡</div><h3>${esc(ev.name)}</h3>
+        <div class="card-kicker">${esc(line.wing)}・館藏卡${window.XData && window.XData.chip ? window.XData.chip(window.XData.eventCount(ev.id)) : ''}</div><h3>${esc(ev.name)}</h3>
         <p class="tl-meta"><b>時間</b>${esc(ev.time === '—' ? '課本未標年代' : ev.time)}${ev._span.guess ? '（約略放在分期中間）' : ''}<br>
         <b>分期</b>${esc(era.name)}（${esc(era.time)}・${esc(era.lessons)}）</p>
         <div class="chips">${(ev.themes || []).map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>

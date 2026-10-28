@@ -122,7 +122,7 @@ geo-quest/
   - `parent.js`：家長頁（進度、弱點矩陣、近期錯題、審題；審題先選科目）
   - `app.js`：社會科闖關首頁 `#/hub`、設定、路由。地理網址不變（`#/`、`#/unit/…`、`#/play/…`、`#/weak`）；歷史在 `#/h`、`#/h/wing/<tw|ea|w>`、`#/h/timeline`、`#/h/play/<分期id>/<practice|sim>`
   - `diagnosis.js`：學習診斷（合併會考真題＋地理原創題＋歷史原創題作答；#/x/diag 與家長頁「學習診斷」分頁，可列印）；年度模擬交卷後的簡版診斷
-- 會考真題 `src/modules/exam/`（#/x/…）：`data.js`（window.XData，讀 `data/exam/manifest.json` 列的年度檔，讀不到的略過並顯示「資料準備中」；也讀 `data/history/kp.json`；統計各知識點 5 年出現次數）、`views.js`（首頁、年度模擬 #/x/sim/<年>、知識點練習 #/x/kp/<概念或kp id>、能力練習 #/x/skill/<能力>、錯題重做 #/x/redo、考點分布 #/x/stats、觀念卡 #/x/card/<id>；圖片點了可放大）、`exam.css`。進度在 store 的 `exam`（log、sims、recycle；真題錯題連對兩次移出）。題目格式見 `docs/會考真題檢測設計.md`。
+- 會考真題 `src/modules/exam/`（#/x/…）：`data.js`（window.XData，讀 `data/exam/manifest.json` 列的年度檔，讀不到的略過並顯示「資料準備中」；也讀 `data/history/kp.json`；統計各知識點 5 年出現次數；**會考出題率**也只在這裡算：`chip`／`chipKey`（高 ≥5、中 2–4、低 1、未考 0）、`questionCount`（原創題取各觀念最高）、`eventCount`（歷史事件取所屬 kp 最高）、`unitShare`／`levelShare`／`eraShare`／`wingShare`＋`shareHTML`（181 題中落在該島／關卡／時代／館區的比例，同類前幾名標「高頻」）、`legendHTML`）、`views.js`（首頁、年度模擬 #/x/sim/<年>、知識點練習 #/x/kp/<概念或kp id>、能力練習 #/x/skill/<能力>、錯題重做 #/x/redo、考點分布 #/x/stats、觀念卡 #/x/card/<id>；圖片點了可放大）、`exam.css`。進度在 store 的 `exam`（log、sims、recycle；真題錯題連對兩次移出）。題目格式見 `docs/會考真題檢測設計.md`。
   - build.js：會考截圖全部內嵌後若 dist 不超過 25 MB 就內嵌，否則改從 `../assets/exam/` 讀（可用 `--embed-exam`／`--link-exam` 強制）；GitHub Pages 根目錄的開發版直接讀 `assets/exam/`，所以 `assets/exam/` 和 `data/exam/` 都要進 git。
 - 地理 `src/modules/geo/`：`geo.js` 共用運算（網頁與 validate 共用）、`charts.js` SVG 繪圖、`data.js`（window.Data）、`views.js` 首頁單元地圖、單元頁、弱點地圖
 - 歷史 `src/modules/history/`：`data.js`（window.HData，事件時間粗略換算年份）、`timeline.js` 時間長廊、`views.js` 選角、大廳、館區、作答、`history.css`（只在 body.subj-history 生效的暖色配色）

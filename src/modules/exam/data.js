@@ -113,5 +113,106 @@
   };
   XData.kpOfEvent = evId => XData.kpList.filter(p => (p.events || []).includes(evId));
 
+  // ---------- 會考出題率（全站共用：所有「出題率」標籤都從這裡算） ----------
+  // 單一觀念（地理概念 id／歷史 kp id）：5 年真題被標到幾次 → 分級
+  //   高 ≥5（平均每年 1 題以上）、中 2–4、低 1、未考 0
+  const TIERS = [
+    { k: 'hi', name: '高', min: 5, desc: '5 年考 5 題以上，平均每年至少 1 題' },
+    { k: 'mid', name: '中', min: 2, desc: '5 年考 2–4 題' },
+    { k: 'lo', name: '低', min: 1, desc: '5 年只考過 1 題' },
+    { k: 'none', name: '未考', min: 0, desc: '5 年都沒考過（課本有教，仍要會）' }
+  ];
+  XData.TIERS = TIERS;
+  XData.tier = n => TIERS.find(t => (n || 0) >= t.min);
+  const nYears = () => XData.years.length || 5;
+  XData.nYears = nYears;
+  const esc0 = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  // 小標籤「出題率 高・5 年 7 題」；opt.short → 只顯示「高」（表格用）
+  XData.chip = (n, opt) => {
+    n = n || 0; opt = opt || {};
+    const t = XData.tier(n);
+    const tip = `會考出題率${t.name}：${nYears()} 年會考共 ${n} 題（${t.desc}）`;
+    const txt = opt.short ? t.name : `出題率 ${t.name}${n ? `・${nYears()} 年 ${n} 題` : ''}`;
+    return `<span class="xf xf-${t.k}${opt.short ? ' xf-s' : ''}" title="${esc0(tip)}">${txt}</span>`;
+  };
+  XData.chipKey = (key, opt) => XData.chip(XData.count(key), opt);
+  // 歷史事件：取它所屬各 kp 的最高次數
+  XData.eventCount = evId => XData.kpOfEvent(evId).reduce((m, p) => Math.max(m, XData.count('hist:' + p.id)), 0);
+  // 原創題（地理或歷史）：題目各觀念的最高次數。歷史題看 kp，再加上事件所屬的 kp
+  XData.questionCount = q => {
+    if (!q) return 0;
+    if (q.era) {
+      let m = 0;
+      for (const k of q.kp || []) m = Math.max(m, XData.count('hist:' + k));
+      for (const e of q.eventIds || []) m = Math.max(m, XData.eventCount(e));
+      return m;
+    }
+    const cs = new Set(q.concepts || []);
+    for (const p of q.parts || []) for (const c of p.concepts || []) cs.add(c);
+    return [...cs].reduce((m, c) => Math.max(m, XData.count('geo:' + c)), 0);
+  };
+
+  // 區塊出題率：所有真題中，有幾 % 落在這個島／遠征／關卡／時代／館區
+  //   地理島嶼：題目概念屬於這座島（concepts.json），或 scope ＝ 這座島
+  //   地理遠征：scope ＝ 這個區域
+  //   關卡：題目概念屬於這一關原創題用到的（本島）概念；遠征關卡另外要 scope 相同
+  //   歷史時代：題目 era ＝ 該時代，或題目 kp 的事件落在該時代；館區同理看 line
+  // 高頻：同一組裡的前幾名（島嶼 3、遠征 3、時代 5、館區 1），和下一名同分就不算
+  let AGG = null;
+  XData.share = n => XData.items.length ? n / XData.items.length * 100 : 0;
+  XData.pctText = n => { const p = XData.share(n); return p >= 10 || p === 0 ? Math.round(p) + '%' : p.toFixed(1) + '%'; };
+  function hotOf(map, ids, k) {
+    const v = ids.map(id => map[id].n).sort((a, b) => b - a);
+    const cut = v[k] == null ? 0 : v[k];
+    for (const id of ids) map[id].hot = map[id].n > 0 && map[id].n > cut;
+  }
+  function buildAgg() {
+    const D = window.Data, H = window.HData;
+    const A = { unit: {}, level: {}, era: {}, wing: {} };
+    const geo = XData.items.filter(it => it.subject === 'geo'), hist = XData.items.filter(it => it.subject === 'hist');
+    if (D && D.units) {
+      const cu = D.conceptUnit || {};
+      for (const u of D.units) {
+        const exp = u.kind === 'expedition';
+        A.unit[u.id] = { n: geo.filter(it => it.scope === u.id || (!exp && it.concepts.some(c => cu[c] === u.id))).length };
+        for (const l of u.levels) {
+          let cs = new Set();
+          for (const q of D.questions) if (q.level === l.id) for (const c of q.concepts || []) cs.add(c);
+          if (!exp) { const own = [...cs].filter(c => cu[c] === u.id); if (own.length) cs = new Set(own); }
+          A.level[l.id] = { n: geo.filter(it => (!exp || it.scope === u.id) && it.concepts.some(c => cs.has(c))).length };
+        }
+      }
+      hotOf(A.unit, D.units.filter(u => u.kind !== 'expedition').map(u => u.id), 3);
+      hotOf(A.unit, D.units.filter(u => u.kind === 'expedition').map(u => u.id), 3);
+    }
+    if (H && H.eras && H.eventById) {
+      const he = hist.map(it => {
+        const s = new Set(it.era ? [it.era] : []);
+        for (const k of it.kp) for (const e of (XData.kp[k] || {}).events || []) if (H.eventById[e]) s.add(H.eventById[e].era);
+        return s;
+      });
+      for (const e of H.eras) A.era[e.id] = { n: he.filter(s => s.has(e.id)).length };
+      for (const l of H.lines) A.wing[l.id] = { n: he.filter(s => [...s].some(x => H.eraById[x] && H.eraById[x].line === l.id)).length };
+      hotOf(A.era, H.eras.map(e => e.id), 5);
+      hotOf(A.wing, H.lines.map(l => l.id), 1);
+    }
+    return A;
+  }
+  XData.agg = () => AGG || (AGG = buildAgg());
+  const aggOf = (kind, id) => (XData.agg()[kind] || {})[id] || { n: 0, hot: false };
+  XData.unitShare = id => aggOf('unit', id);
+  XData.levelShare = id => aggOf('level', id);
+  XData.eraShare = id => aggOf('era', id);
+  XData.wingShare = id => aggOf('wing', id);
+  // 「會考出題率 X%」＋（前幾名）「高頻」
+  XData.shareHTML = s => {
+    if (!XData.items.length || !s) return '';
+    return `<span class="xsh" title="111–115 年會考地理、歷史共 ${XData.items.length} 題，有 ${s.n} 題考到這裡"><span class="xsh-t">會考出題率 ${XData.pctText(s.n)}</span>${s.hot ? '<span class="xhot">高頻</span>' : ''}</span>`;
+  };
+  // 圖例（考點分布頁、設定頁）
+  XData.legendHTML = () => `<div class="xf-legend"><p><b>會考出題率</b>：統計 111–115 年會考社會科的地理、歷史題（共 ${XData.items.length} 題），看每個觀念被考到幾題。</p>
+    <ul>${TIERS.map(t => `<li>${XData.chip(t.min, { short: true })}<span>${esc0(t.desc)}</span></li>`).join('')}</ul>
+    <p class="hint">島嶼、關卡、時代、館區上的「會考出題率 X%」＝這 ${XData.items.length} 題中有幾 % 考到那裡；「高頻」是同一類裡考最多的幾個。</p></div>`;
+
   window.XData = XData;
 })();

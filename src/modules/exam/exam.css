@@ -96,14 +96,36 @@ body.x-noscroll { overflow: hidden; }
 .x-legend span { display: inline-block; padding: 0 .6em; border-radius: 4px; margin-right: .3em; }
 .x-legend .h1 { background: #e3e8ee; } .x-legend .h2 { background: #c3cfdb; } .x-legend .h3 { background: #93a6ba; color: #fff; } .x-legend .h4 { background: #4a5a6a; color: #fff; }
 
-/* 「會考 5 年出現 N 次」徽章（地理原理卡、單元頁、歷史館藏卡、館區頁） */
-.x-badge { display: inline-block; font-size: .72rem; font-weight: 400; letter-spacing: 0; color: #4a5a6a; background: #e3e8ee; border-radius: 999px; padding: 0 .6em; margin-left: .5em; vertical-align: middle; }
-.x-badge-line { font-size: .8rem; color: var(--muted); margin: .5em 0 0; }
-.x-badge-line .x-badge { margin: 0 .4em 0 0; }
+/* 會考出題率（XData.chip／shareHTML／legendHTML；地理青綠與歷史暖色兩種配色都看得清楚） */
+span.xf { display: inline-block; font-size: .7rem; font-weight: 600; line-height: 1.45; letter-spacing: 0; padding: 0 .55em; border-radius: 999px; border: 1px solid transparent; white-space: nowrap; vertical-align: middle; font-family: system-ui, -apple-system, "Noto Sans TC", sans-serif; }
+span.xf.xf-hi { background: #fbe0d9; color: #9e2f1e; border-color: #eeb3a5; }
+span.xf.xf-mid { background: #fbeccb; color: #82530a; border-color: #ead08f; }
+span.xf.xf-lo { background: #e1ebe2; color: #48654e; border-color: #c2d5c5; }
+span.xf.xf-none { background: #f0efec; color: #8a8a85; border-color: #e1e0dc; font-weight: 400; }
+span.xf.xf-s { padding: 0 .4em; font-size: .68rem; }
+.card-kicker span.xf, .dg-pth span.xf { margin-left: .4em; }
+.dg-pth span.xf { margin-left: 0; }
+span.xsh { display: inline-flex; flex-wrap: wrap; gap: .3em; align-items: center; font-size: .75rem; font-weight: 400; color: #5d6670; margin-top: .15em; }
+span.xsh .xsh-t { color: inherit; font-size: inherit; }
+span.xsh .xhot { font-size: .68rem; font-weight: 700; color: #fff; background: #b4472f; border-radius: 4px; padding: 0 .4em; line-height: 1.5; }
+.xf-line { display: flex; flex-wrap: wrap; gap: .4em; align-items: center; margin: .5em 0 0; font-size: .78rem; color: var(--muted); }
+.xf-evline { margin: .5em 0 0; font-size: .8rem; color: var(--muted); display: grid; gap: .25em; }
+.xf-ev { display: flex; gap: .4em; align-items: flex-start; min-width: 0; }
+.xf-ev span.xf { flex: none; margin-top: .1em; }
+.xf-ev small { overflow-wrap: anywhere; min-width: 0; }
+.xf-legend { background: var(--card); border-radius: var(--radius); padding: .6em .9em; box-shadow: var(--shadow); margin: .8em 0; font-size: .88rem; }
+.xf-legend p { margin: .3em 0; }
+.xf-legend ul { list-style: none; padding: 0; margin: .3em 0; display: grid; gap: .25em; }
+.xf-legend li { display: grid; grid-template-columns: 3.2em minmax(0, 1fr); gap: .4em; align-items: center; }
+.xf-legend li span.xf { justify-self: start; }
 .x-kps { display: flex; flex-wrap: wrap; gap: .3em; align-items: center; margin: .6em 0; font-size: .8rem; }
 .x-kps-h { color: var(--muted); margin-right: .2em; }
-.x-kpchip { background: #e3e8ee; color: #3d4a57; border-radius: 999px; padding: .05em .65em; text-decoration: none; max-width: 100%; overflow-wrap: anywhere; }
-.x-kpchip b { font-weight: 400; margin-left: .35em; color: #6b7a88; }
+.x-kpchip { display: inline-flex; gap: .35em; align-items: center; background: #eef0f2; color: #3d4a57; border-radius: 999px; padding: .05em .3em .05em .65em; text-decoration: none; max-width: 100%; overflow-wrap: anywhere; }
+.x-kprow .xf { margin-left: .3em; }
+.mx th span.xf { margin-left: .3em; }
+.x-heat td.xf-cell { white-space: nowrap; }
+.x-sort { display: flex; flex-wrap: wrap; gap: .4em; align-items: center; font-size: .85rem; margin: .4em 0; }
+.x-sort button.on { background: #4a5a6a; color: #fff; }
 
 /* ---------- 學習診斷 ---------- */
 .dg h3 { margin: 1em 0 .3em; } .dg h4 { margin: .4em 0 .2em; font-size: .95rem; }
@@ -123,7 +145,6 @@ body.x-noscroll { overflow: hidden; }
 .dg-weak { padding-left: 1.3em; }
 .dg-pt { background: var(--card); border-radius: var(--radius); padding: .7em .9em; box-shadow: var(--shadow); margin: .7em 0; }
 .dg-pth { display: flex; flex-wrap: wrap; gap: .4em; align-items: center; }
-.dg-pth .x-badge { margin-left: 0; }
 .dg-acc, .dg-last { font-size: .9rem; margin: .2em 0; }
 .dg-last { color: var(--muted); overflow-wrap: anywhere; }
 .dg-steps { padding-left: 1.2em; margin: .3em 0; font-size: .92rem; }
@@ -152,3 +173,10 @@ body.x-noscroll { overflow: hidden; }
   .dg-sec { break-inside: auto; }
   .dg-track, .dg-track i { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+.x-kpchip small.x-kpn { color: #6b7a88; font-size: .72rem; margin-right: .3em; }
+.unit-xsh { margin: .2em 0 .4em; }
+.era summary span.xsh { flex-basis: 100%; margin-top: 0; }
+.x-heat tr.x-zero th { color: var(--muted); }
+.x-tiersum { display: flex; flex-wrap: wrap; gap: .2em .6em; align-items: center; }
+.x-rk a span.xf { margin-left: .2em; }
+.chip span.xf { margin-left: .15em; }

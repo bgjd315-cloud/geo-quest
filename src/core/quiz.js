@@ -143,7 +143,7 @@
         d.querySelectorAll('.opt').forEach(x => { x.disabled = true; const n = +x.dataset.i; if (n === i) x.classList.add(ok ? 'right' : 'wrong', 'chosen'); if (!sim && n === p.answer) x.classList.add('right'); });
         res[k] = ok;
         if (!sim) {
-          showExplain(d, p, ok);
+          showExplain(d, p, ok, null, true);
           // 練習模式：前一題答對才解鎖下一題；答錯則看解析後解鎖，避免卡關
           const next = box.children[k + 1];
           if (next) {
@@ -159,6 +159,7 @@
         }
         if (res.filter(x => x !== undefined).length === q.parts.length) {
           const score = res.filter(Boolean).length;
+          if (!sim) box.insertAdjacentHTML('afterend', freqLine(q));
           done({ ok: score === q.parts.length, parts: res, score });
         }
       });
@@ -223,9 +224,15 @@
     };
   }
 
-  function showExplain(el, q, ok, extra) {
+  function showExplain(el, q, ok, extra, noFreq) {
     const fb = el.querySelector(':scope > .feedback');
-    fb.innerHTML = `<div class="explain ${ok ? 'good' : 'bad'}"><div class="verdict">${ok ? '答對了' : '再想想看'}</div>${extra ? `<p>${esc(extra)}</p>` : ''}<p>${fmt(q.explain || '')}</p></div>`;
+    fb.innerHTML = `<div class="explain ${ok ? 'good' : 'bad'}"><div class="verdict">${ok ? '答對了' : '再想想看'}</div>${extra ? `<p>${esc(extra)}</p>` : ''}<p>${fmt(q.explain || '')}</p></div>${noFreq ? '' : freqLine(q)}`;
+  }
+  // 作答後：這題觀念的會考出題率（題目各觀念取最高；地理看 concepts，歷史看 kp 與事件）
+  function freqLine(q) {
+    const X = window.XData;
+    if (!X || !X.questionCount || !X.items || !X.items.length) return '';
+    return `<p class="xf-line">${X.chip(X.questionCount(q))}<span>這題的觀念在會考有多常考</span></p>`;
   }
 
   const fmt = s => esc(s || '').replace(/\n/g, '<br>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
@@ -238,8 +245,8 @@
     const c = window.Data.cards[concept];
     const name = window.Data.conceptName[concept] || concept;
     if (!c) return `<div class="card"><h3>${esc(name)}</h3><p>這個概念的原理卡還在準備中。</p></div>`;
-    const xn = window.XData && window.XData.count ? window.XData.count('geo:' + concept) : 0;
-    return `<div class="card"><div class="card-kicker">原理卡${xn ? `<span class="x-badge">會考 5 年出現 ${xn} 次</span>` : ''}</div><h3>${esc(c.title || name)}</h3>${figure(c.figure)}<p>${fmt(c.text)}</p>${c.tip ? `<p class="tip">${fmt(c.tip)}</p>` : ''}</div>`;
+    const xc = window.XData && window.XData.chipKey ? window.XData.chipKey('geo:' + concept) : '';
+    return `<div class="card"><div class="card-kicker">原理卡${xc}</div><h3>${esc(c.title || name)}</h3>${figure(c.figure)}<p>${fmt(c.text)}</p>${c.tip ? `<p class="tip">${fmt(c.tip)}</p>` : ''}</div>`;
   }
 
   // ---------- 一場闖關 ----------
@@ -354,12 +361,12 @@
   function reviewList(results) {
     return results.map(({ q, r }, n) => {
       if (q.parts) {
-        return `<div class="rv"><div class="rvh">${n + 1}. ${fmt(q.stem)}</div>${figure(q.figure)}${q.parts.map((p, k) => `<div class="rvp ${r.parts[k] ? 'good' : 'bad'}"><b>${k + 1}.</b> ${fmt(p.stem)}<div>正解：${optionHTML(p.options[p.answer])}</div><p>${fmt(p.explain)}</p></div>`).join('')}</div>`;
+        return `<div class="rv"><div class="rvh">${n + 1}. ${fmt(q.stem)}</div>${figure(q.figure)}${q.parts.map((p, k) => `<div class="rvp ${r.parts[k] ? 'good' : 'bad'}"><b>${k + 1}.</b> ${fmt(p.stem)}<div>正解：${optionHTML(p.options[p.answer])}</div><p>${fmt(p.explain)}</p></div>`).join('')}${freqLine(q)}</div>`;
       }
       const ans = q.type === 'order' ? q.answer.map(i => q.items[i]).join(' → ')
         : q.type === 'match' ? q.left.map((l, i) => `${l} → ${q.right[q.answer[i]]}`).join('；')
           : `${typeof q.options[q.answer] === 'string' ? q.options[q.answer] : (q.options[q.answer].text || '（見圖）')}`;
-      return `<div class="rv ${r.ok ? 'good' : 'bad'}"><div class="rvh">${n + 1}. ${r.ok ? '○' : '×'} ${fmt(q.stem)}</div>${figure(q.figure)}<div>正解：${esc(ans)}</div><p>${fmt(q.explain)}</p></div>`;
+      return `<div class="rv ${r.ok ? 'good' : 'bad'}"><div class="rvh">${n + 1}. ${r.ok ? '○' : '×'} ${fmt(q.stem)}</div>${figure(q.figure)}<div>正解：${esc(ans)}</div><p>${fmt(q.explain)}</p>${freqLine(q)}</div>`;
     }).join('');
   }
 

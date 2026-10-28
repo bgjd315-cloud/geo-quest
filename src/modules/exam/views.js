@@ -74,7 +74,7 @@
   const cardHref = key => `#/x/card/${encodeURIComponent(X().split(key).id)}`;
   function chipsHTML(it) {
     const keys = X().keysOf(it);
-    return `<div class="chips x-chips">${keys.map(k => `<a class="chip" href="${keyHref(k)}">${esc(X().name(k))}</a>`).join('')}
+    return `<div class="chips x-chips">${keys.map(k => `<a class="chip" href="${keyHref(k)}">${esc(X().name(k))} ${X().chipKey(k, { short: true })}</a>`).join('')}
       ${it.skill.map(s => `<a class="chip soft" href="#/x/skill/${encodeURIComponent(s)}">${esc(s)}</a>`).join('')}</div>
       ${keys.length ? `<div class="x-links">${keys.slice(0, 2).map(k => `<a href="${cardHref(k)}">看${X().split(k).subj === 'geo' ? '原理卡' : '館藏卡'}：${esc(short(X().name(k)))}</a>`).join('')}${siteLinks(keys[0])}</div>` : ''}`;
   }
@@ -92,7 +92,7 @@
     const kp = X().kp[id] || { name: id, events: [] };
     const H = window.HData, hc = window.Subjects.history && window.Subjects.history.card;
     const evs = (kp.events || []).filter(e => H && H.eventById && H.eventById[e]).slice(0, 3);
-    return `<div class="card x-kpcard"><div class="card-kicker">會考知識點</div><h3>${esc(kp.name)}</h3>${kp.skill ? `<p class="hint">常考能力：${esc(kp.skill)}</p>` : ''}${X().count(key) ? `<span class="x-badge">會考 5 年出現 ${X().count(key)} 次</span>` : ''}</div>
+    return `<div class="card x-kpcard"><div class="card-kicker">會考知識點</div><h3>${esc(kp.name)}</h3>${kp.skill ? `<p class="hint">常考能力：${esc(kp.skill)}</p>` : ''}<p class="xf-line">${X().chipKey(key)}</p></div>
       ${hc ? evs.map(e => hc(e)).join('') : ''}`;
   }
 
@@ -328,7 +328,7 @@
     practice({
       title: X().name(key), sub: `知識點練習・5 年真題 ${items.length} 題`, key, mode: 'kp', back: '#/x/kp',
       items, empty: '5 年會考還沒有考過這個知識點。',
-      headHTML: `<div class="row x-headlinks"><a class="ghost btn" href="${cardHref(key)}">先看觀念卡</a>${lv ? `<a class="ghost btn" href="${lv.href}">網站關卡</a>` : ''}</div>`
+      headHTML: `<p class="xf-line x-kphead">${X().chipKey(key)}<span>${esc(X().tier(X().count(key)).desc)}</span></p><div class="row x-headlinks"><a class="ghost btn" href="${cardHref(key)}">先看觀念卡</a>${lv ? `<a class="ghost btn" href="${lv.href}">網站關卡</a>` : ''}</div>`
     });
   };
   views.skill = s => {
@@ -349,8 +349,8 @@
   }
   views.kpList = () => {
     const done = {}; for (const e of P().log) { const it = X().byId[e.id]; if (it) for (const k of X().keysOf(it)) { done[k] = done[k] || { n: 0, ok: 0 }; done[k].n++; if (e.ok) done[k].ok++; } }
-    const sec = subj => { const ks = rankRows(subj); return `<h2 class="sec">${SUBJ_NAME[subj]}</h2>${ks.length ? `<div class="x-kplist">${ks.map(k => `<a class="x-kprow" href="${keyHref(k)}"><span>${esc(X().name(k))}</span><small>${X().count(k)} 題${done[k] ? `・答對 ${pct(done[k].ok, done[k].n)}%` : ''}</small></a>`).join('')}</div>` : '<p class="empty">資料準備中。</p>'}`; };
-    app().innerHTML = `${topbar('#/x')}<div class="page"><h1>知識點練習</h1><p class="hint">點一個知識點，練 5 年來考過它的所有真題。答錯時會先看觀念卡，再做一題網站原創題，最後回到真題。</p>${sec('geo')}${sec('hist')}</div>`;
+    const sec = subj => { const ks = rankRows(subj); return `<h2 class="sec">${SUBJ_NAME[subj]}</h2>${ks.length ? `<div class="x-kplist">${ks.map(k => `<a class="x-kprow" href="${keyHref(k)}"><span>${esc(X().name(k))}</span><small>${X().chipKey(k, { short: true })} ${X().count(k)} 題${done[k] ? `・答對 ${pct(done[k].ok, done[k].n)}%` : ''}</small></a>`).join('')}</div>` : '<p class="empty">資料準備中。</p>'}`; };
+    app().innerHTML = `${topbar('#/x')}<div class="page"><h1>知識點練習</h1><p class="hint">點一個知識點，練 5 年來考過它的所有真題。答錯時會先看觀念卡，再做一題網站原創題，最後回到真題。標籤是會考出題率：${X().TIERS.filter(t => t.min).map(t => `${X().chip(t.min, { short: true })} ${t.min >= 5 ? '5 題以上' : t.min === 2 ? '2–4 題' : '1 題'}`).join('、')}。</p>${sec('geo')}${sec('hist')}</div>`;
   };
   views.skillList = () => {
     const sec = (name, skills) => `<h2 class="sec">${name}</h2><div class="x-kplist">${skills.map(s => { const n = X().itemsOfSkill(s).length; return n ? `<a class="x-kprow" href="#/x/skill/${encodeURIComponent(s)}"><span>${esc(s)}</span><small>${n} 題</small></a>` : `<div class="x-kprow off"><span>${esc(s)}</span><small>沒有題目</small></div>`; }).join('')}</div>`;
@@ -358,26 +358,50 @@
   };
 
   // ---------- 考點分布 ----------
+  // 排序：出題率（預設）或課本順序；可勾選列出 5 年沒考過的觀念
+  const statsOpt = { sort: 'freq', zero: false };
+  function allKeys(subj) {
+    if (subj === 'geo') return ((window.Data && window.Data.concepts && window.Data.concepts.units) || []).flatMap(u => u.concepts.map(c => 'geo:' + c.id));
+    return X().kpList.map(p => 'hist:' + p.id);
+  }
+  function statKeys(subj) {
+    const book = allKeys(subj), seen = new Set(book);
+    // 標籤檔沒有、但真題標到的（理論上不會有）放最後
+    const extra = Object.keys(X().appear).filter(k => X().split(k).subj === subj && !seen.has(k));
+    let ks = book.concat(extra);
+    if (!statsOpt.zero) ks = ks.filter(k => X().count(k));
+    if (statsOpt.sort === 'freq') ks = ks.map((k, i) => [k, i]).sort((a, b) => X().count(b[0]) - X().count(a[0]) || a[1] - b[1]).map(x => x[0]);
+    return ks;
+  }
   views.stats = () => {
     const years = YEARS.filter(y => X().yearItems(y).length);
     const sec = subj => {
-      const ks = rankRows(subj);
+      const ks = statKeys(subj);
       if (!ks.length) return `<h2 class="sec">${SUBJ_NAME[subj]}</h2><p class="empty">資料準備中。</p>`;
-      const max = X().count(ks[0]);
-      const top = ks.slice(0, 10);
+      const ranked = rankRows(subj);
+      const max = X().count(ranked[0]) || 1;
+      const top = ranked.slice(0, 10);
       const heat = n => n ? `h${Math.min(4, n)}` : '';
+      const tc = {}; for (const k of allKeys(subj)) { const t = X().tier(X().count(k)).name; tc[t] = (tc[t] || 0) + 1; }
       return `<h2 class="sec">${SUBJ_NAME[subj]}：高頻考點排行</h2>
-        <ol class="x-rank">${top.map(k => { const lv = X().siteLevel(k); return `<li><div class="x-rk"><a href="${keyHref(k)}">${esc(X().name(k))}</a><span class="x-bar"><i style="width:${X().count(k) / max * 100}%"></i></span><b>${X().count(k)}</b></div>
+        <p class="hint x-tiersum">${X().TIERS.map(t => `${X().chip(t.min, { short: true })} ${tc[t.name] || 0} 個`).join('　')}</p>
+        <ol class="x-rank">${top.map(k => { const lv = X().siteLevel(k); return `<li><div class="x-rk"><a href="${keyHref(k)}">${esc(X().name(k))} ${X().chipKey(k, { short: true })}</a><span class="x-bar"><i style="width:${X().count(k) / max * 100}%"></i></span><b>${X().count(k)}</b></div>
           <div class="x-links"><a href="${keyHref(k)}">練真題</a><a href="${cardHref(k)}">${subj === 'geo' ? '原理卡' : '館藏卡'}</a>${lv ? `<a href="${lv.href}">網站關卡</a>` : ''}</div></li>`; }).join('')}</ol>
         <h3>${SUBJ_NAME[subj]}：知識點 × 年份</h3>
-        <div class="mx-wrap"><table class="x-heat"><thead><tr><th>知識點</th>${years.map(y => `<th>${y}</th>`).join('')}<th>合計</th><th>網站</th></tr></thead><tbody>
-        ${ks.map(k => { const lv = X().siteLevel(k), ay = X().appearYear[k] || {}; return `<tr><th><a href="${keyHref(k)}">${esc(short(X().name(k), 18))}</a></th>${years.map(y => `<td class="${heat(ay[y] || 0)}">${ay[y] || ''}</td>`).join('')}<td><b>${X().count(k)}</b></td><td>${lv ? `<a href="${lv.href}">關卡</a>` : `<a href="${cardHref(k)}">卡</a>`}</td></tr>`; }).join('')}
+        <div class="mx-wrap"><table class="x-heat"><thead><tr><th>知識點</th><th>出題率</th>${years.map(y => `<th>${y}</th>`).join('')}<th>合計</th><th>網站</th></tr></thead><tbody>
+        ${ks.map(k => { const lv = X().siteLevel(k), ay = X().appearYear[k] || {}, n = X().count(k); return `<tr${n ? '' : ' class="x-zero"'}><th>${n ? `<a href="${keyHref(k)}">${esc(short(X().name(k), 18))}</a>` : esc(short(X().name(k), 18))}</th><td class="xf-cell">${X().chip(n, { short: true })}</td>${years.map(y => `<td class="${heat(ay[y] || 0)}">${ay[y] || ''}</td>`).join('')}<td><b>${n}</b></td><td>${lv ? `<a href="${lv.href}">關卡</a>` : `<a href="${cardHref(k)}">卡</a>`}</td></tr>`; }).join('')}
         </tbody></table></div>`;
     };
     app().innerHTML = `${topbar('#/x')}<div class="page x-stats"><h1>考點分布</h1>
       <p class="hint">統計 ${years.length ? `${years[0]}–${years[years.length - 1]}` : ''} 年會考社會科的地理、歷史題（一題標了幾個知識點就各算一次）。點知識點可以練它的真題。</p>
+      ${X().legendHTML()}
+      <div class="x-sort"><span>表格排序：</span><button class="ghost ${statsOpt.sort === 'freq' ? 'on' : ''}" data-sort="freq">出題率高→低</button><button class="ghost ${statsOpt.sort === 'book' ? 'on' : ''}" data-sort="book">課本順序</button>
+        <label><input type="checkbox" class="x-zerobox" ${statsOpt.zero ? 'checked' : ''}> 列出沒考過的觀念</label></div>
       ${sec('geo')}${sec('hist')}<p class="legend x-legend"><span class="h1">1</span><span class="h2">2</span><span class="h3">3</span><span class="h4">4+</span>＝該年出現題數</p></div>`;
+    app().querySelectorAll('.x-sort button').forEach(b => b.onclick = () => { statsOpt.sort = b.dataset.sort; keepScroll(views.stats); });
+    app().querySelector('.x-zerobox').onchange = e => { statsOpt.zero = e.target.checked; keepScroll(views.stats); };
   };
+  const keepScroll = f => { const y = window.scrollY; f(); window.scrollTo(0, y); };
 
   // ---------- 觀念卡 ----------
   views.card = id => {

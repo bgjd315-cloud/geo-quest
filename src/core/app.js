@@ -38,6 +38,7 @@
       ${Object.entries(SUBJ).filter(([, s]) => s.hero).map(([k, s]) => `<section><h2>${s.name}・${s.hero.label}</h2><div class="heroes small">${['boy', 'girl'].map(h => `<button class="hero-pick ${s.hero.get() === h ? 'on' : ''}" data-k="${k}" data-h="${h}"><img src="${s.hero.img(h)}" alt=""></button>`).join('')}</div></section>`).join('')}
       <section><h2>換裝置時帶走進度</h2><p>匯出一個進度檔（JSON，地理、歷史和會考真題都在裡面），到新裝置按「匯入」選這個檔案即可。舊版只有地理的進度檔也可以匯入。</p>
         <div class="row"><button class="primary" id="exp">匯出進度檔</button><button class="ghost" id="imp">匯入進度或審題檔</button></div><p class="msg"></p></section>
+      ${window.XData && window.XData.legendHTML && window.XData.items.length ? `<section><h2>標籤說明：會考出題率</h2>${window.XData.legendHTML()}<a class="ghost btn" href="#/x/stats">看考點分布</a></section>` : ''}
       <section><h2>家長</h2><a class="ghost btn" href="#/parent">進入家長頁</a></section>
       <section class="about"><h2>關於資料</h2>${Object.values(SUBJ).filter(s => s.about).map(s => `<p><b>${s.name}</b>：${esc(s.about)}</p>`).join('')}</section></div>`;
     app().querySelectorAll('.hero-pick').forEach(b => b.onclick = () => { SUBJ[b.dataset.k].hero.set(b.dataset.h); settings(); });

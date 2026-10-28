@@ -160,7 +160,7 @@
       <section class="dg-sec"><h2 class="sec">二、需加強的觀念</h2>
         <p class="hint">列入條件：真題和原創題合計作答至少 3 次、答對率低於 70%。排序＝（1 − 答對率）×（1 ＋ 會考 5 年出現次數 ÷ 5），常考的觀念排前面。</p>
         ${weak.length ? `<ol class="dg-weak">${weak.slice(0, 10).map(p => `<li class="dg-pt">
-          <div class="dg-pth"><b>${esc(X().name(p.key))}</b><span class="tag">${X().split(p.key).subj === 'geo' ? '地理' : '歷史'}</span>${p.appear ? `<span class="x-badge">會考 5 年出現 ${p.appear} 次</span>` : '<span class="tag soft">會考未考過</span>'}</div>
+          <div class="dg-pth"><b>${esc(X().name(p.key))}</b><span class="tag">${X().split(p.key).subj === 'geo' ? '地理' : '歷史'}</span>${X().chip(p.appear)}</div>
           <div class="dg-acc">答對率 <b>${pct(p.ok, p.n)}%</b>（真題 ${p.xn ? `${p.xok}/${p.xn}` : '—'}・原創題 ${p.sn ? `${p.sok}/${p.sn}` : '—'}）</div>
           <div class="dg-last">最近一次答錯：${lastWrongHTML(p)}</div>
           <div class="dg-sug"><h4>加強建議</h4>${suggestHTML(p)}</div></li>`).join('')}</ol>${weak.length > 10 ? `<p class="hint">另有 ${weak.length - 10} 個觀念也低於 70%，先把上面這些補好。</p>` : ''}`
@@ -192,7 +192,7 @@
       .sort((a, b) => b.priority - a.priority).slice(0, 3);
     if (!top.length) return `<h2 class="sec">簡版診斷</h2><p>這一年的題目全部答對，太厲害了！可以換一年再挑戰。</p>`;
     return `<h2 class="sec">簡版診斷：先補這 ${top.length} 個觀念</h2>
-      <ol class="dg-weak">${top.map(p => `<li class="dg-pt"><div class="dg-pth"><b>${esc(X().name(p.key))}</b>${p.appear ? `<span class="x-badge">會考 5 年出現 ${p.appear} 次</span>` : ''}</div>
+      <ol class="dg-weak">${top.map(p => `<li class="dg-pt"><div class="dg-pth"><b>${esc(X().name(p.key))}</b>${X().chip(p.appear)}</div>
         <div class="dg-acc">這次 ${p.ok}/${p.n} 題答對</div>${suggestHTML(p, true)}</li>`).join('')}</ol>`;
   }
 

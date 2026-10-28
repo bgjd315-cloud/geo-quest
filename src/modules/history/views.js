@@ -15,6 +15,8 @@
   }
   const eventsOfEra = id => H().events.filter(e => e.era === id);
   const erasOfLine = id => H().eras.filter(e => e.line === id);
+  // 會考出題率（算法在 exam/data.js 的 XData，全站共用）
+  const XD = () => window.XData && window.XData.shareHTML ? window.XData : null;
 
   const views = {};
 
@@ -44,7 +46,7 @@
       <section class="wing-list">${H().lines.map(l => {
         const eras = erasOfLine(l.id), evs = H().events.filter(e => e.line === l.id);
         const n = live.filter(q => eras.some(e => e.id === q.era)).length;
-        return `<a class="wing-card" href="#/h/wing/${l.id}"><img src="${H().img(WINGS[l.id])}" alt=""><div><b>${esc(l.wing)}</b><span>${esc(l.name)}・${eras.length} 個時代・${evs.length} 份檔案</span><small>${n ? `${n} 題可整理` : '籌備中'}${storyCount(l.id)}</small></div></a>`;
+        return `<a class="wing-card" href="#/h/wing/${l.id}"><img src="${H().img(WINGS[l.id])}" alt=""><div><b>${esc(l.wing)}</b><span>${esc(l.name)}・${eras.length} 個時代・${evs.length} 份檔案</span><small>${n ? `${n} 題可整理` : '籌備中'}${storyCount(l.id)}</small>${XD() ? XD().shareHTML(XD().wingShare(l.id)) : ''}</div></a>`;
       }).join('')}</section>
       <h2 class="sec">時間長廊</h2>
       <a class="corridor-card" href="#/h/timeline"><img src="${H().img('hist_corridor')}" alt="時間長廊"><span>三排書架並排：臺灣、東亞、世界。可以縮放，看看同一個時候各地發生什麼事。</span></a>
@@ -59,12 +61,13 @@
     if (!line) return views.hall();
     app().innerHTML = `${topbar('#/h')}<div class="page wing">
       <div class="cover"><img src="${H().img(WINGS[id])}" alt=""><h1>${esc(line.wing)}<small>${esc(line.name)}</small></h1></div>
+      ${XD() ? `<p class="unit-xsh">${XD().shareHTML(XD().wingShare(id))}</p>` : ''}
       ${aban(`${esc(line.wing)}有 ${erasOfLine(id).length} 個時代的櫃子。每個櫃子的檔案歸好位，長廊就亮一段。`)}
       ${storySection(id)}
       <h2 class="sec">時代櫃子</h2>
       <div class="era-list">${erasOfLine(id).map(era => {
         const n = H().liveOfEra(era.id).length, r = P().levels[era.id];
-        return `<details class="era" ${n ? 'open' : ''}><summary><b>${esc(era.name)}</b><span class="era-time">${esc(era.time)}</span><span class="tag soft">${esc(era.lessons)}</span>${n ? `<span class="tag">${n} 題</span>` : '<span class="tag wait">籌備中</span>'}</summary>
+        return `<details class="era" ${n ? 'open' : ''}><summary><b>${esc(era.name)}</b><span class="era-time">${esc(era.time)}</span><span class="tag soft">${esc(era.lessons)}</span>${n ? `<span class="tag">${n} 題</span>` : '<span class="tag wait">籌備中</span>'}${XD() ? XD().shareHTML(XD().eraShare(era.id)) : ''}</summary>
           ${n ? `<div class="row"><a class="primary btn" href="#/h/play/${era.id}/practice">整理這個櫃子</a><a class="ghost btn" href="#/h/play/${era.id}/sim">模擬</a>${r ? `<small>最佳 ${Math.round(r.best * 100)}%</small>` : ''}</div>` : ''}
           ${xkpHTML(era.id)}
           <ul class="ev-list">${eventsOfEra(era.id).map(e => { const k = H().liveOfEvent(e.id).length; return `<li><span class="ev-time">${esc(e.time === '—' ? '—' : e.time)}</span><span class="ev-name">${esc(e.name)}</span>${k ? `<span class="tag">${k} 題</span>` : '<span class="tag wait">籌備中</span>'}</li>`; }).join('')}</ul>
@@ -73,12 +76,12 @@
     </div>`;
   };
 
-  // 時代櫃子裡的會考知識點：「會考 5 年出現 N 次」（N > 0 才列，點了練那個知識點的真題）
+  // 時代櫃子裡的會考知識點與出題率（考過的才列，點了練那個知識點的真題）
   function xkpHTML(eraId) {
     const XD = window.XData;
-    if (!XD || !XD.kpOfEra) return '';
+    if (!XD || !XD.kpOfEra || !XD.chip) return '';
     const ks = XD.kpOfEra(eraId).map(p => [p, XD.count('hist:' + p.id)]).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
-    return ks.length ? `<div class="x-kps"><span class="x-kps-h">會考 5 年出現</span>${ks.map(([p, n]) => `<a class="x-kpchip" href="#/x/kp/${encodeURIComponent(p.id)}" title="${esc(p.name)}">${esc(p.name.length > 14 ? p.name.slice(0, 14) + '…' : p.name)}<b>${n} 次</b></a>`).join('')}</div>` : '';
+    return ks.length ? `<div class="x-kps"><span class="x-kps-h">這裡的會考考點</span>${ks.map(([p, n]) => `<a class="x-kpchip" href="#/x/kp/${encodeURIComponent(p.id)}" title="${esc(p.name)}">${esc(p.name.length > 14 ? p.name.slice(0, 14) + '…' : p.name)}${XD.chip(n, { short: true })}<small class="x-kpn">${n} 題</small></a>`).join('')}</div>` : '';
   }
 
   views.timeline = () => {
@@ -108,10 +111,12 @@
     if (!era) return `<div class="card"><p>這張館藏卡還在準備中。</p></div>`;
     const c = ev && H().cards[ev.id];
     const body = c ? `<p>${esc(c.text).replace(/\n/g, '<br>')}</p>${c.tip ? `<p class="tip">${esc(c.tip)}</p>` : ''}` : '';
-    // 會考知識點：這個事件屬於哪些 kp，5 年出現幾次（只列出現過的）
-    const xk = ev && window.XData && window.XData.kpOfEvent ? window.XData.kpOfEvent(ev.id).map(p => [p, window.XData.count('hist:' + p.id)]).filter(([, n]) => n) : [];
-    const xb = xk.length ? `<p class="x-badge-line">${xk.map(([p, n]) => `<span class="x-badge" title="${esc(p.name)}">會考 5 年出現 ${n} 次</span><small>${esc(p.name)}</small>`).join('<br>')}</p>` : '';
-    return `<div class="card"><div class="card-kicker">館藏卡</div><h3>${esc(c ? c.title : ev ? ev.name : era.name)}</h3><p>${esc(ev ? ev.time : era.time)}・${esc(era.name)}</p>${body}${ev ? `<div class="chips">${ev.themes.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}${xb}</div>`;
+    // 會考出題率：事件的等級＝它所屬各 kp 的最高次數；下面列出考過的 kp
+    const X = XD();
+    const xk = ev && X ? X.kpOfEvent(ev.id).map(p => [p, X.count('hist:' + p.id)]).filter(([, n]) => n).sort((a, b) => b[1] - a[1]) : [];
+    const xb = xk.length ? `<div class="xf-evline">${xk.map(([p, n]) => `<span class="xf-ev">${X.chip(n, { short: true })}<small>${esc(p.name)}（${n} 題）</small></span>`).join('')}</div>` : '';
+    const kick = ev && X ? X.chip(X.eventCount(ev.id)) : era && !ev && X ? X.shareHTML(X.eraShare(era.id)) : '';
+    return `<div class="card"><div class="card-kicker">館藏卡${kick}</div><h3>${esc(c ? c.title : ev ? ev.name : era.name)}</h3><p>${esc(ev ? ev.time : era.time)}・${esc(era.name)}</p>${body}${ev ? `<div class="chips">${ev.themes.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}${xb}</div>`;
   }
 
   views.result = (sum, line) => {
