@@ -36,6 +36,9 @@
     const man = await get('manifest.json');
     const ev = await get(man.events);
     const qfiles = await Promise.all((man.questions || []).map(get));
+    const cfiles = await Promise.all((man.cards || []).map(get));
+    // 館藏卡：各檔的 cards 以事件 id 為鍵，合併成一份
+    HData.cards = Object.assign({}, ...cfiles.map(f => f.cards || {}));
     HData.manifest = man;
     HData.lines = ev.lines; HData.themes = ev.themes; HData.skills = ev.skills; HData.periods = ev.periods;
     HData.eras = ev.eras; HData.events = ev.events;

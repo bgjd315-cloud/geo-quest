@@ -236,9 +236,18 @@ function validate() {
       for (const t of e.themes || []) if (!THEMES.includes(t)) err(id, `主題「${t}」不在六大主題內`);
     }
     for (const e of hev.events || []) for (const r of e.related || []) if (!events.has(r)) err('history/' + e.id, `相關事件「${r}」不存在`);
-    for (const rel of [].concat(hman.cards || [], hman.stories || [])) readJSON('history/' + rel);
+    for (const rel of hman.stories || []) readJSON('history/' + rel);
+    for (const rel of hman.cards || []) {
+      const f = readJSON('history/' + rel);
+      for (const [k, c] of Object.entries((f && f.cards) || {})) {
+        if (!events.has(k)) err('history/' + rel, `館藏卡「${k}」不是 events.json 的事件`);
+        if (!c.title || !c.text) err('history/' + rel, `館藏卡「${k}」缺 title 或 text`);
+      }
+    }
     // 歷史題目：欄位比照地理（不用 unit、region、concepts），另外必須標 theme、era、skill
     const skills = new Set(hev.skills || []);
+    const kpf = readJSON('history/kp.json');
+    const kps = new Set(((kpf && kpf.points) || []).map(p => p.id));
     const list = v => [].concat(v || []);
     let hn = 0;
     for (const rel of hman.questions || []) {
@@ -257,6 +266,7 @@ function validate() {
         if (!eras.has(q.era)) err(id, `era「${q.era}」不在 events.json 的分期`);
         for (const s of list(q.skill)) if (!skills.has(s)) err(id, `skill「${s}」不在 events.json 的能力清單`);
         for (const e of q.eventIds || []) if (!events.has(e)) err(id, `事件「${e}」不在 events.json`);
+        for (const k of q.kp || []) if (!kps.has(k)) err(id, `知識點「${k}」不在 kp.json`);
         checkFigure(id, q.figure);
         const key = (q.stem || '').replace(/\s/g, '') + JSON.stringify(q.figure || null) + JSON.stringify(q.parts ? q.parts.map(p => p.stem) : null);
         if (seenStem.has(key)) err(id, `與 ${seenStem.get(key)} 重複`);

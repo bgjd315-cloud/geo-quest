@@ -93,7 +93,9 @@
   function cardHTML(id) {
     const ev = H().eventById[id], era = H().eraById[ev ? ev.era : id];
     if (!era) return `<div class="card"><p>這張館藏卡還在準備中。</p></div>`;
-    return `<div class="card"><div class="card-kicker">館藏卡</div><h3>${esc(ev ? ev.name : era.name)}</h3><p>${esc(ev ? ev.time : era.time)}・${esc(era.name)}</p>${ev ? `<div class="chips">${ev.themes.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}</div>`;
+    const c = ev && H().cards[ev.id];
+    const body = c ? `<p>${esc(c.text).replace(/\n/g, '<br>')}</p>${c.tip ? `<p class="tip">${esc(c.tip)}</p>` : ''}` : '';
+    return `<div class="card"><div class="card-kicker">館藏卡</div><h3>${esc(c ? c.title : ev ? ev.name : era.name)}</h3><p>${esc(ev ? ev.time : era.time)}・${esc(era.name)}</p>${body}${ev ? `<div class="chips">${ev.themes.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}</div>`;
   }
 
   views.result = (sum, line) => {

@@ -1,6 +1,12 @@
 {
  "events": "events.json",
- "cards": [],
- "questions": [],
+ "cards": [
+  "cards/tw-1a.json",
+  "cards/tw-1b.json"
+ ],
+ "questions": [
+  "questions/tw-1a.json",
+  "questions/tw-1b.json"
+ ],
  "stories": []
 }
