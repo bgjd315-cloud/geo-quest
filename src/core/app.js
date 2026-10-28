@@ -66,9 +66,11 @@
     return SUBJ.geo.route(a, b, c);
   }
 
-  window.addEventListener('hashchange', route);
+  // 資料還沒載完就換網址（點太快、書籤、Safari 還原分頁）時先不畫，等載完再畫
+  let ready = false;
+  window.addEventListener('hashchange', () => { if (ready) route(); });
   window.addEventListener('DOMContentLoaded', async () => {
-    try { await Promise.all(Object.values(SUBJ).map(s => s.load())); route(); }
+    try { await Promise.all(Object.values(SUBJ).map(s => s.load())); ready = true; route(); }
     catch (e) { app().innerHTML = `<div class="page"><h1>載入失敗</h1><p>${esc(e.message)}</p><p class="hint">開發版要用本機伺服器開啟；或直接開 dist/ 裡的單一 HTML 檔。</p></div>`; }
   });
 })();

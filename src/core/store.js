@@ -129,9 +129,17 @@
     async get(p) {
       const pack = window.GEO_DATA;
       if (pack) { if (!(p in pack)) throw new Error('缺少資料檔 ' + p); return pack[p]; }
-      const r = await fetch('data/' + p, { cache: 'no-cache' });
-      if (!r.ok) throw new Error('讀不到 data/' + p);
-      return r.json();
+      // 手機網路偶爾斷一下：同一個檔案最多試三次
+      for (let i = 0; ; i++) {
+        try {
+          const r = await fetch('data/' + p, { cache: 'no-cache' });
+          if (!r.ok) throw new Error('讀不到 data/' + p);
+          return await r.json();
+        } catch (e) {
+          if (i >= 2) throw e;
+          await new Promise(res => setTimeout(res, 800 * (i + 1)));
+        }
+      }
     },
     // dir：開發版的插畫資料夾（單一 HTML 版兩科插畫都在 GEO_IMAGES，檔名不重複）
     img(name, dir) {

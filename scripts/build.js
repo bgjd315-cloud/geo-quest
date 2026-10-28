@@ -57,14 +57,28 @@ if (embedExam) for (const p of examImgs) if (fs.existsSync(path.join(ROOT, p))) 
 
 // JSON 內嵌到 <script> 時，避免出現 </script>
 const safe = o => JSON.stringify(o).replace(/</g, '\\u003c');
-let html = read('index.html');
-html = html.replace(/<link rel="stylesheet" href="(src\/[^"]+)">/g, (_, p) => `<style>\n${read(p)}\n</style>`);
-html = html.replace('<!--DATA-->', () => `<script>window.GEO_DATA=${safe(data)};window.GEO_IMAGES=${safe(images)};window.GEO_BUILD=${safe(new Date().toISOString())};${embedExam ? `window.GEO_EXAM_IMAGES=${safe(examImages)};` : `window.GEO_EXAM_BASE='../';`}</script>`);
-html = html.replace(/<script src="(src\/[^"]+)"><\/script>/g, (_, p) => `<script>\n${read(p)}\n</script>`);
+const tpl = read('dev.html');   // 開發版頁面（逐檔載入 src/ 與 data/）當模板
 
+// 程式：照 dev.html 的順序串成一支，再用 esbuild 轉成舊版 Safari（iOS 12 起）也看得懂的寫法
+const srcs = [...tpl.matchAll(/<script src="(src\/[^"]+)"><\/script>/g)].map(m => m[1]);
+const { execFileSync } = require('child_process');
+const js = execFileSync('npx', ['--yes', 'esbuild@0.24.0', '--target=safari12', '--loader=js', '--charset=utf8', '--log-level=error'],
+  { input: srcs.map(p => `// ${p}\n${read(p)}`).join(';\n'), encoding: 'utf8', shell: true, maxBuffer: 64 * 1024 * 1024 }).replace(/<\/script/gi, '<\\/script');
+
+function page(dataScript) {
+  let html = tpl.replace(/<link rel="stylesheet" href="(src\/[^"]+)">/g, (_, p) => `<style>\n${read(p)}\n</style>`);
+  html = html.replace('<!--DATA-->', () => `<script>${dataScript}</script>`);
+  let first = true;   // 第一支 <script src> 換成整包程式，其餘刪掉
+  return html.replace(/<script src="(src\/[^"]+)"><\/script>\n?/g, () => first ? (first = false, `<script>\n${js}\n</script>\n`) : '');
+}
+const stamp = `window.GEO_BUILD=${safe(new Date().toISOString())};`;
+const report = f => (fs.statSync(path.join(ROOT, f)).size / 1024 / 1024).toFixed(2);
+
+// 1. 網站首頁 index.html（GitHub Pages）：資料內嵌，不必再逐檔下載；插畫與會考截圖照常從 assets/ 讀
+fs.writeFileSync(path.join(ROOT, 'index.html'), page(`window.GEO_DATA=${safe(data)};${stamp}window.GEO_EXAM_BASE='';`));
+// 2. 單一 HTML 檔 dist/index.html：連插畫也內嵌，離線雙擊就能開
 fs.mkdirSync(path.join(ROOT, 'dist'), { recursive: true });
-const out = path.join(ROOT, 'dist/index.html');
-fs.writeFileSync(out, html);
-const mb = (fs.statSync(out).size / 1024 / 1024).toFixed(2);
-console.log(`\n已產生 dist/index.html（${mb} MB）：可直接雙擊開啟，也可以部署到 GitHub Pages。`);
+fs.writeFileSync(path.join(ROOT, 'dist/index.html'), page(`window.GEO_DATA=${safe(data)};window.GEO_IMAGES=${safe(images)};${stamp}${embedExam ? `window.GEO_EXAM_IMAGES=${safe(examImages)};` : `window.GEO_EXAM_BASE='../';`}`));
+console.log(`\n已產生網站首頁 index.html（${report('index.html')} MB）與單一 HTML 檔 dist/index.html（${report('dist/index.html')} MB）。`);
+console.log('開發時用本機伺服器開 dev.html（逐檔讀 src/ 與 data/，改了不必重新打包）。');
 console.log(embedExam ? `會考題目圖片 ${examImgs.size} 張已內嵌。` : `會考題目圖片 ${examImgs.size} 張（${(imgBytes / 1024 / 1024).toFixed(1)} MB）沒有內嵌：dist/index.html 從 ../assets/exam/ 讀圖，部署時 assets/exam/ 要一起進 git。`);

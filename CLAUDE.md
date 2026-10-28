@@ -41,7 +41,8 @@
 ```
 geo-quest/
 ├─ CLAUDE.md
-├─ index.html
+├─ dev.html（開發版頁面，也是打包模板）
+├─ index.html（打包產生的網站首頁，不要手改）
 ├─ src/                  遊戲引擎、題型元件、繪圖（溫雨圖／等高線／人口金字塔／地圖）
 ├─ data/
 │  ├─ concepts.json      概念標籤樹
@@ -109,9 +110,9 @@ geo-quest/
 
 ## 常用指令
 - 題庫檢查：`node scripts/validate.js`（除了規範的五項，還會用 `src/modules/geo/geo.js` 重算方位、距離、時差、地形高低、氣象數值，題目寫的數字和答案必須與資料一致）
-- 打包單一檔：`node scripts/build.js` → `dist/index.html`（先跑檢查，沒過就停止；插畫取自 `assets/web/*.webp`）
+- 打包：`node scripts/build.js --link-exam` → 網站首頁 `index.html`（資料內嵌、插畫與會考截圖從 assets/ 讀）＋單一檔 `dist/index.html`（插畫也內嵌）。先跑檢查，沒過就停止；程式會串成一支並用 esbuild 轉成 Safari 12 相容寫法。**改了 src/ 或 data/ 一定要重新打包再 push，否則線上網站不會更新。**
 - 寫回家長審題結果：`node scripts/apply-review.js <審題結果.json>`
-- 開發版要用本機伺服器開 `index.html`（讀 `data/` 用 fetch）；`dist/index.html` 可直接雙擊。
+- 開發時用本機伺服器開 `dev.html`（逐檔讀 src/ 與 data/）；`index.html` 與 `dist/index.html` 是打包結果。手機相容性用 Playwright WebKit（iPhone 13 模擬）測。
 - 部署：GitHub Pages https://bgjd315-cloud.github.io/geo-quest/ （repo bgjd315-cloud/geo-quest，main 分支根目錄）。改完先 build、commit，再 git push 就會自動更新。repo 是公開的，`_課本/` 絕對不能進 git。
 
 ## 程式結構
