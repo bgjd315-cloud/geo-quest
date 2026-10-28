@@ -28,5 +28,12 @@
   "questions/w-5b.json",
   "questions/w-6.json"
  ],
- "stories": []
+ "stories": [
+  "stories/tw-a.json",
+  "stories/tw-b.json",
+  "stories/ea-a.json",
+  "stories/ea-b.json",
+  "stories/w-a.json",
+  "stories/w-b.json"
+ ]
 }
