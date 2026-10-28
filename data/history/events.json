@@ -1,0 +1,1526 @@
+{
+ "version": 1,
+ "source": "康軒國中歷史 1上、1下（113）、2上、2下（114）、3上（115）、3下（114，自第1課1-3起）課文與時間走廊；見 歷史_H0_確認清單.md",
+ "lines": [
+  {
+   "id": "tw",
+   "name": "臺灣史",
+   "wing": "臺灣館"
+  },
+  {
+   "id": "ea",
+   "name": "中國與東亞史",
+   "wing": "東亞館"
+  },
+  {
+   "id": "w",
+   "name": "世界史",
+   "wing": "世界館"
+  }
+ ],
+ "themes": [
+  "統治與政權",
+  "經濟與貿易",
+  "社會與文化",
+  "思想與宗教",
+  "對外交流與衝突",
+  "近代化"
+ ],
+ "skills": [
+  "時序",
+  "因果",
+  "比較",
+  "變遷與延續",
+  "史料判讀",
+  "歷史解釋"
+ ],
+ "periods": [
+  {
+   "name": "史前時代",
+   "to": "前3500"
+  },
+  {
+   "name": "上古",
+   "from": "前3500",
+   "to": "476"
+  },
+  {
+   "name": "中古",
+   "from": "476",
+   "to": "15世紀"
+  },
+  {
+   "name": "近代",
+   "from": "15世紀",
+   "to": "18世紀"
+  },
+  {
+   "name": "現代",
+   "from": "18世紀"
+  }
+ ],
+ "eras": [
+  {
+   "id": "tw-pre",
+   "line": "tw",
+   "name": "史前與原住民族",
+   "time": "舊石器～約 400 年前",
+   "lessons": "1上・1"
+  },
+  {
+   "id": "tw-sea",
+   "line": "tw",
+   "name": "大航海時代（荷、西、鄭氏）",
+   "time": "1604～1683",
+   "lessons": "1上・2、3"
+  },
+  {
+   "id": "tw-qing",
+   "line": "tw",
+   "name": "清帝國時期",
+   "time": "1683～1895",
+   "lessons": "1上・4、5、6"
+  },
+  {
+   "id": "tw-jp",
+   "line": "tw",
+   "name": "日治時期",
+   "time": "1895～1945",
+   "lessons": "1下・1、2、3"
+  },
+  {
+   "id": "tw-post",
+   "line": "tw",
+   "name": "戰後",
+   "time": "1945～",
+   "lessons": "1下・4、5、6"
+  },
+  {
+   "id": "ea-classic",
+   "line": "ea",
+   "name": "商周（封建）",
+   "time": "約前 16 世紀～前 221",
+   "lessons": "2上・1、2"
+  },
+  {
+   "id": "ea-empire",
+   "line": "ea",
+   "name": "秦漢至隋唐（郡縣帝國）",
+   "time": "前 221～907",
+   "lessons": "2上・1、2"
+  },
+  {
+   "id": "ea-songyuan",
+   "line": "ea",
+   "name": "宋元（民族互動）",
+   "time": "907～1368",
+   "lessons": "2上・3"
+  },
+  {
+   "id": "ea-mingqing",
+   "line": "ea",
+   "name": "明清（天朝體制）",
+   "time": "1368～1840",
+   "lessons": "2上・4"
+  },
+  {
+   "id": "ea-lateqing",
+   "line": "ea",
+   "name": "晚清（西力衝擊）",
+   "time": "1840～1911",
+   "lessons": "2上・5、6"
+  },
+  {
+   "id": "ea-roc",
+   "line": "ea",
+   "name": "中華民國早期",
+   "time": "1912～1937",
+   "lessons": "2下・1、2、3"
+  },
+  {
+   "id": "ea-war",
+   "line": "ea",
+   "name": "中日戰爭與國共內戰",
+   "time": "1937～1949",
+   "lessons": "2下・4"
+  },
+  {
+   "id": "ea-modern",
+   "line": "ea",
+   "name": "當代東亞與東南亞",
+   "time": "1949～",
+   "lessons": "2下・5、6"
+  },
+  {
+   "id": "w-ancient",
+   "line": "w",
+   "name": "古代文明（西亞、埃及）",
+   "time": "約前 3500～前 6 世紀",
+   "lessons": "3上・1"
+  },
+  {
+   "id": "w-classic",
+   "line": "w",
+   "name": "古希臘與古羅馬",
+   "time": "前 8 世紀～476",
+   "lessons": "3上・2"
+  },
+  {
+   "id": "w-faith",
+   "line": "w",
+   "name": "普世宗教與中古世界",
+   "time": "476～1453",
+   "lessons": "3上・3"
+  },
+  {
+   "id": "w-early",
+   "line": "w",
+   "name": "近代早期（文藝復興、大航海、宗教改革、科學革命）",
+   "time": "14～17 世紀",
+   "lessons": "3上・4、5"
+  },
+  {
+   "id": "w-revolution",
+   "line": "w",
+   "name": "啟蒙與民主革命",
+   "time": "17 世紀末～1815",
+   "lessons": "3上・5、6"
+  },
+  {
+   "id": "w-nation",
+   "line": "w",
+   "name": "民族國家的建立",
+   "time": "1810～1871",
+   "lessons": "3下・1"
+  },
+  {
+   "id": "w-war",
+   "line": "w",
+   "name": "帝國主義與兩次世界大戰",
+   "time": "1870 年代～1945",
+   "lessons": "3下・2、3"
+  },
+  {
+   "id": "w-cold",
+   "line": "w",
+   "name": "冷戰與多元世局",
+   "time": "1945～1991",
+   "lessons": "3下・4"
+  }
+ ],
+ "events": [
+  {
+   "id": "tw-prehistory",
+   "line": "tw",
+   "name": "史前文化：舊石器（長濱）、新石器、金屬器（十三行）",
+   "datedInBook": false,
+   "time": "舊石器～約 400 年前",
+   "era": "tw-pre",
+   "themes": [
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "tw-indigenous",
+   "line": "tw",
+   "name": "原住民族的傳說、遷徙與名稱演變",
+   "datedInBook": false,
+   "time": "—",
+   "era": "tw-pre",
+   "themes": [
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "tw-haishang",
+   "line": "tw",
+   "name": "漢人海商與日本人在臺澎活動（顏思齊、鄭芝龍）",
+   "datedInBook": false,
+   "time": "16～17 世紀初",
+   "era": "tw-sea",
+   "themes": [
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "tw-1604",
+   "line": "tw",
+   "name": "荷蘭入侵澎湖，沈有容勸退",
+   "datedInBook": true,
+   "time": "1604",
+   "era": "tw-sea",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "tw-dutch",
+   "line": "tw",
+   "name": "荷蘭占領臺灣南部，築熱蘭遮城",
+   "datedInBook": true,
+   "time": "1624",
+   "era": "tw-sea",
+   "themes": [
+    "統治與政權",
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "tw-spain",
+   "line": "tw",
+   "name": "西班牙占領雞籠、淡水",
+   "datedInBook": true,
+   "time": "1626",
+   "era": "tw-sea",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "tw-madou",
+   "line": "tw",
+   "name": "麻豆社事件",
+   "datedInBook": true,
+   "time": "1629（1635 荷蘭攻打麻豆社）",
+   "era": "tw-sea",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "tw-1642",
+   "line": "tw",
+   "name": "荷蘭驅逐西班牙，進占北臺灣",
+   "datedInBook": true,
+   "time": "1642",
+   "era": "tw-sea",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "tw-guo",
+   "line": "tw",
+   "name": "郭懷一事件",
+   "datedInBook": true,
+   "time": "1652",
+   "era": "tw-sea",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-zheng",
+   "line": "tw",
+   "name": "鄭成功逐荷、鄭氏政權",
+   "datedInBook": true,
+   "time": "1662～1683",
+   "era": "tw-sea",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-1683",
+   "line": "tw",
+   "name": "施琅攻臺、臺灣棄留爭議、納入版圖",
+   "datedInBook": true,
+   "time": "1683～1684",
+   "era": "tw-qing",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-fangtai",
+   "line": "tw",
+   "name": "為防臺而治臺：渡臺禁令、劃界封山",
+   "datedInBook": false,
+   "time": "康熙年間起",
+   "era": "tw-qing",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-district",
+   "line": "tw",
+   "name": "行政區劃演變（一府三縣→三府一州）",
+   "datedInBook": false,
+   "time": "1684～1885",
+   "era": "tw-qing",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-irrigate",
+   "line": "tw",
+   "name": "土地拓墾與水利（八堡圳 1719、瑠公圳 1760）◆",
+   "datedInBook": true,
+   "time": "18 世紀",
+   "era": "tw-qing",
+   "themes": [
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "tw-jiao",
+   "line": "tw",
+   "name": "行郊與兩岸對渡",
+   "datedInBook": true,
+   "time": "1684 鹿耳門設港起",
+   "era": "tw-qing",
+   "themes": [
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "tw-revolt",
+   "line": "tw",
+   "name": "民變：朱一貴 1721、林爽文 1786、戴潮春 1862",
+   "datedInBook": true,
+   "time": "1721～1862",
+   "era": "tw-qing",
+   "themes": [
+    "統治與政權",
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "tw-migrant",
+   "line": "tw",
+   "name": "移民社會：械鬥、信仰、文教發展",
+   "datedInBook": false,
+   "time": "18～19 世紀",
+   "era": "tw-qing",
+   "themes": [
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "tw-ports",
+   "line": "tw",
+   "name": "開港通商：茶、糖、樟腦，經濟重心北移",
+   "datedInBook": true,
+   "time": "1860 年代",
+   "era": "tw-qing",
+   "themes": [
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "tw-mission",
+   "line": "tw",
+   "name": "西方宣教：馬雅各 1865、馬偕 1872",
+   "datedInBook": true,
+   "time": "1865～1872",
+   "era": "tw-qing",
+   "themes": [
+    "思想與宗教"
+   ]
+  },
+  {
+   "id": "tw-mudan",
+   "line": "tw",
+   "name": "牡丹社事件、沈葆楨來臺",
+   "datedInBook": true,
+   "time": "1874",
+   "era": "tw-qing",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "tw-pingpu",
+   "line": "tw",
+   "name": "平埔族漢化與遷徙、大港口事件",
+   "datedInBook": true,
+   "time": "1877 等",
+   "era": "tw-qing",
+   "themes": [
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "tw-1884",
+   "line": "tw",
+   "name": "清法戰爭",
+   "datedInBook": true,
+   "time": "1884",
+   "era": "tw-qing",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "tw-province",
+   "line": "tw",
+   "name": "臺灣建省、劉銘傳的建設",
+   "datedInBook": true,
+   "time": "1885",
+   "era": "tw-qing",
+   "themes": [
+    "統治與政權",
+    "近代化"
+   ]
+  },
+  {
+   "id": "tw-cede",
+   "line": "tw",
+   "name": "馬關條約、臺灣民主國、武裝抗日",
+   "datedInBook": true,
+   "time": "1895",
+   "era": "tw-jp",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-63",
+   "line": "tw",
+   "name": "六三法與總督專制",
+   "datedInBook": true,
+   "time": "1896",
+   "era": "tw-jp",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-jp-stage",
+   "line": "tw",
+   "name": "治臺三階段：綏撫、內地延長主義、皇民化",
+   "datedInBook": true,
+   "time": "1895～1945",
+   "era": "tw-jp",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-xilaian",
+   "line": "tw",
+   "name": "西來庵事件",
+   "datedInBook": true,
+   "time": "1915",
+   "era": "tw-jp",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-lifan",
+   "line": "tw",
+   "name": "五年理蕃計畫",
+   "datedInBook": true,
+   "time": "1910",
+   "era": "tw-jp",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-wushe",
+   "line": "tw",
+   "name": "霧社事件",
+   "datedInBook": true,
+   "time": "1930",
+   "era": "tw-jp",
+   "themes": [
+    "統治與政權",
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "tw-survey",
+   "line": "tw",
+   "name": "調查工作、臺灣銀行 1899、縱貫鐵路 1908",
+   "datedInBook": true,
+   "time": "1899～1908",
+   "era": "tw-jp",
+   "themes": [
+    "近代化"
+   ]
+  },
+  {
+   "id": "tw-sugar-rice",
+   "line": "tw",
+   "name": "工業日本農業臺灣：新式製糖、蓬萊米 1922、嘉南大圳 1930",
+   "datedInBook": true,
+   "time": "1900～1930",
+   "era": "tw-jp",
+   "themes": [
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "tw-south",
+   "line": "tw",
+   "name": "工業臺灣農業南洋：日月潭發電所 1934",
+   "datedInBook": true,
+   "time": "1930 年代",
+   "era": "tw-jp",
+   "themes": [
+    "經濟與貿易",
+    "近代化"
+   ]
+  },
+  {
+   "id": "tw-edu",
+   "line": "tw",
+   "name": "差別待遇的殖民教育、國民學校 1941",
+   "datedInBook": true,
+   "time": "1895～1945",
+   "era": "tw-jp",
+   "themes": [
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "tw-movement",
+   "line": "tw",
+   "name": "議會請願、文化協會 1921、民眾黨 1927",
+   "datedInBook": true,
+   "time": "1921～1930",
+   "era": "tw-jp",
+   "themes": [
+    "統治與政權",
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "tw-1935",
+   "line": "tw",
+   "name": "第一次地方議員選舉",
+   "datedInBook": true,
+   "time": "1935",
+   "era": "tw-jp",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-kominka",
+   "line": "tw",
+   "name": "皇民化運動",
+   "datedInBook": true,
+   "time": "1937～1945",
+   "era": "tw-jp",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-228",
+   "line": "tw",
+   "name": "二二八事件",
+   "datedInBook": true,
+   "time": "1947",
+   "era": "tw-post",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-martial",
+   "line": "tw",
+   "name": "戒嚴、白色恐怖、雷震事件 1960",
+   "datedInBook": true,
+   "time": "1949～1987",
+   "era": "tw-post",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-formosa",
+   "line": "tw",
+   "name": "美麗島事件",
+   "datedInBook": true,
+   "time": "1979",
+   "era": "tw-post",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-democracy",
+   "line": "tw",
+   "name": "解嚴 1987、終止動員戡亂 1991、民主化",
+   "datedInBook": true,
+   "time": "1987～",
+   "era": "tw-post",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "tw-strait",
+   "line": "tw",
+   "name": "兩岸關係：古寧頭 1949、八二三炮戰 1958、開放探親 1987、大三通 2008",
+   "datedInBook": true,
+   "time": "1949～2008",
+   "era": "tw-post",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "tw-diplomacy",
+   "line": "tw",
+   "name": "退出聯合國 1971、中美斷交 1979",
+   "datedInBook": true,
+   "time": "1971～1979",
+   "era": "tw-post",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "tw-land",
+   "line": "tw",
+   "name": "三七五減租 1949、公地放領 1951、耕者有其田 1953、新臺幣",
+   "datedInBook": true,
+   "time": "1949～1953",
+   "era": "tw-post",
+   "themes": [
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "tw-export",
+   "line": "tw",
+   "name": "進口替代→出口導向、加工出口區、十大建設 1973、竹科 1980",
+   "datedInBook": true,
+   "time": "1950～1980",
+   "era": "tw-post",
+   "themes": [
+    "經濟與貿易",
+    "近代化"
+   ]
+  },
+  {
+   "id": "tw-society",
+   "line": "tw",
+   "name": "戰後社會與文化：美國文化、多元族群（原民會 1996、客委會 2001）",
+   "datedInBook": true,
+   "time": "1950～",
+   "era": "tw-post",
+   "themes": [
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "ea-feudal",
+   "line": "ea",
+   "name": "西周封建與宗法",
+   "datedInBook": false,
+   "time": "約前 11 世紀",
+   "era": "ea-classic",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "ea-shangyang",
+   "line": "ea",
+   "name": "商鞅變法",
+   "datedInBook": false,
+   "time": "戰國",
+   "era": "ea-classic",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "ea-qin",
+   "line": "ea",
+   "name": "秦統一，實施郡縣",
+   "datedInBook": true,
+   "time": "前 221",
+   "era": "ea-empire",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "ea-select",
+   "line": "ea",
+   "name": "選才制度：察舉、九品官人之法、科舉",
+   "datedInBook": false,
+   "time": "漢～隋",
+   "era": "ea-empire",
+   "themes": [
+    "統治與政權",
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "ea-silk",
+   "line": "ea",
+   "name": "張騫出使西域、絲路",
+   "datedInBook": true,
+   "time": "前 139",
+   "era": "ea-empire",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-buddhism",
+   "line": "ea",
+   "name": "佛教傳入、玄奘西行 627",
+   "datedInBook": true,
+   "time": "1 世紀～7 世紀",
+   "era": "ea-empire",
+   "themes": [
+    "思想與宗教"
+   ]
+  },
+  {
+   "id": "ea-hu",
+   "line": "ea",
+   "name": "永嘉之禍 311、北魏孝文帝遷都洛陽 493",
+   "datedInBook": true,
+   "time": "311～493",
+   "era": "ea-empire",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-tang",
+   "line": "ea",
+   "name": "天可汗 630、大化革新 646、東亞文化圈",
+   "datedInBook": true,
+   "time": "630～646",
+   "era": "ea-empire",
+   "themes": [
+    "對外交流與衝突",
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "ea-talas",
+   "line": "ea",
+   "name": "怛羅斯之役，造紙術西傳",
+   "datedInBook": true,
+   "time": "751",
+   "era": "ea-empire",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-liao-song",
+   "line": "ea",
+   "name": "遼建國 947、宋建國 960、澶淵之盟 1005",
+   "datedInBook": true,
+   "time": "947～1005",
+   "era": "ea-songyuan",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-jingkang",
+   "line": "ea",
+   "name": "金建國 1115、靖康之禍 1127、宋室南遷",
+   "datedInBook": true,
+   "time": "1115～1127",
+   "era": "ea-songyuan",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-mongol",
+   "line": "ea",
+   "name": "成吉思汗 1206、蒙古西征 1218、元滅南宋 1279、四等人",
+   "datedInBook": true,
+   "time": "1206～1279",
+   "era": "ea-songyuan",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "ea-ming",
+   "line": "ea",
+   "name": "明朝建立、修長城、遷都北京",
+   "datedInBook": true,
+   "time": "1368",
+   "era": "ea-mingqing",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "ea-zhenghe",
+   "line": "ea",
+   "name": "鄭和初次西航、朝貢體制",
+   "datedInBook": true,
+   "time": "1405",
+   "era": "ea-mingqing",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-ricci",
+   "line": "ea",
+   "name": "利瑪竇來華 1582、清朝禁教 1723",
+   "datedInBook": true,
+   "time": "1582～1723",
+   "era": "ea-mingqing",
+   "themes": [
+    "思想與宗教"
+   ]
+  },
+  {
+   "id": "ea-qing",
+   "line": "ea",
+   "name": "清國建立 1636、入關 1644",
+   "datedInBook": true,
+   "time": "1636～1644",
+   "era": "ea-mingqing",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "ea-opium",
+   "line": "ea",
+   "name": "鴉片戰爭、南京條約",
+   "datedInBook": true,
+   "time": "1842",
+   "era": "ea-lateqing",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-anglo-french",
+   "line": "ea",
+   "name": "英法聯軍、天津及北京條約",
+   "datedInBook": true,
+   "time": "1856～1860",
+   "era": "ea-lateqing",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-selfstrength",
+   "line": "ea",
+   "name": "總理各國事務衙門、自強運動",
+   "datedInBook": true,
+   "time": "1861",
+   "era": "ea-lateqing",
+   "themes": [
+    "近代化"
+   ]
+  },
+  {
+   "id": "ea-meiji",
+   "line": "ea",
+   "name": "日本明治維新",
+   "datedInBook": true,
+   "time": "1868",
+   "era": "ea-lateqing",
+   "themes": [
+    "近代化"
+   ]
+  },
+  {
+   "id": "ea-1894",
+   "line": "ea",
+   "name": "甲午戰爭、馬關條約",
+   "datedInBook": true,
+   "time": "1894～1895",
+   "era": "ea-lateqing",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-1898",
+   "line": "ea",
+   "name": "戊戌變法",
+   "datedInBook": true,
+   "time": "1898",
+   "era": "ea-lateqing",
+   "themes": [
+    "近代化"
+   ]
+  },
+  {
+   "id": "ea-boxer",
+   "line": "ea",
+   "name": "庚子拳亂、八國聯軍、辛丑和約",
+   "datedInBook": true,
+   "time": "1900～1901",
+   "era": "ea-lateqing",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-newpolicy",
+   "line": "ea",
+   "name": "庚子後新政、廢科舉、預備立憲",
+   "datedInBook": true,
+   "time": "1901～1911",
+   "era": "ea-lateqing",
+   "themes": [
+    "近代化"
+   ]
+  },
+  {
+   "id": "ea-qing-society",
+   "line": "ea",
+   "name": "晚清社會文化：報刊、新式教育、婦女（秋瑾）",
+   "datedInBook": false,
+   "time": "19 世紀末～1911",
+   "era": "ea-lateqing",
+   "themes": [
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "ea-1911",
+   "line": "ea",
+   "name": "同盟會 1905、辛亥革命、中華民國成立 1912",
+   "datedInBook": true,
+   "time": "1905～1912",
+   "era": "ea-roc",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "ea-yuan-sk",
+   "line": "ea",
+   "name": "袁世凱稱帝、二十一條 1915、北京政府",
+   "datedInBook": true,
+   "time": "1912～1928",
+   "era": "ea-roc",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "ea-may4",
+   "line": "ea",
+   "name": "新文化運動、五四運動",
+   "datedInBook": true,
+   "time": "1915～1919",
+   "era": "ea-roc",
+   "themes": [
+    "思想與宗教"
+   ]
+  },
+  {
+   "id": "ea-northern",
+   "line": "ea",
+   "name": "聯俄容共、北伐 1926～1928",
+   "datedInBook": true,
+   "time": "1924～1928",
+   "era": "ea-roc",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "ea-1931",
+   "line": "ea",
+   "name": "九一八事變、滿洲國、長征、西安事變 1936",
+   "datedInBook": true,
+   "time": "1931～1936",
+   "era": "ea-roc",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-1937",
+   "line": "ea",
+   "name": "七七事變、中日戰爭",
+   "datedInBook": true,
+   "time": "1937～1945",
+   "era": "ea-war",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-civil",
+   "line": "ea",
+   "name": "國共內戰",
+   "datedInBook": false,
+   "time": "1945～1949",
+   "era": "ea-war",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "ea-prc",
+   "line": "ea",
+   "name": "中華人民共和國建國、鞏固政權",
+   "datedInBook": true,
+   "time": "1949",
+   "era": "ea-modern",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "ea-leap",
+   "line": "ea",
+   "name": "大躍進 1958、文化大革命 1966～1976",
+   "datedInBook": true,
+   "time": "1958～1976",
+   "era": "ea-modern",
+   "themes": [
+    "統治與政權",
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "ea-reform",
+   "line": "ea",
+   "name": "改革開放 1978、六四天安門事件 1989",
+   "datedInBook": true,
+   "time": "1978～1989",
+   "era": "ea-modern",
+   "themes": [
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "ea-us-china",
+   "line": "ea",
+   "name": "尼克森訪北京 1972、中美建交 1979",
+   "datedInBook": true,
+   "time": "1972～1979",
+   "era": "ea-modern",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-korea-vietnam",
+   "line": "ea",
+   "name": "韓戰 1950、越戰（1961 美國派兵、1973 退出）◆",
+   "datedInBook": true,
+   "time": "1950～1973",
+   "era": "ea-modern",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-sea",
+   "line": "ea",
+   "name": "東南亞公約組織 1954、東協 1967",
+   "datedInBook": true,
+   "time": "1954～1967",
+   "era": "ea-modern",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "ea-hk",
+   "line": "ea",
+   "name": "香港 1997、澳門 1999 主權移交",
+   "datedInBook": true,
+   "time": "1997～1999",
+   "era": "ea-modern",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "w-mesopotamia",
+   "line": "w",
+   "name": "兩河流域：楔形文字、漢摩拉比法典",
+   "datedInBook": false,
+   "time": "約前 3500 起",
+   "era": "w-ancient",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "w-egypt",
+   "line": "w",
+   "name": "古埃及：象形文字、太陽曆、木乃伊",
+   "datedInBook": false,
+   "time": "約前 3100 起",
+   "era": "w-ancient",
+   "themes": [
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "w-greece",
+   "line": "w",
+   "name": "希臘城邦：雅典民主、斯巴達、奧林匹克",
+   "datedInBook": false,
+   "time": "前 8～前 5 世紀",
+   "era": "w-classic",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "w-persian",
+   "line": "w",
+   "name": "波希戰爭",
+   "datedInBook": true,
+   "time": "前 5 世紀",
+   "era": "w-classic",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "w-alexander",
+   "line": "w",
+   "name": "亞歷山大東征、希臘化",
+   "datedInBook": true,
+   "time": "前 334",
+   "era": "w-classic",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "w-rome",
+   "line": "w",
+   "name": "羅馬共和→帝國 前 27、分裂 395、西羅馬亡 476",
+   "datedInBook": true,
+   "time": "前 509～476",
+   "era": "w-classic",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "w-christian",
+   "line": "w",
+   "name": "基督教成國教 392、東西教會分裂 1054",
+   "datedInBook": true,
+   "time": "1 世紀～1054",
+   "era": "w-faith",
+   "themes": [
+    "思想與宗教"
+   ]
+  },
+  {
+   "id": "w-islam",
+   "line": "w",
+   "name": "伊斯蘭教創立 610、阿拉伯帝國擴張",
+   "datedInBook": true,
+   "time": "610～8 世紀",
+   "era": "w-faith",
+   "themes": [
+    "思想與宗教"
+   ]
+  },
+  {
+   "id": "w-byzantine",
+   "line": "w",
+   "name": "鄂圖曼滅拜占庭帝國",
+   "datedInBook": true,
+   "time": "1453",
+   "era": "w-faith",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "w-renaissance",
+   "line": "w",
+   "name": "文藝復興",
+   "datedInBook": false,
+   "time": "14～16 世紀",
+   "era": "w-early",
+   "themes": [
+    "思想與宗教",
+    "社會與文化"
+   ]
+  },
+  {
+   "id": "w-voyage",
+   "line": "w",
+   "name": "大航海：狄亞士 1488、哥倫布 1492、達伽馬 1498、麥哲倫 1519",
+   "datedInBook": true,
+   "time": "1488～1522",
+   "era": "w-early",
+   "themes": [
+    "對外交流與衝突",
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "w-colony",
+   "line": "w",
+   "name": "受殖民影響的美洲、東南亞、南亞與澳洲；東印度公司 1600、1602",
+   "datedInBook": true,
+   "time": "16～17 世紀",
+   "era": "w-early",
+   "themes": [
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "w-reformation",
+   "line": "w",
+   "name": "宗教改革：九十五條論綱 1517、耶穌會 1534",
+   "datedInBook": true,
+   "time": "1517～1534",
+   "era": "w-early",
+   "themes": [
+    "思想與宗教"
+   ]
+  },
+  {
+   "id": "w-science",
+   "line": "w",
+   "name": "科學革命：哥白尼 1543、伽利略、牛頓 1687",
+   "datedInBook": true,
+   "time": "1543～1687",
+   "era": "w-early",
+   "themes": [
+    "思想與宗教",
+    "近代化"
+   ]
+  },
+  {
+   "id": "w-enlight",
+   "line": "w",
+   "name": "啟蒙運動：洛克 1690、孟德斯鳩 1748、盧梭 1762",
+   "datedInBook": true,
+   "time": "1690～1762",
+   "era": "w-revolution",
+   "themes": [
+    "思想與宗教"
+   ]
+  },
+  {
+   "id": "w-us",
+   "line": "w",
+   "name": "波士頓茶葉事件 1773、獨立宣言 1776、美國憲法",
+   "datedInBook": true,
+   "time": "1773～1787",
+   "era": "w-revolution",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "w-france",
+   "line": "w",
+   "name": "法國大革命、人權宣言",
+   "datedInBook": true,
+   "time": "1789",
+   "era": "w-revolution",
+   "themes": [
+    "統治與政權",
+    "近代化"
+   ]
+  },
+  {
+   "id": "w-napoleon",
+   "line": "w",
+   "name": "拿破崙稱帝 1804、維也納會議 1814～1815",
+   "datedInBook": true,
+   "time": "1804～1815",
+   "era": "w-revolution",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "w-latin",
+   "line": "w",
+   "name": "拉丁美洲獨立、門羅宣言 1823",
+   "datedInBook": true,
+   "time": "1810～1825",
+   "era": "w-nation",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "w-germany",
+   "line": "w",
+   "name": "關稅同盟 1834、德法戰爭、德意志帝國 1871",
+   "datedInBook": true,
+   "time": "1834～1871",
+   "era": "w-nation",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "w-italy",
+   "line": "w",
+   "name": "青年義大利黨 1831、加里波底 1860、統一 1870",
+   "datedInBook": true,
+   "time": "1831～1870",
+   "era": "w-nation",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "w-balkan",
+   "line": "w",
+   "name": "奧匈帝國、希臘獨立 1832、巴爾幹問題",
+   "datedInBook": true,
+   "time": "1832～1908",
+   "era": "w-nation",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "w-imperial",
+   "line": "w",
+   "name": "帝國主義擴張、柏林會議瓜分非洲 1884",
+   "datedInBook": true,
+   "time": "1880 年代",
+   "era": "w-war",
+   "themes": [
+    "對外交流與衝突",
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "w-ww1",
+   "line": "w",
+   "name": "三國同盟 1882／協約 1907、塞拉耶佛事件、一次大戰",
+   "datedInBook": true,
+   "time": "1914～1918",
+   "era": "w-war",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "w-paris",
+   "line": "w",
+   "name": "十四點原則、巴黎和會 1919、國際聯盟 1920",
+   "datedInBook": true,
+   "time": "1918～1920",
+   "era": "w-war",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "w-ussr",
+   "line": "w",
+   "name": "俄國革命 1917、共產國際 1919",
+   "datedInBook": true,
+   "time": "1917～1919",
+   "era": "w-war",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "w-depression",
+   "line": "w",
+   "name": "經濟大恐慌 1929、羅斯福新政 1933",
+   "datedInBook": true,
+   "time": "1929～1933",
+   "era": "w-war",
+   "themes": [
+    "經濟與貿易"
+   ]
+  },
+  {
+   "id": "w-fascism",
+   "line": "w",
+   "name": "法西斯 1922、納粹執政 1933、排猶",
+   "datedInBook": true,
+   "time": "1922～1933",
+   "era": "w-war",
+   "themes": [
+    "統治與政權"
+   ]
+  },
+  {
+   "id": "w-ww2",
+   "line": "w",
+   "name": "姑息政策 1938、德蘇互不侵犯、二次大戰、諾曼第、原爆",
+   "datedInBook": true,
+   "time": "1939～1945",
+   "era": "w-war",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "w-un",
+   "line": "w",
+   "name": "開羅會議 1943、雅爾達會議、聯合國成立 1945",
+   "datedInBook": true,
+   "time": "1943～1945",
+   "era": "w-war",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "w-cold",
+   "line": "w",
+   "name": "冷戰：柏林封鎖 1948、柏林圍牆 1961、古巴飛彈危機 1962",
+   "datedInBook": true,
+   "time": "1948～1962",
+   "era": "w-cold",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "w-mideast",
+   "line": "w",
+   "name": "以色列建國 1948、以阿衝突、亞非會議 1955",
+   "datedInBook": true,
+   "time": "1948～1967",
+   "era": "w-cold",
+   "themes": [
+    "對外交流與衝突"
+   ]
+  },
+  {
+   "id": "w-space",
+   "line": "w",
+   "name": "太空競賽：史普尼克 1957、登月 1969",
+   "datedInBook": true,
+   "time": "1957～1969",
+   "era": "w-cold",
+   "themes": [
+    "近代化"
+   ]
+  },
+  {
+   "id": "w-1991",
+   "line": "w",
+   "name": "戈巴契夫改革 1985、柏林圍牆倒 1989、兩德統一 1990、蘇聯解體 1991",
+   "datedInBook": true,
+   "time": "1985～1991",
+   "era": "w-cold",
+   "themes": [
+    "統治與政權"
+   ]
+  }
+ ]
+}
