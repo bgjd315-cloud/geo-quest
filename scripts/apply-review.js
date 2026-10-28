@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // 把家長頁「匯出審題結果」的 JSON 寫回題庫檔（只改 status，標記問題的備註另存成 review_note）。
+// 地理題目、歷史題目、歷史故事章節（審題鍵 story:<章id>）都會寫回。
 // 用法：node scripts/apply-review.js <審題結果.json>
 const fs = require('fs');
 const path = require('path');
@@ -27,6 +28,24 @@ for (const rel of man.questions) {
   }
   if (changed) fs.writeFileSync(p, JSON.stringify(d, null, 1) + '\n');
 }
+// 歷史：題目與故事章節
+const hman = JSON.parse(fs.readFileSync(path.join(DATA, 'history/manifest.json'), 'utf8'));
+const write = (rel, list, key) => {
+  const p = path.join(DATA, 'history', rel);
+  const d = JSON.parse(fs.readFileSync(p, 'utf8'));
+  let changed = false;
+  for (const x of d[list] || []) {
+    const k = key(x), r = exp.review[k];
+    if (!r) continue;
+    seen.add(k);
+    if (r.status && r.status !== x.status) { x.status = r.status; changed = true; }
+    if (r.flag) { x.review_note = r.note || '（家長標記有問題，未附說明）'; flagged.push(`${k}：${x.review_note}`); changed = true; }
+    count[x.status] = (count[x.status] || 0) + 1;
+  }
+  if (changed) fs.writeFileSync(p, JSON.stringify(d, null, 1) + '\n');
+};
+for (const rel of hman.questions || []) write(rel, 'questions', q => q.id);
+for (const rel of hman.stories || []) write(rel, 'chapters', c => 'story:' + c.id);
 const missing = Object.keys(exp.review).filter(id => !seen.has(id));
 console.log(`已寫回：確認 ${count['確認']}、退回 ${count['退回']}、待審 ${count['待審']}`);
 if (flagged.length) console.log('家長標記的問題：\n  ' + flagged.join('\n  '));

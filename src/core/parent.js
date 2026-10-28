@@ -53,25 +53,76 @@
       .sort((a, b) => b.e.ts - a.e.ts).slice(0, 30);
     if (!rows.length) { body.innerHTML = '<p class="empty">最近沒有錯題。</p>'; return; }
     body.innerHTML = rows.map(({ k, e }) => {
-      const P = SUBJ[k].parent, q = P.questions().find(x => x.id === e.q);
+      const P = SUBJ[k].parent, q = P.find ? P.find(e.q) : P.questions().find(x => x.id === e.q);
       if (!q) return '';
       const stem = e.part != null ? q.parts[e.part].stem : q.stem;
       return `<div class="wrong-row"><small><span class="tag">${subjName(k)}</span> ${new Date(e.ts).toLocaleString('zh-TW')}・${esc(q.id)}${e.part != null ? ` 第${e.part + 1}小題` : ''}・${esc(P.tagsOf(e))}</small><div>${esc(stem)}</div></div>`;
     }).join('');
   }
 
-  // 審題：先選科目，再依單元（地理）或時代（歷史）篩選
-  let filter = { subj: 'geo', status: '待審', group: '' };
+  // 審題：先選科目，再依單元（地理）或時代（歷史）篩選；歷史另有「故事章節」
+  let filter = { subj: 'geo', status: '待審', group: '', kind: 'q' };
   function review(body) {
     const st = q => window.Loader.status(q);
+    // 題目／故事章節切換（只有提供 stories 的科目才有）
+    const kindNav = P => P.stories ? `<nav class="tabs kind-tabs"><a href="javascript:void 0" data-kind="q" class="${filter.kind !== 'story' ? 'on' : ''}">題目</a><a href="javascript:void 0" data-kind="story" class="${filter.kind === 'story' ? 'on' : ''}">故事章節（${P.stories().length} 章・待審 ${P.stories().filter(c => P.storyStatus(c) === '待審').length}）</a></nav>` : '';
+    const subjNav = () => `<nav class="tabs subj-tabs">${Object.keys(SUBJ).map(k => `<a href="javascript:void 0" data-k="${k}" class="${k === filter.subj ? 'on' : ''}">${subjName(k)}（${SUBJ[k].parent.questions().length} 題・待審 ${SUBJ[k].parent.questions().filter(q => st(q) === '待審').length}）</a>`).join('')}</nav>`;
+    const bindNav = () => {
+      body.querySelectorAll('.subj-tabs a').forEach(a => a.onclick = () => { filter = { subj: a.dataset.k, status: '待審', group: '', kind: 'q' }; draw(); });
+      body.querySelectorAll('.kind-tabs a').forEach(a => a.onclick = () => { filter = Object.assign({}, filter, { kind: a.dataset.kind, group: '', status: '待審' }); draw(); });
+    };
+
+    // 故事章節：每章整章攤開預覽（嵌入題用答題元件顯示，附答案），確認／退回存在 review 的 story:<章id>
+    const drawStories = P => {
+      const chs = P.stories();
+      const cst = c => P.storyStatus(c);
+      const groups = [...new Set(chs.map(P.storyGroupOf))];
+      const list = chs.filter(c => (!filter.status || cst(c) === filter.status) && (!filter.group || P.storyGroupOf(c) === filter.group));
+      const n = s => chs.filter(c => cst(c) === s).length;
+      const rv = c => S().review[P.storyKey(c.id)] || {};
+      body.innerHTML = `${subjNav()}${kindNav(P)}
+        <div class="rfilter">
+          <select id="fs"><option value="">全部狀態</option>${['待審', '確認', '退回'].map(s => `<option ${filter.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
+          <select id="fu"><option value="">全部館區</option>${groups.map(u => `<option ${filter.group === u ? 'selected' : ''}>${esc(u)}</option>`).join('')}</select>
+          <span>待審 ${n('待審')}・確認 ${n('確認')}・退回 ${n('退回')}</span></div>
+        <p class="hint">故事章節確認後，孩子才能在館區讀這一章（章內嵌入題跟著章節一起上架）。</p>
+        <div class="rlist">${list.map(c => `<details class="rq rs s-${cst(c)}" data-id="${esc(c.id)}"><summary><b>${esc(c.id)}</b> <span class="tag">${esc(cst(c))}</span>${rv(c).flag ? '<span class="tag flag">已標記問題</span>' : ''} ${esc(c.title || '')}</summary>
+          <div class="rmeta">${P.storyMetaHTML(c)}</div>
+          <div class="spreview"></div>
+          <div class="row"><button class="primary sone" data-id="${esc(c.id)}" data-s="確認">確認</button><button class="ghost sone" data-id="${esc(c.id)}" data-s="退回">退回</button><button class="ghost sflag" data-id="${esc(c.id)}">標記問題（立即下架）</button></div>
+          ${rv(c).note ? `<p class="note">備註：${esc(rv(c).note)}</p>` : ''}</details>`).join('') || `<p class="empty">${chs.length ? '沒有符合的章節。' : '故事還在撰寫中，目前沒有章節。'}</p>`}</div>`;
+      bindNav();
+      body.querySelector('#fs').onchange = e => { filter.status = e.target.value; draw(); };
+      body.querySelector('#fu').onchange = e => { filter.group = e.target.value; draw(); };
+      body.querySelectorAll('.sone').forEach(b => b.onclick = () => { window.Store.setReview(P.storyKey(b.dataset.id), { status: b.dataset.s }); draw(); });
+      body.querySelectorAll('.sflag').forEach(b => b.onclick = () => {
+        const note = prompt('這一章有什麼問題？（會一起存下來，方便修正）', '');
+        if (note === null) return;
+        window.Store.setReview(P.storyKey(b.dataset.id), { status: '退回', flag: true, note });
+        draw();
+      });
+      body.querySelectorAll('details.rs').forEach(d => d.addEventListener('toggle', () => {
+        const box = d.querySelector('.spreview');
+        if (!d.open || box.dataset.done) return;
+        box.dataset.done = '1';
+        const c = chs.find(x => x.id === d.dataset.id);
+        box.innerHTML = P.storyPreviewHTML(c);
+        box.querySelectorAll('.sp-q').forEach(el => {
+          const q = c.scenes[+el.dataset.k].question;
+          window.Quiz.renderItem(el, q, { mode: 'practice' }, () => { });
+          el.insertAdjacentHTML('beforeend', `<div class="answer-key"><small>${esc(q.id)}・${esc(window.Quiz.typeName(q.type))}</small>${answerKey(q)}</div>`);
+        });
+      }));
+    };
+
     const draw = () => {
       const P = SUBJ[filter.subj].parent;
+      if (filter.kind === 'story' && P.stories) return drawStories(P);
       const qs = P.questions();
       const groups = [...new Set(qs.map(P.groupOf))];
       const list = qs.filter(q => (!filter.status || st(q) === filter.status) && (!filter.group || P.groupOf(q) === filter.group));
       const n = s => qs.filter(q => st(q) === s).length;
-      const pending = k => SUBJ[k].parent.questions().filter(q => st(q) === '待審').length;
-      body.innerHTML = `<nav class="tabs subj-tabs">${Object.keys(SUBJ).map(k => `<a href="javascript:void 0" data-k="${k}" class="${k === filter.subj ? 'on' : ''}">${subjName(k)}（${SUBJ[k].parent.questions().length} 題・待審 ${pending(k)}）</a>`).join('')}</nav>
+      body.innerHTML = `${subjNav()}${kindNav(P)}
         <div class="rfilter">
           <select id="fs"><option value="">全部狀態</option>${['待審', '確認', '退回'].map(s => `<option ${filter.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
           <select id="fu"><option value="">${filter.subj === 'history' ? '全部時代' : '全部單元'}</option>${groups.map(u => `<option ${filter.group === u ? 'selected' : ''}>${esc(u)}</option>`).join('')}</select>
@@ -84,7 +135,7 @@
           <div class="rpreview" data-id="${q.id}"></div>
           <div class="row"><button class="primary one" data-id="${q.id}" data-s="確認">確認</button><button class="ghost one" data-id="${q.id}" data-s="退回">退回</button><button class="ghost flagbtn" data-id="${q.id}">標記問題（立即下架）</button></div>
           ${S().review[q.id] && S().review[q.id].note ? `<p class="note">備註：${esc(S().review[q.id].note)}</p>` : ''}</details>`).join('') || `<p class="empty">${qs.length ? '沒有符合的題目。' : `${subjName(filter.subj)}目前還沒有題目。`}</p>`}</div>`;
-      body.querySelectorAll('.subj-tabs a').forEach(a => a.onclick = () => { filter = { subj: a.dataset.k, status: '待審', group: '' }; draw(); });
+      bindNav();
       body.querySelector('#fs').onchange = e => { filter.status = e.target.value; draw(); };
       body.querySelector('#fu').onchange = e => { filter.group = e.target.value; draw(); };
       body.querySelector('#all').onchange = e => body.querySelectorAll('.sel').forEach(c => c.checked = e.target.checked);

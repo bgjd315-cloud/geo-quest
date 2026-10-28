@@ -1,4 +1,4 @@
-// 歷史模組《時光檔案館》：見習檔案員選角、大廳（三個館區）、館區頁、時間長廊、整理檔案（作答）。
+// 歷史模組《時光檔案館》：見習檔案員選角、大廳（三個館區）、館區頁、時間長廊、整理檔案（作答）、故事閱讀（#/h/story/<章id>）、館藏卡收藏冊（#/h/cards）。
 // 網址都在 #/h/ 底下，不和地理的 #/unit/…、#/play/… 衝突。
 (function () {
   const { esc, app } = window.UI;
@@ -44,10 +44,12 @@
       <section class="wing-list">${H().lines.map(l => {
         const eras = erasOfLine(l.id), evs = H().events.filter(e => e.line === l.id);
         const n = live.filter(q => eras.some(e => e.id === q.era)).length;
-        return `<a class="wing-card" href="#/h/wing/${l.id}"><img src="${H().img(WINGS[l.id])}" alt=""><div><b>${esc(l.wing)}</b><span>${esc(l.name)}・${eras.length} 個時代・${evs.length} 份檔案</span><small>${n ? `${n} 題可整理` : '籌備中'}</small></div></a>`;
+        return `<a class="wing-card" href="#/h/wing/${l.id}"><img src="${H().img(WINGS[l.id])}" alt=""><div><b>${esc(l.wing)}</b><span>${esc(l.name)}・${eras.length} 個時代・${evs.length} 份檔案</span><small>${n ? `${n} 題可整理` : '籌備中'}${storyCount(l.id)}</small></div></a>`;
       }).join('')}</section>
       <h2 class="sec">時間長廊</h2>
       <a class="corridor-card" href="#/h/timeline"><img src="${H().img('hist_corridor')}" alt="時間長廊"><span>三排書架並排：臺灣、東亞、世界。可以縮放，看看同一個時候各地發生什麼事。</span></a>
+      <h2 class="sec">館藏卡收藏冊</h2>
+      <a class="album-link" href="#/h/cards"><b>打開收藏冊</b><span>讀完故事會解鎖館藏卡，已收藏 ${myCards().length} 張</span></a>
     </div>`;
   };
 
@@ -58,6 +60,8 @@
     app().innerHTML = `${topbar('#/h')}<div class="page wing">
       <div class="cover"><img src="${H().img(WINGS[id])}" alt=""><h1>${esc(line.wing)}<small>${esc(line.name)}</small></h1></div>
       ${aban(`${esc(line.wing)}有 ${erasOfLine(id).length} 個時代的櫃子。每個櫃子的檔案歸好位，長廊就亮一段。`)}
+      ${storySection(id)}
+      <h2 class="sec">時代櫃子</h2>
       <div class="era-list">${erasOfLine(id).map(era => {
         const n = H().liveOfEra(era.id).length, r = P().levels[era.id];
         return `<details class="era" ${n ? 'open' : ''}><summary><b>${esc(era.name)}</b><span class="era-time">${esc(era.time)}</span><span class="tag soft">${esc(era.lessons)}</span>${n ? `<span class="tag">${n} 題</span>` : '<span class="tag wait">籌備中</span>'}</summary>
@@ -108,6 +112,225 @@
       <div class="row"><a class="primary btn" href="${back}">回到${esc(line.wing)}</a></div></div>`;
   };
 
+  // ---------- 故事 ----------
+  // 每章：阿斑叼來檔案 → 開場 → 時代選擇 → 場景＋嵌入題 → 時代錯置偵探 → 虛構與史實 → 結尾 → 解鎖館藏卡
+  const eraName = id => (H().eraById[id] || { name: id || '—' }).name;
+  const paras = s => String(s || '').split(/\n+/).map(t => t.trim()).filter(Boolean).map(t => `<p>${esc(t)}</p>`).join('');
+  const storyDone = id => !!(P().stories && P().stories[id] && P().stories[id].done);
+  const myCards = () => P().cards || [];
+  const unlockOf = ch => (ch.unlock && ch.unlock.length ? ch.unlock : ch.eventIds || []).filter(id => H().eventById[id]);
+  function storyCount(line) {
+    const chs = H().chaptersOfLine(line), n = chs.filter(H().chapterPlayable).length;
+    return chs.length ? `・故事 ${n ? `${n} 章可讀` : '待審中'}` : '';
+  }
+  function storyProgressText() {
+    const chs = H().chapters;
+    if (!chs.length) return '故事還在撰寫中。';
+    const done = chs.filter(c => storyDone(c.id));
+    return `共 ${chs.length} 章，家長確認 ${chs.filter(H().chapterPlayable).length} 章，孩子讀完 ${done.length} 章${done.length ? `（${done.map(c => esc(c.id)).join('、')}）` : ''}；館藏卡已收藏 ${myCards().length} 張。`;
+  }
+
+  // 館區頁的「故事」區塊
+  function storySection(line) {
+    const info = H().storyLines[line], chs = H().chaptersOfLine(line);
+    const title = info && info.title ? `故事・${esc(info.title)}` : '故事';
+    if (!chs.length) return `<h2 class="sec">${title}</h2><p class="hint story-empty">這一館的故事還在撰寫中。</p>`;
+    return `<h2 class="sec">${title}</h2><div class="story-list">${chs.map(ch => {
+      const ok = H().chapterPlayable(ch), done = storyDone(ch.id);
+      const inner = `<span class="st-no">${esc(ch.id)}</span><span class="st-main"><b>${esc(ch.title || ch.id)}</b><small>${esc(eraName(ch.era))}</small></span>${done ? '<span class="st-badge done">✓ 讀完</span>' : ok ? '<span class="st-badge go">開始讀</span>' : '<span class="st-badge lock">待審中</span>'}`;
+      return ok ? `<a class="st-card${done ? ' done' : ''}" href="#/h/story/${encodeURIComponent(ch.id)}">${inner}</a>` : `<div class="st-card locked" aria-disabled="true">${inner}</div>`;
+    }).join('')}</div>`;
+  }
+
+  views.story = id => {
+    const ch = H().chapterById[id];
+    if (!ch) return views.hall();
+    const line = H().lineById[ch._line] || { wing: '館區', id: ch._line };
+    const back = '#/h/wing/' + line.id;
+    if (!H().chapterPlayable(ch)) {
+      app().innerHTML = `${topbar(back)}<div class="page story"><h1>${esc(ch.title || ch.id)}</h1>${aban('這份檔案還在等家長審過，審好之後就能讀了。', 'hint')}<div class="row"><a class="primary btn" href="${back}">回到${esc(line.wing)}</a></div></div>`;
+      return;
+    }
+    const dt = ch.detective && Array.isArray(ch.detective.sentences) && ch.detective.sentences.length ? ch.detective : null;
+    const steps = [['doc', '檔案'], ['opening', '開場'], ['era', '歸檔'],
+      ...ch.scenes.map((_, k) => ['scene' + k, '場景 ' + (k + 1)]),
+      ...(dt ? [['detective', '偵探']] : []), ...(ch.factFiction.length ? [['ff', '史實']] : []),
+      ['ending', '結尾'], ['unlock', '館藏卡']];
+    const score = { got: 0, total: 0 };
+    let at = 0;
+
+    app().innerHTML = `${topbar(back)}<div class="page story">
+      <header class="st-head"><small>${esc(line.wing)}・${esc(ch.id)}・${esc(eraName(ch.era))}</small><h1>${esc(ch.title || ch.id)}</h1>
+        <ol class="st-dots">${steps.map(([, n], i) => `<li data-i="${i}" title="${esc(n)}"></li>`).join('')}</ol><div class="st-step"></div></header>
+      <div class="st-stage"></div>
+      <div class="st-nav"><button class="primary st-next" disabled>繼續</button></div></div>`;
+    const stage = app().querySelector('.st-stage'), next = app().querySelector('.st-next');
+    const ready = label => { next.disabled = false; if (label) next.textContent = label; };
+
+    function show() {
+      const [k, name] = steps[at];
+      app().querySelectorAll('.st-dots li').forEach((li, i) => li.className = i < at ? 'past' : i === at ? 'now' : '');
+      app().querySelector('.st-step').textContent = `${at + 1} / ${steps.length}・${name}`;
+      next.disabled = true; next.textContent = '繼續';
+      next.parentNode.hidden = k === 'unlock';
+      window.scrollTo(0, 0);
+      if (k === 'doc') {
+        stage.innerHTML = `${aban(`我從書架縫裡叼來一份被時間蛀蟲咬過的檔案。讀讀看，它是哪個年代的？`, 'hint')}
+          <div class="st-doc"><span class="card-kicker">檔案</span><p>${esc(ch.doc || '一份沒有標年代的舊檔案')}</p></div>`;
+        ready('打開檔案');
+      } else if (k === 'opening') {
+        stage.innerHTML = `<article class="st-text">${paras(ch.opening)}</article>`;
+        ready('把它歸檔');
+      } else if (k === 'era') eraStep();
+      else if (k.startsWith('scene')) sceneStep(+k.slice(5));
+      else if (k === 'detective') detectiveStep();
+      else if (k === 'ff') ffStep();
+      else if (k === 'ending') {
+        stage.innerHTML = `<article class="st-text st-ending">${paras(ch.ending)}</article>${score.total ? `<p class="hint">這一章的嵌入題答對 ${score.got} / ${score.total}。答錯的事件已收進「待修復」，之後會換一題再出現。</p>` : ''}`;
+        ready('收進檔案館');
+      } else if (k === 'unlock') unlockStep();
+    }
+    next.onclick = () => { if (at < steps.length - 1) { at++; show(); } };
+
+    // 時代選擇：每個選項都有回饋，選對才能繼續
+    function eraStep() {
+      const ec = ch.eraChoice || { options: [] };
+      stage.innerHTML = `<div class="item st-era"><div class="stem">${esc(ec.prompt || '這份檔案應該放進哪一個時代的櫃子？')}</div>
+        <div class="opts">${window.Quiz.shuffle(ec.options.map((o, i) => i)).map(i => `<button class="opt" data-i="${i}">${esc(ec.options[i].text)}</button>`).join('')}</div><div class="feedback"></div></div>`;
+      stage.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+        const o = ec.options[+b.dataset.i];
+        b.disabled = true;
+        b.classList.add(o.correct ? 'right' : 'wrong');
+        stage.querySelector('.feedback').innerHTML = `<div class="explain ${o.correct ? 'good' : 'bad'}"><div class="verdict">${o.correct ? '歸檔正確' : '這個櫃子不對，再找找線索'}</div><p>${esc(o.feedback || '')}</p></div>`;
+        if (o.correct) { stage.querySelectorAll('.opt').forEach(x => x.disabled = true); ready(); }
+      });
+    }
+
+    // 場景：故事段落＋嵌入題（共用答題元件；記進歷史作答紀錄，答錯的事件進錯題回收）
+    function sceneStep(k) {
+      const s = ch.scenes[k], q = s.question;
+      stage.innerHTML = `<article class="st-text">${paras(s.text)}</article>${q ? '<div class="st-qhead">檔案員的判斷</div><div class="item st-q"></div>' : ''}`;
+      if (!q) { ready(); return; }
+      window.Quiz.renderItem(stage.querySelector('.st-q'), q, { mode: 'practice' }, r => {
+        const T = window.Store.H;
+        if (q.parts) r.parts.forEach((ok, j) => T.record({ q: q.id, part: j, ok, c: q.parts[j].concepts || q.concepts, m: 'story' }));
+        else T.record({ q: q.id, ok: r.ok, c: q.concepts, m: 'story' });
+        score.total += 1; if (r.ok) score.got += 1;
+        ready(r.ok ? '繼續故事' : '看懂了，繼續故事');
+      });
+    }
+
+    // 時代錯置偵探：點出不屬於這個時代的句子
+    function detectiveStep() {
+      const wrong = new Set((dt.wrong || []).map(Number));
+      const picked = new Set();
+      stage.innerHTML = `${aban(esc(dt.intro || '這段文字裡混進了不屬於這個時代的東西，把它們找出來！'), 'hint')}
+        <p class="hint">點選你覺得「時代不對」的句子（共 ${wrong.size} 處），再按「檢查」。</p>
+        <div class="dt-box">${dt.sentences.map((t, i) => `<button class="dt-s" data-i="${i}">${esc(t)}</button>`).join('')}</div>
+        <div class="row"><button class="primary dt-check">檢查</button></div><div class="dt-result"></div>`;
+      stage.querySelectorAll('.dt-s').forEach(b => b.onclick = () => {
+        const i = +b.dataset.i;
+        picked.has(i) ? picked.delete(i) : picked.add(i);
+        b.classList.toggle('on', picked.has(i));
+      });
+      stage.querySelector('.dt-check').onclick = e => {
+        e.target.remove();
+        let found = 0;
+        stage.querySelectorAll('.dt-s').forEach(b => {
+          const i = +b.dataset.i, w = wrong.has(i), p = picked.has(i);
+          b.disabled = true;
+          b.classList.add(w && p ? 'hit' : w ? 'miss' : p ? 'false' : 'plain');
+          if (w && p) found++;
+        });
+        const extra = [...picked].filter(i => !wrong.has(i)).length;
+        stage.querySelector('.dt-result').innerHTML = `<div class="explain ${found === wrong.size && !extra ? 'good' : 'bad'}"><div class="verdict">找到 ${found} / ${wrong.size} 處${extra ? `，另有 ${extra} 句其實沒有問題` : ''}</div>
+          <ul class="dt-explain">${[...wrong].sort((a, b) => a - b).map(i => `<li><b>「${esc(dt.sentences[i] || '')}」</b><br>${esc((dt.explain || {})[i] || '')}</li>`).join('')}</ul></div>`;
+        ready();
+      };
+    }
+
+    // 虛構與史實：先自己分類，再揭曉並看課本怎麼說
+    function ffStep() {
+      const items = ch.factFiction, pick = {};
+      stage.innerHTML = `${aban('故事裡有真的歷史，也有編出來的人物和情節。你分得出來嗎？')}
+        <div class="ff-list">${items.map((it, i) => `<div class="ff-row" data-i="${i}"><p>${esc(it.text)}</p><div class="ff-btns"><button class="ff-b" data-v="1">史實</button><button class="ff-b" data-v="0">虛構</button></div><div class="ff-note"></div></div>`).join('')}</div>
+        <div class="row"><button class="primary ff-reveal" disabled>揭曉</button></div>`;
+      const reveal = stage.querySelector('.ff-reveal');
+      stage.querySelectorAll('.ff-row').forEach(row => row.querySelectorAll('.ff-b').forEach(b => b.onclick = () => {
+        pick[row.dataset.i] = b.dataset.v === '1';
+        row.querySelectorAll('.ff-b').forEach(x => x.classList.toggle('on', x === b));
+        reveal.disabled = Object.keys(pick).length < items.length;
+      }));
+      reveal.onclick = () => {
+        reveal.remove();
+        let ok = 0;
+        stage.querySelectorAll('.ff-row').forEach(row => {
+          const it = items[+row.dataset.i], right = pick[row.dataset.i] === !!it.fact;
+          if (right) ok++;
+          row.classList.add(right ? 'good' : 'bad');
+          row.querySelectorAll('.ff-b').forEach(x => x.disabled = true);
+          row.querySelector('.ff-note').innerHTML = `<b>${it.fact ? '史實' : '虛構'}</b>${right ? '' : '（你選錯了）'}：${esc(it.note || '')}`;
+        });
+        stage.insertAdjacentHTML('beforeend', `<p class="hint">分對 ${ok} / ${items.length} 條。</p>`);
+        ready();
+      };
+    }
+
+    // 解鎖館藏卡：記下讀完與收藏
+    function unlockStep() {
+      const ids = unlockOf(ch);
+      const have = new Set(myCards());
+      const fresh = ids.filter(x => !have.has(x));
+      const stories = Object.assign({}, P().stories, { [ch.id]: { done: true, ts: Date.now(), got: score.got, total: score.total } });
+      window.Store.H.set({ stories, cards: myCards().concat(fresh) });
+      stage.innerHTML = `${aban(fresh.length ? `這份檔案歸檔完成！${fresh.length} 張館藏卡收進你的收藏冊了。` : '這份檔案歸檔完成！這幾張館藏卡你之前已經收藏過了。', 'happy')}
+        <div class="unlock-cards">${ids.map(x => `<div class="unlock-card${fresh.includes(x) ? ' new' : ''}">${fresh.includes(x) ? '<span class="new-tag">新收藏</span>' : ''}${cardHTML(x)}</div>`).join('')}</div>
+        <div class="row"><a class="primary btn" href="${back}">回到${esc(line.wing)}</a><a class="ghost btn" href="#/h/cards">看收藏冊</a></div>`;
+    }
+
+    show();
+  };
+
+  // 館藏卡收藏冊：依三條線分組；沒解鎖的顯示空卡位
+  views.cards = () => {
+    const have = new Set(myCards());
+    const groups = H().lines.map(l => ({ l, evs: H().events.filter(e => e.line === l.id && (H().cards[e.id] || have.has(e.id))).sort((a, b) => have.has(b.id) - have.has(a.id)) }));
+    const total = groups.reduce((s, g) => s + g.evs.length, 0);
+    app().innerHTML = `${topbar('#/h')}<div class="page album"><h1>館藏卡收藏冊</h1>
+      ${aban(have.size ? `你已經收藏了 ${have.size} 張館藏卡。點一張卡就能再讀一次。` : '收藏冊還是空的。到館區讀完一章故事，就能解鎖那個時代的館藏卡。', have.size ? 'happy' : 'idle')}
+      <p class="hint">已收藏 ${have.size} / ${total} 張</p>
+      ${groups.map(({ l, evs }) => `<h2 class="sec">${esc(l.wing)}<small>　${evs.filter(e => have.has(e.id)).length} / ${evs.length}</small></h2>
+        <div class="album-grid">${evs.map(e => have.has(e.id)
+          ? `<button class="cc on" data-id="${esc(e.id)}"><b>${esc((H().cards[e.id] || {}).title || e.name)}</b><small>${esc(e.time)}</small></button>`
+          : `<div class="cc off"><b>？</b><small>${esc(eraName(e.era))}</small></div>`).join('')}</div>`).join('')}
+      <div class="cc-sheet" hidden></div></div>`;
+    const sheet = app().querySelector('.cc-sheet');
+    app().querySelectorAll('.cc.on').forEach(b => b.onclick = () => {
+      sheet.hidden = false;
+      sheet.innerHTML = `<button class="ghost cc-close" aria-label="關閉">×</button>${cardHTML(b.dataset.id)}`;
+      sheet.querySelector('.cc-close').onclick = () => { sheet.hidden = true; };
+    });
+  };
+
+  // 家長頁：一章全部內容一次攤開（嵌入題的位置留給 parent.js 用答題元件畫）
+  function storyPreviewHTML(ch) {
+    const len = s => String(s || '').replace(/\s/g, '').length;
+    const ec = ch.eraChoice || { options: [] }, dt = ch.detective || { sentences: [], wrong: [] };
+    const wrong = new Set((dt.wrong || []).map(Number));
+    return `<div class="sp">
+      <h4>檔案</h4><p>${esc(ch.doc || '—')}</p>
+      <h4>開場 <small>${len(ch.opening)} 字</small></h4><div class="sp-text">${paras(ch.opening)}</div>
+      <h4>時代選擇</h4><p>${esc(ec.prompt || '')}</p>
+      <ul class="sp-opts">${ec.options.map(o => `<li class="${o.correct ? 'ok' : ''}">${o.correct ? '✓ ' : ''}${esc(o.text)}<small>（${esc(eraName(o.era))}）</small><br><span class="hint">${esc(o.feedback || '')}</span></li>`).join('')}</ul>
+      ${ch.scenes.map((s, k) => `<h4>場景 ${k + 1} <small>${len(s.text)} 字</small></h4><div class="sp-text">${paras(s.text)}</div>${s.question ? `<div class="sp-q" data-k="${k}"></div>` : '<p class="hint">（沒有嵌入題）</p>'}`).join('')}
+      <h4>時代錯置偵探</h4><p>${esc(dt.intro || '')}</p>
+      <ol class="sp-dt">${(dt.sentences || []).map((t, i) => `<li class="${wrong.has(i) ? 'bad' : ''}">${esc(t)}${wrong.has(i) ? `<br><span class="hint">錯置：${esc((dt.explain || {})[i] || '（缺說明）')}</span>` : ''}</li>`).join('')}</ol>
+      <h4>虛構與史實</h4><ul class="sp-ff">${ch.factFiction.map(it => `<li><span class="tag ${it.fact ? '' : 'soft'}">${it.fact ? '史實' : '虛構'}</span> ${esc(it.text)}<br><span class="hint">${esc(it.note || '')}</span></li>`).join('')}</ul>
+      <h4>結尾 <small>${len(ch.ending)} 字</small></h4><div class="sp-text">${paras(ch.ending)}</div>
+      <h4>解鎖館藏卡</h4><p>${unlockOf(ch).map(id => esc(H().eventById[id].name)).join('、') || '—'}</p></div>`;
+  }
+
+
   // ---------- 家長頁的歷史部分 ----------
   const parent = {
     progressHTML() {
@@ -115,12 +338,20 @@
       return `<table class="plist"><thead><tr><th>館區／時代</th><th>可用題數</th><th>最佳</th><th>最近</th></tr></thead><tbody>
         ${H().lines.map(l => `<tr class="uh"><th colspan="4">${esc(l.wing)}</th></tr>` + erasOfLine(l.id).map(e => { const r = P().levels[e.id]; return `<tr><td>${esc(e.name)}</td><td>${H().liveOfEra(e.id).length}</td><td>${r ? Math.round(r.best * 100) + '%' : '—'}</td><td>${r ? new Date(r.ts).toLocaleDateString('zh-TW') : '—'}</td></tr>`; }).join('')).join('')}
         </tbody></table>
+        <h3>故事</h3><p>${storyProgressText()}</p>
         <h3>待修復檔案（錯題回收中）</h3><p>${Object.keys(P().recycle).map(id => esc((H().eventById[id] || H().eraById[id] || { name: id }).name)).join('、') || '沒有'}</p>`;
     },
     log: () => P().log,
     tagsOf: e => (e.c || []).map(id => (H().eventById[id] || H().eraById[id] || { name: id }).name).join('、'),
     questions: () => H().questions,
     groupOf: q => q.unit,
+    find: id => H().anyQ(id),
+    stories: () => H().chapters,
+    storyKey: id => H().storyKey(id),
+    storyStatus: ch => H().chapterStatus(ch),
+    storyGroupOf: ch => (H().lineById[ch._line] || { wing: '其他' }).wing,
+    storyMetaHTML: ch => `${esc(ch.id)}｜${esc(eraName(ch.era))}｜主題：${esc([].concat(ch.themes || []).join('、'))}｜能力：${esc([].concat(ch.skills || []).join('、'))}｜事件：${esc((ch.eventIds || []).map(id => (H().eventById[id] || { name: id }).name).join('、') || '—')}`,
+    storyPreviewHTML,
     metaHTML: q => `時代：${esc(q.unit)}｜主題：${esc([].concat(q.theme || []).join('、'))}｜能力：${esc([].concat(q.skill || []).join('、'))}｜事件：${esc((q.eventIds || []).map(id => (H().eventById[id] || { name: id }).name).join('、') || '—')}`
   };
 
@@ -129,6 +360,8 @@
     if (!P().hero) return views.hero();
     if (a === 'wing') return views.wing(b);
     if (a === 'timeline') return views.timeline();
+    if (a === 'story') return views.story(b);
+    if (a === 'cards') return views.cards();
     if (a === 'play') return views.play(b, c === 'sim' ? 'sim' : 'practice');
     return views.hall();
   }

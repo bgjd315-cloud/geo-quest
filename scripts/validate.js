@@ -236,7 +236,6 @@ function validate() {
       for (const t of e.themes || []) if (!THEMES.includes(t)) err(id, `主題「${t}」不在六大主題內`);
     }
     for (const e of hev.events || []) for (const r of e.related || []) if (!events.has(r)) err('history/' + e.id, `相關事件「${r}」不存在`);
-    for (const rel of hman.stories || []) readJSON('history/' + rel);
     for (const rel of hman.cards || []) {
       const f = readJSON('history/' + rel);
       for (const [k, c] of Object.entries((f && f.cards) || {})) {
@@ -274,7 +273,125 @@ function validate() {
         checkBody(id, q);
       }
     }
-    console.log(`歷史：${eras.size} 個分期、${events.size} 件事件、${hn} 題`);
+    // 故事章節（docs/歷史故事指引.md）：結構問題是錯誤；字數、句數等風格問題是警告
+    const OUTLINE = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T7b', 'T8', 'I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10'];
+    const LINE_OF = { F: 'tw', T: 'ea', I: 'w' };
+    const len = s => String(s || '').replace(/\s/g, '').length;
+    const cardIds = new Set();
+    for (const rel of hman.cards || []) { const f = readJSON('history/' + rel); for (const k of Object.keys((f && f.cards) || {})) cardIds.add(k); }
+    const seenCh = new Set();
+    let sn = 0, sq = 0;
+    for (const rel of hman.stories || []) {
+      const f = readJSON('history/' + rel);
+      if (!f) continue;
+      const fid = 'history/' + rel;
+      if (!lineIds.has(f.line)) err(fid, `line「${f.line}」不是 tw／ea／w`);
+      if (!Array.isArray(f.chapters)) { err(fid, '缺少 chapters 陣列'); continue; }
+      for (const ch of f.chapters) {
+        sn++;
+        const id = 'story:' + (ch && ch.id || '(沒有 id)');
+        if (!ch || !ch.id) { err(fid, '有章節沒有 id'); continue; }
+        if (seenCh.has(ch.id)) err(id, '章節 id 重複');
+        seenCh.add(ch.id);
+        if (!OUTLINE.includes(ch.id)) err(id, `章節 id 不在故事大綱（${OUTLINE.join('、')}）`);
+        else if (LINE_OF[ch.id[0]] !== f.line) err(id, `章節屬於 ${LINE_OF[ch.id[0]]} 線，卻寫在 line 為「${f.line}」的檔案`);
+        for (const k of ['title', 'era', 'doc', 'opening', 'ending']) if (!String(ch[k] || '').trim()) err(id, `缺少欄位 ${k}`);
+        if (ch.status != null && !STATUS.has(ch.status)) err(id, `status 必須是 待審／確認／退回，目前是「${ch.status}」`);
+        if (ch.era && !eras.has(ch.era)) err(id, `era「${ch.era}」不在 events.json 的分期`);
+        if (!Array.isArray(ch.eventIds) || !ch.eventIds.length) err(id, 'eventIds 不可為空');
+        for (const e of ch.eventIds || []) if (!events.has(e)) err(id, `事件「${e}」不在 events.json`);
+        for (const t of list(ch.themes)) if (!THEMES.includes(t)) err(id, `主題「${t}」不在六大主題內`);
+        for (const s of list(ch.skills)) if (!skills.has(s)) err(id, `能力「${s}」不在 events.json 的能力清單`);
+        if (!list(ch.themes).length || !list(ch.skills).length) warn(id, 'themes、skills 要標');
+        for (const e of ch.unlock || []) {
+          if (!events.has(e)) err(id, `解鎖的館藏卡「${e}」不在 events.json`);
+          else if (!cardIds.has(e)) warn(id, `解鎖的事件「${e}」還沒有館藏卡內容`);
+        }
+        if (!Array.isArray(ch.unlock) || !ch.unlock.length) warn(id, 'unlock 沒填，會改用 eventIds');
+        // 開場：250–600 字之外是錯誤，300–500 字之外是警告
+        const ol = len(ch.opening);
+        if (ch.opening && (ol < 250 || ol > 600)) err(id, `開場 ${ol} 字，必須在 250–600 字之間（建議 300–500）`);
+        else if (ch.opening && (ol < 300 || ol > 500)) warn(id, `開場 ${ol} 字，建議 300–500 字`);
+        if (ch.ending && (len(ch.ending) < 100 || len(ch.ending) > 250)) warn(id, `結尾 ${len(ch.ending)} 字，建議 100–250 字`);
+        // 時代選擇
+        const ec = ch.eraChoice;
+        if (!ec || !Array.isArray(ec.options) || ec.options.length < 2) err(id, 'eraChoice 至少要 2 個選項');
+        else {
+          const right = ec.options.filter(o => o.correct === true);
+          if (right.length !== 1) err(id, `eraChoice 必須剛好一個正確選項，目前 ${right.length} 個`);
+          for (const o of ec.options) {
+            if (!o.text || !o.feedback) err(id, 'eraChoice 每個選項都要有 text 和 feedback');
+            if (o.era && !eras.has(o.era)) err(id, `eraChoice 選項的 era「${o.era}」不在分期`);
+          }
+          if (right.length === 1 && right[0].era && right[0].era !== ch.era) warn(id, `eraChoice 正解的 era（${right[0].era}）和章節 era（${ch.era}）不同`);
+          const L = ec.options.map(o => len(o.text)), ri = ec.options.indexOf(right[0]);
+          if (ri >= 0 && L[ri] > Math.max(...L.filter((_, i) => i !== ri)) * 1.3 && L.length > 1) warn(id, 'eraChoice 正解明顯比其他選項長');
+        }
+        // 場景與嵌入題（嵌入題比照題庫題目檢查；status 跟著章節，source 可省略）
+        const sc = ch.scenes;
+        if (!Array.isArray(sc) || sc.length < 2 || sc.length > 5) err(id, `scenes 必須 2–5 段，目前 ${Array.isArray(sc) ? sc.length : 0} 段`);
+        else if (sc.length < 3 || sc.length > 4) warn(id, `scenes ${sc.length} 段，指引建議 3–4 段`);
+        (Array.isArray(sc) ? sc : []).forEach((s, k) => {
+          const sid = `${id}#場景${k + 1}`;
+          if (!s || !String(s.text || '').trim()) err(sid, '缺少故事段落 text');
+          else if (len(s.text) < 200 || len(s.text) > 400) warn(sid, `段落 ${len(s.text)} 字，建議 200–400 字`);
+          const q = s && s.question;
+          if (!q || typeof q !== 'object') { err(sid, '每段都要有嵌入題 question'); return; }
+          sq++;
+          const qid = q.id || sid;
+          if (!q.id) err(sid, '嵌入題沒有 id');
+          else if (q.id !== `s-${ch.id}-${k + 1}`) warn(qid, `嵌入題 id 建議用 s-${ch.id}-${k + 1}`);
+          if (q.id && seenId.has(q.id)) err(qid, 'id 重複（地理、歷史題目與故事嵌入題的 id 都不可重複）');
+          if (q.id) seenId.add(q.id);
+          for (const k2 of ['type', 'stem', 'theme', 'era', 'skill']) if (!list(q[k2]).length) err(qid, `缺少欄位 ${k2}`);
+          if (!TYPES.has(q.type)) err(qid, `未知題型 ${q.type}`);
+          if (q.type === 'click' || q.figure) err(qid, '嵌入題不要用圖上點選或圖表');
+          if (q.status && !STATUS.has(q.status)) err(qid, `status 必須是 待審／確認／退回`);
+          for (const t of list(q.theme)) if (!THEMES.includes(t)) err(qid, `theme「${t}」不在六大主題內`);
+          if (q.era && !eras.has(q.era)) err(qid, `era「${q.era}」不在 events.json 的分期`);
+          if (q.level && q.level !== q.era) warn(qid, `level（${q.level}）應等於 era（${q.era}）`);
+          for (const s2 of list(q.skill)) if (!skills.has(s2)) err(qid, `skill「${s2}」不在 events.json 的能力清單`);
+          if (!Array.isArray(q.eventIds) || !q.eventIds.length) warn(qid, 'eventIds 沒填，錯題回收會改用分期');
+          for (const e of q.eventIds || []) if (!events.has(e)) err(qid, `事件「${e}」不在 events.json`);
+          for (const k2 of q.kp || []) if (!kps.has(k2)) err(qid, `知識點「${k2}」不在 kp.json`);
+          if (!q.kp) warn(qid, '沒有標 kp（會考知識點）');
+          const key = (q.stem || '').replace(/\s/g, '') + JSON.stringify(q.figure || null) + JSON.stringify(q.parts ? q.parts.map(p => p.stem) : null);
+          if (seenStem.has(key)) err(qid, `題幹與 ${seenStem.get(key)} 一字不差`);
+          seenStem.set(key, qid);
+          checkBody(qid, q);
+        });
+        // 時代錯置偵探
+        const dt = ch.detective;
+        if (!dt || !Array.isArray(dt.sentences) || !dt.sentences.length) err(id, '缺少 detective.sentences');
+        else {
+          const n = dt.sentences.length, w = dt.wrong;
+          if (n < 6 || n > 10) warn(id, `detective ${n} 句，指引建議 6–10 句`);
+          if (!Array.isArray(w) || !w.length) err(id, 'detective.wrong 不可為空');
+          else {
+            if (w.length < 2 || w.length > 3) warn(id, `detective 有 ${w.length} 處錯置，指引建議 2–3 處`);
+            if (new Set(w).size !== w.length) err(id, 'detective.wrong 有重複');
+            for (const i of w) {
+              if (!Number.isInteger(i) || i < 0 || i >= n) err(id, `detective.wrong 的 ${i} 超出句子範圍 0～${n - 1}`);
+              else if (!String((dt.explain || {})[i] || '').trim()) err(id, `detective 第 ${i} 句（從 0 起算）缺少 explain`);
+            }
+          }
+          for (const k of Object.keys(dt.explain || {})) if (!(w || []).includes(+k)) warn(id, `detective.explain 的 ${k} 不在 wrong 裡`);
+        }
+        // 虛構與史實
+        const ff = ch.factFiction;
+        if (!Array.isArray(ff) || !ff.length) err(id, '缺少 factFiction');
+        else {
+          if (!ff.some(x => x.fact === true) || !ff.some(x => x.fact === false)) err(id, 'factFiction 史實（fact: true）和虛構（fact: false）都要有');
+          for (const x of ff) {
+            if (!x.text || typeof x.fact !== 'boolean') err(id, 'factFiction 每條都要有 text，fact 必須是 true／false');
+            if (!x.note) warn(id, `factFiction「${x.text}」缺少 note`);
+          }
+          if (ff.length < 4 || ff.length > 6) warn(id, `factFiction ${ff.length} 條，指引建議 4–6 條`);
+        }
+      }
+    }
+    const missingCh = OUTLINE.filter(c => !seenCh.has(c));
+    console.log(`歷史：${eras.size} 個分期、${events.size} 件事件、${hn} 題；故事 ${sn} 章（嵌入題 ${sq} 題）${missingCh.length ? `，尚未寫：${missingCh.join('、')}` : ''}`);
   }
 
   return report(all);

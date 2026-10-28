@@ -3,7 +3,8 @@
 // 單一 HTML 版會把所有資料檔放進 window.GEO_DATA、插畫放進 window.GEO_IMAGES；開發版用 fetch 讀 data/。
 (function () {
   const KEY = 'geoquest.v1';
-  const blankHistory = () => ({ hero: null, log: [], levels: {}, recycle: {}, introSeen: false });
+  // stories：故事章節完成紀錄 {章id: {done, ts}}；cards：故事解鎖的館藏卡（事件 id）
+  const blankHistory = () => ({ hero: null, log: [], levels: {}, recycle: {}, introSeen: false, stories: {}, cards: [] });
   const blank = () => ({ v: 1, hero: null, log: [], levels: {}, recycle: {}, review: {}, parentHash: null, introSeen: false, subject: null, history: blankHistory() });
   // 缺的欄位補上預設值（舊版存檔沒有 history、subject）
   const normalize = o => { const s = Object.assign(blank(), o); s.history = Object.assign(blankHistory(), o && o.history); return s; };

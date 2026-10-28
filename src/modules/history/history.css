@@ -70,3 +70,88 @@ body.subj-history .cover h1 { z-index: 1; }
 .tl-sheet h3 { margin: .2em 2em .4em 0; }
 .tl-close { position: absolute; top: .6em; right: .8em; padding: 0 .6em; font-size: 1.2rem; }
 .tl-meta b { display: inline-block; min-width: 3em; color: var(--teal); }
+
+/* 故事：館區列表 */
+.story-list { display: grid; gap: .5em; margin-bottom: .6em; }
+.st-card { display: flex; align-items: center; gap: .7em; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: .6em .8em; text-decoration: none; color: var(--ink); border-left: 5px solid var(--amber); min-width: 0; }
+.st-card.done { border-left-color: #6d8a4a; }
+.st-card.locked { opacity: .62; border-left-color: #b9a888; box-shadow: none; }
+.st-no { flex: none; min-width: 2.4em; text-align: center; font-weight: 700; color: #5a3a1e; background: var(--amber-soft); border-radius: 8px; padding: .1em .3em; font-size: .9rem; }
+.st-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.st-main b { font-family: "Noto Serif TC", "PMingLiU", serif; overflow-wrap: anywhere; }
+.st-main small { color: var(--muted); font-size: .8rem; }
+.st-badge { flex: none; font-size: .78rem; border-radius: 999px; padding: .1em .65em; white-space: nowrap; }
+.st-badge.go { background: #7a4e2d; color: #fff; }
+.st-badge.done { background: #e3ecd7; color: #4a6a2a; font-weight: 700; }
+.st-badge.lock { background: #ece3d2; color: #8a7a62; }
+.album-link { display: flex; flex-direction: column; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: .8em 1em; text-decoration: none; color: var(--ink); border-left: 5px solid #a8761a; }
+.album-link span { color: var(--muted); font-size: .88rem; }
+h2.sec small { font-family: "Noto Sans TC", sans-serif; font-weight: 400; color: var(--muted); font-size: .8rem; }
+
+/* 故事：閱讀器 */
+.story .st-head { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: .7em 1em .6em; margin-bottom: .8em; }
+.story .st-head small { color: var(--muted); font-size: .8rem; }
+.story .st-head h1 { margin: .1em 0 .3em; font-size: 1.35rem; }
+.st-dots { display: flex; gap: 4px; list-style: none; padding: 0; margin: 0; }
+.st-dots li { flex: 1; height: 5px; border-radius: 3px; background: var(--line); }
+.st-dots li.past { background: #b08a5a; } .st-dots li.now { background: #7a4e2d; }
+.st-step { font-size: .78rem; color: var(--muted); margin-top: .3em; }
+.st-text { background: #fffaf0; border-radius: var(--radius); box-shadow: var(--shadow); padding: 1em 1.1em; font-family: "Noto Serif TC", "PMingLiU", serif; font-size: 1.04rem; line-height: 1.95; letter-spacing: .02em; overflow-wrap: anywhere; }
+.st-text p { margin: 0 0 .9em; text-indent: 2em; }
+.st-text p:last-child { margin-bottom: 0; }
+.st-ending { border-left: 5px solid #a8761a; }
+.st-doc { background: #f6ecd6; border: 1px dashed #b08a5a; border-radius: var(--radius); padding: .8em 1em; }
+.st-doc p { margin: .2em 0 0; font-family: "Noto Serif TC", "PMingLiU", serif; }
+.st-qhead { margin: 1.1em 0 .4em; font-weight: 700; color: #5a3a1e; font-size: .9rem; letter-spacing: .1em; }
+.st-era .opts .opt, .st-q .opt { width: 100%; }
+.st-nav { position: sticky; bottom: 0; padding: .8em 0; background: linear-gradient(transparent, var(--paper) 35%); display: flex; justify-content: flex-end; }
+.st-nav[hidden] { display: none; }
+.st-nav .st-next { min-width: 9em; }
+
+/* 時代錯置偵探 */
+.dt-box { background: #fffaf0; border-radius: var(--radius); box-shadow: var(--shadow); padding: .8em; display: flex; flex-direction: column; gap: .4em; }
+.dt-s { text-align: left; border-radius: 10px; border: 1.5px solid var(--line); background: #fff; color: var(--ink); padding: .5em .8em; font-family: "Noto Serif TC", "PMingLiU", serif; line-height: 1.7; }
+.dt-s.on { border-color: #a8761a; background: #fbe9c4; }
+.dt-s.hit { border-color: var(--green); background: var(--green-soft); }
+.dt-s.miss { border-color: var(--rust); background: var(--rust-soft); border-style: dashed; }
+.dt-s.false { border-color: #c0a070; background: #f3ead9; text-decoration: line-through; text-decoration-color: rgba(0, 0, 0, .3); }
+.dt-s:disabled { opacity: 1; cursor: default; }
+.dt-explain { padding-left: 1.2em; margin: .4em 0 0; }
+.dt-explain li { margin: .4em 0; }
+
+/* 虛構與史實 */
+.ff-list { display: grid; gap: .5em; }
+.ff-row { background: var(--card); border-radius: 12px; box-shadow: var(--shadow); padding: .6em .8em; border-left: 4px solid var(--line); }
+.ff-row p { margin: 0 0 .4em; }
+.ff-row.good { border-left-color: var(--green); } .ff-row.bad { border-left-color: var(--rust); }
+.ff-btns { display: flex; gap: .5em; }
+.ff-b { flex: 1; padding: .35em .6em; background: #fff; color: #7a4e2d; border-color: #c9a87a; }
+.ff-b.on { background: #7a4e2d; color: #fff; border-color: #7a4e2d; }
+.ff-b:disabled { opacity: .8; }
+.ff-note:not(:empty) { margin-top: .4em; font-size: .92rem; background: #f6ecd6; border-radius: 8px; padding: .4em .6em; }
+
+/* 解鎖與收藏冊 */
+.unlock-cards { display: grid; gap: .7em; }
+.unlock-card { position: relative; }
+.unlock-card.new .card { border: 2px solid #f2c14e; box-shadow: 0 0 12px rgba(242, 193, 78, .55); }
+.new-tag { position: absolute; top: -.6em; right: .8em; background: #a8761a; color: #fff; font-size: .75rem; border-radius: 999px; padding: 0 .6em; z-index: 1; }
+.album-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .4em; }
+.cc { min-height: 4.6em; border-radius: 10px; padding: .35em .4em; display: flex; flex-direction: column; justify-content: space-between; text-align: left; min-width: 0; overflow: hidden; }
+.cc b { font-size: .85rem; line-height: 1.35; overflow-wrap: anywhere; font-family: "Noto Serif TC", "PMingLiU", serif; }
+.cc small { font-size: .7rem; color: var(--muted); line-height: 1.3; }
+.cc.on { background: linear-gradient(160deg, #fbf5e8, #f1dfb8); border: 1.5px solid #c9a87a; color: var(--ink); box-shadow: var(--shadow); }
+.cc.off { background: repeating-linear-gradient(45deg, #ece3d2, #ece3d2 6px, #e6dbc6 6px, #e6dbc6 12px); border: 1.5px dashed #c8b796; }
+.cc.off b { font-size: 1.1rem; color: #b9a888; text-align: center; }
+.cc.off small { font-size: .62rem; }
+.cc.on b { font-size: .8rem; }
+.cc-sheet { position: fixed; left: 0; right: 0; bottom: 0; max-width: 760px; margin: 0 auto; max-height: 70vh; overflow: auto; background: var(--paper); border-radius: 18px 18px 0 0; box-shadow: 0 -4px 20px rgba(60, 30, 5, .25); padding: 2.4em 1em 1.4em; z-index: 30; }
+.cc-close { position: absolute; top: .4em; right: .8em; padding: 0 .6em; font-size: 1.2rem; }
+
+/* 家長頁：整章預覽 */
+.sp h4 { margin: 1em 0 .3em; color: #5a3a1e; border-bottom: 1px dashed var(--line); }
+.sp h4 small { color: var(--muted); font-weight: 400; }
+.sp-text p { margin: 0 0 .6em; line-height: 1.85; }
+.sp-opts li.ok { color: #3f6a2a; font-weight: 700; }
+.sp-dt li.bad { background: var(--rust-soft); border-radius: 6px; }
+.sp-q { border: 1px solid var(--line); border-radius: 10px; padding: .6em; margin: .4em 0; background: #fff; }
+.kind-tabs { margin-top: -.3em; }
