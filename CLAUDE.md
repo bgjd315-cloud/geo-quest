@@ -173,7 +173,7 @@ geo-quest/
 - skill：時序、因果、比較、變遷與延續、史料判讀、歷史解釋。
 
 ## 資料結構
-- data/history/events.json（id、名稱、時間、所屬線、分期、主題、背景、影響、相關事件 id）
+- 歷史題目與故事：家長 115/10/28 改為「先全部上線、之後再決定是否審」，目前 638 題與 29 章都是「確認」。新寫的內容程式預設仍是「待審」，新增時要問家長要不要直接上架。有問題用家長頁標記下架。
 - data/history/cards/（每事件一張時空卡，同時期另兩條線事件由 events.json 自動帶入）
 - data/history/questions/（依時代區塊分檔；題目格式比照地理，另加 theme、era、skill、eventIds）
 - data/history/stories/<line>/（id、line、title、era、eventIds、themes、skills、status、paragraphs、choices、questions、anachronism、factNotes、fictionNotes）
