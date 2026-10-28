@@ -255,10 +255,14 @@ h3.vol { color: var(--teal); margin: .8em 0 .2em; }
 .expcard .mapcover { width: 100%; height: 96px; }
 .expcard > div:last-child { padding: .4em .7em .6em; }
 .cover.expcover .mapcover { height: 170px; }
-.cover.expcover h1 { color: var(--ink); text-shadow: 0 0 6px #fff, 0 0 2px #fff; }
+.cover.expcover .mapcover + h1 { color: var(--ink); text-shadow: 0 0 6px #fff, 0 0 2px #fff; }
 .level .mapcover { height: 100%; min-height: 90px; grid-row: span 2; }
 .banner.expbanner .mapcover { height: 120px; }
 .fig.mini { max-height: none; }
 @media (max-width: 480px) { .level .mapcover { height: 110px; grid-row: auto; } }
 
 .fig .grat, .fig .tropic, .fig .prime { fill: none; }
+
+.ship { border-radius: var(--radius); overflow: hidden; margin: .6em 0; }
+.ship img { width: 100%; height: 130px; object-fit: cover; }
+.expcard img { width: 100%; height: 96px; object-fit: cover; }

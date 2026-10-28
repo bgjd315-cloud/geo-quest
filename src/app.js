@@ -79,8 +79,10 @@
     return (mapCache[u.id] = svg);
   }
   const isExp = u => u.kind === 'expedition';
+  // img === 'map'：遠征的關卡卡片用迷你地圖，看得出是哪個區域；其他情況用插畫
   function coverHTML(u, img) {
-    return isExp(u) ? `<div class="mapcover">${miniMap(u)}</div>` : `<img src="${D().img(img || u.cover)}" alt="">`;
+    if (isExp(u) && (img === 'map' || !u.cover)) return `<div class="mapcover">${miniMap(u)}</div>`;
+    return `<img src="${D().img(img && img !== 'map' ? img : u.cover)}" alt="">`;
   }
   const title = u => u.island || u.name;
   const hasLive = u => { const ids = u.levels.map(l => l.id); return D().live().some(q => ids.includes(q.level)); };
@@ -119,6 +121,7 @@
       <h2 class="sec">通論六島</h2>
       <section class="unit-list">${units.map(u => unitCard(u)).join('')}</section>
       <h2 class="sec">遠征航線</h2>
+      <div class="ship"><img src="${D().img('exp_ship')}" alt="研究船出海"></div>
       ${bird('通論島上學到的原理，要帶出海用在世界各地。答錯時，我會先帶你回去複習原理。')}
       ${['第三冊', '第四冊', '第五冊'].map(v => `<h3 class="vol">${v}</h3><section class="unit-list exp">${exps.filter(u => u.volume === v).map(u => unitCard(u)).join('')}</section>`).join('')}
     </div>`;
@@ -138,7 +141,7 @@
     app().innerHTML = `${topbar('#/')}<div class="page unit">
       <div class="cover ${isExp(u) ? 'expcover' : ''}">${coverHTML(u)}<h1>${esc(title(u))}<small>${esc(isExp(u) ? u.volume + '・區域遠征' : u.name)}</small></h1></div>
       ${bird(esc(u.story))}
-      <div class="levels">${u.levels.map((l, i) => { const r = S().levels[l.id]; return `<div class="level">${coverHTML(u, l.banner)}<div class="linfo"><b>第 ${i + 1} 關</b><span>${esc(l.name)}</span><small>${cnt(l.id)} 題可練習${r ? `・最佳 ${Math.round(r.best * 100)}%` : ''}</small></div><div class="lbtn"><a class="primary btn" href="#/play/${l.id}/practice">練習</a><a class="ghost btn" href="#/play/${l.id}/sim">模擬</a></div></div>`; }).join('')}
+      <div class="levels">${u.levels.map((l, i) => { const r = S().levels[l.id]; return `<div class="level">${coverHTML(u, isExp(u) ? 'map' : l.banner)}<div class="linfo"><b>第 ${i + 1} 關</b><span>${esc(l.name)}</span><small>${cnt(l.id)} 題可練習${r ? `・最佳 ${Math.round(r.best * 100)}%` : ''}</small></div><div class="lbtn"><a class="primary btn" href="#/play/${l.id}/practice">練習</a><a class="ghost btn" href="#/play/${l.id}/sim">模擬</a></div></div>`; }).join('')}
         ${u.boss ? `<div class="level boss ${allDone ? '' : 'dim'}">${u.boss.image ? `<img src="${D().img(u.boss.image)}" alt="">` : coverHTML(u)}<div class="linfo"><b>${isExp(u) ? '區域魔王關' : '魔王關'}</b><span>${esc(u.boss.name)}</span><small>${allDone ? `${cnt(u.boss.id)} 題` : '完成前面的關卡後挑戰'}</small></div><div class="lbtn">${allDone ? `<a class="primary btn" href="#/play/${u.boss.id}/practice">挑戰</a><a class="ghost btn" href="#/play/${u.boss.id}/sim">模擬</a>` : ''}</div></div>` : ''}
       </div>
       <a class="ghost btn wide" href="#/play/${u.id}-all/sim">單元模擬測驗（計時 20 題）</a>
@@ -161,7 +164,7 @@
     const live = D().live();
     const pool = info.all ? live.filter(q => q.unit === info.u.name) : live.filter(q => q.level === lid);
     const intro = info.boss ? `<div class="boss-intro">${info.u.boss.image ? `<img src="${D().img(info.u.boss.image)}" alt="">` : ''}<p>${esc(info.u.boss.intro)}</p></div>` : '';
-    app().innerHTML = `<div class="page play"><div class="banner ${isExp(info.u) ? 'expbanner' : ''}">${coverHTML(info.u, info.l.banner)}<h2>${esc(info.l.name)}</h2><span class="mode">${mode === 'sim' ? '模擬模式・計時，交卷後看解析' : '練習模式・不計時，即時解析'}</span></div>${intro}<div class="runbox"></div></div>`;
+    app().innerHTML = `<div class="page play"><div class="banner">${coverHTML(info.u, isExp(info.u) ? info.u.cover : info.l.banner)}<h2>${esc(info.l.name)}</h2><span class="mode">${mode === 'sim' ? '模擬模式・計時，交卷後看解析' : '練習模式・不計時，即時解析'}</span></div>${intro}<div class="runbox"></div></div>`;
     window.Quiz.run(app().querySelector('.runbox'), {
       pool, mode, size: info.all ? 20 : info.boss ? 8 : 10,
       onQuit: () => { location.hash = '#/unit/' + info.u.id; },
