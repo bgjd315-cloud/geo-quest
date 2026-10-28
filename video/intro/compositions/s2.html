@@ -1,0 +1,43 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    #s2-atlas { position: absolute; left: 1040px; top: 40px; width: 750px; height: 1000px; border-radius: 24px; object-fit: cover; box-shadow: 0 18px 40px rgba(47,58,64,.22); }
+    .s2-fog { position: absolute; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,.95), rgba(255,255,255,.7) 45%, rgba(255,255,255,0)); }
+    .s2-glow { position: absolute; width: 150px; height: 150px; margin: -75px 0 0 -75px; border-radius: 50%; border: 8px solid #C48A2C; }
+    #s2-hero { position: absolute; left: 120px; top: 360px; height: 700px; }
+    #s2-bird { position: absolute; left: 560px; top: 330px; width: 230px; }
+    #s2-text { position: absolute; left: 150px; top: 110px; width: 880px; }
+    #s2-text h2 { font-size: 100px; font-weight: 700; letter-spacing: .04em; }
+    #s2-text p { font-size: 46px; margin-top: 26px; color: #4a575d; }
+  </style>
+  <div id="root" data-composition-id="s2" data-width="1920" data-height="1080">
+    <img id="s2-atlas" src="assets/img/home_atlas.webp" alt="" />
+    <div id="s2-fog1" class="s2-fog" style="left:1020px; top:120px; width:1100px; height:520px;"></div>
+    <div id="s2-fog2" class="s2-fog" style="left:1020px; top:470px; width:1000px; height:480px;"></div>
+    <div id="s2-fog3" class="s2-fog" style="left:1070px; top:760px; width:950px; height:380px;"></div>
+    <!-- 地圖冊上 ①羅盤島、②雲頂島的位置（與遊戲首頁 SPOT 相同） -->
+    <div id="s2-g1" class="s2-glow" style="left:1243px; top:300px;"></div>
+    <div id="s2-g2" class="s2-glow" style="left:1243px; top:510px;"></div>
+    <div id="s2-text"><h2>你是見習測繪員</h2><p>讀懂一張圖，就有一座島重新浮現</p></div>
+    <img id="s2-hero" src="assets/img/hero_girl_idle.webp" alt="" />
+    <img id="s2-bird" src="assets/img/bird_happy.webp" alt="" />
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // 迷霧被吹散
+    ["#s2-fog1", "#s2-fog2", "#s2-fog3"].forEach((id, i) => {
+      tl.fromTo(id, { opacity: 0.92, x: 0 }, { opacity: 0, x: 500, duration: 1.1, ease: "sine.inOut" }, 0.15 + i * 0.15);
+    });
+    tl.fromTo("#s2-hero", { y: 760 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0.3);
+    tl.fromTo("#s2-bird", { x: -500, y: -300, rotation: -18, opacity: 0 }, { x: 0, y: 0, rotation: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 0.9);
+    tl.fromTo("#s2-text h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 0.6);
+    tl.fromTo("#s2-text p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 1.4);
+    // 兩座島亮起
+    tl.fromTo("#s2-g1", { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.33, ease: "back.out(2)" }, 2.4);
+    tl.fromTo("#s2-g2", { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.33, ease: "back.out(2)" }, 3.0);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 4.2);
+    window.__timelines["s2"] = tl;
+  </script>
+</template>

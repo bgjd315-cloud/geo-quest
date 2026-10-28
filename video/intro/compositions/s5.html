@@ -1,0 +1,75 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    .s5-head { position: absolute; left: 0; top: 70px; width: 1920px; text-align: center; font-size: 96px; font-weight: 700; letter-spacing: .06em; }
+    .s5-head b { color: #94631A; }
+    .s5-card { position: absolute; width: 500px; height: 281px; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 26px rgba(47,58,64,.18); }
+    .s5-card img { width: 100%; height: 100%; object-fit: cover; }
+    .s5-card span { position: absolute; left: 16px; bottom: 12px; font-size: 34px; font-weight: 700; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.55); }
+    .s5-mist { position: absolute; inset: 0; background: rgba(250,248,242,.86); }
+    #s5-strip { position: absolute; left: 0; top: 330px; height: 420px; opacity: 0; }
+    #s5-h2, #s5-total { opacity: 0; }
+    .s5-reg { position: absolute; top: 0; width: 520px; height: 293px; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 26px rgba(47,58,64,.18); }
+    .s5-reg img { width: 100%; height: 100%; object-fit: cover; }
+    .s5-reg span { position: absolute; left: 16px; bottom: 12px; font-size: 36px; font-weight: 700; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.55); }
+    #s5-total { position: absolute; left: 0; top: 300px; width: 1920px; text-align: center; }
+    #s5-num { font-size: 300px; font-weight: 700; color: #94631A; line-height: 1; }
+    #s5-num small { font-size: 120px; color: #2F3A40; margin-left: 20px; }
+    #s5-total p { font-size: 54px; margin-top: 40px; color: #4a575d; }
+  </style>
+  <div id="root" data-composition-id="s5" data-width="1920" data-height="1080">
+    <div id="s5-h1" class="s5-head"><b>6</b> 座通論島</div>
+    <div id="s5-grid">
+      <div class="s5-card" id="s5-c1" style="left:165px; top:260px;"><img src="assets/img/cover_compass.webp" alt="" /><span>羅盤島．地圖與位置</span><div class="s5-mist"></div></div>
+      <div class="s5-card" id="s5-c2" style="left:710px; top:260px;"><img src="assets/img/cover_cloud.webp" alt="" /><span>雲頂島．天氣與氣候</span><div class="s5-mist"></div></div>
+      <div class="s5-card" id="s5-c3" style="left:1255px; top:260px;"><img src="assets/img/cover_rift.webp" alt="" /><span>裂谷島．地形與海岸</span><div class="s5-mist"></div></div>
+      <div class="s5-card" id="s5-c4" style="left:165px; top:600px;"><img src="assets/img/cover_spring.webp" alt="" /><span>泉源島．水文</span><div class="s5-mist"></div></div>
+      <div class="s5-card" id="s5-c5" style="left:710px; top:600px;"><img src="assets/img/cover_lights.webp" alt="" /><span>燈火島．人口</span><div class="s5-mist"></div></div>
+      <div class="s5-card" id="s5-c6" style="left:1255px; top:600px;"><img src="assets/img/cover_market.webp" alt="" /><span>市集島．聚落與產業</span><div class="s5-mist"></div></div>
+    </div>
+    <div id="s5-h2" class="s5-head"><b>12</b> 條遠征航線</div>
+    <div id="s5-strip">
+      <div class="s5-reg" style="left:0px;"><img src="assets/img/exp_cn.webp" alt="" /><span>中國</span></div>
+      <div class="s5-reg" style="left:560px;"><img src="assets/img/exp_nea.webp" alt="" /><span>東北亞</span></div>
+      <div class="s5-reg" style="left:1120px;"><img src="assets/img/exp_sea.webp" alt="" /><span>東南亞</span></div>
+      <div class="s5-reg" style="left:1680px;"><img src="assets/img/exp_sa.webp" alt="" /><span>南亞</span></div>
+      <div class="s5-reg" style="left:2240px;"><img src="assets/img/exp_wana.webp" alt="" /><span>西亞與北非</span></div>
+      <div class="s5-reg" style="left:2800px;"><img src="assets/img/exp_ssa.webp" alt="" /><span>漠南非洲</span></div>
+      <div class="s5-reg" style="left:3360px;"><img src="assets/img/exp_eu.webp" alt="" /><span>歐洲</span></div>
+      <div class="s5-reg" style="left:3920px;"><img src="assets/img/exp_ru.webp" alt="" /><span>俄羅斯</span></div>
+      <div class="s5-reg" style="left:4480px;"><img src="assets/img/exp_na.webp" alt="" /><span>北美洲</span></div>
+      <div class="s5-reg" style="left:5040px;"><img src="assets/img/exp_la.webp" alt="" /><span>中南美洲</span></div>
+      <div class="s5-reg" style="left:5600px;"><img src="assets/img/exp_oc.webp" alt="" /><span>大洋洲</span></div>
+      <div class="s5-reg" style="left:6160px;"><img src="assets/img/exp_polar.webp" alt="" /><span>兩極地區</span></div>
+    </div>
+    <div id="s5-total"><div id="s5-num"><span id="s5-count">504</span><small>題</small></div><p>康軒第一至五冊．會考地理全範圍</p></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // 六島：卡片進場，迷霧一張張散開
+    tl.fromTo("#s5-h1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0);
+    for (let i = 1; i <= 6; i++) {
+      tl.fromTo(`#s5-c${i}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.1 + i * 0.06);
+      tl.to(`#s5-c${i} .s5-mist`, { opacity: 0, duration: 0.35, ease: "power1.out" }, 0.9 + (i - 1) * 0.42);
+    }
+    tl.to(["#s5-h1", "#s5-grid"], { opacity: 0, duration: 0.25 }, 3.95);
+    // 十二航線：膠捲橫向移動（最右一張停在畫面右側）
+    tl.set("#s5-h2", { opacity: 1 }, 4.15);
+    tl.fromTo("#s5-h2", { y: 30 }, { y: 0, duration: 0.45, ease: "power3.out" }, 4.15);
+    tl.set("#s5-strip", { opacity: 1 }, 4.15);
+    tl.fromTo("#s5-strip", { x: 1920 }, { x: -(6680 - 1840), duration: 3.0, ease: "power1.inOut" }, 4.15);
+    tl.to(["#s5-h2", "#s5-strip"], { opacity: 0, duration: 0.25 }, 7.2);
+    // 504 題
+    tl.set("#s5-total", { opacity: 1 }, 7.45);
+    tl.fromTo("#s5-num", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.8)" }, 7.45);
+    const counter = { v: 0 };
+    tl.fromTo(counter, { v: 0 }, { v: 504, duration: 0.8, ease: "power2.out", onUpdate: () => {
+      const el = document.getElementById("s5-count"); if (el) el.textContent = Math.round(counter.v);
+    } }, 7.45);
+    tl.fromTo("#s5-total p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 8.0);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 9.2);
+    window.__timelines["s5"] = tl;
+  </script>
+</template>

@@ -1,0 +1,30 @@
+<template>
+  <style>
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-400.woff2"); font-weight: 400; }
+    @font-face { font-family: "NotoTC"; src: url("assets/fonts/noto-700.woff2"); font-weight: 700; }
+    #root { position: absolute; inset: 0; font-family: "NotoTC"; color: #2F3A40; overflow: hidden; }
+    #s6-text { position: absolute; left: 0; top: 80px; width: 1920px; text-align: center; }
+    #s6-text h2 { font-size: 96px; font-weight: 700; letter-spacing: .05em; }
+    #s6-text p { font-size: 46px; margin-top: 18px; color: #4a575d; }
+    .s6-boss { position: absolute; width: 300px; height: 300px; object-fit: contain; }
+  </style>
+  <div id="root" data-composition-id="s6" data-width="1920" data-height="1080">
+    <div id="s6-text"><h2>每座島都有魔王試煉</h2><p>跨概念、跨區域，一次串起來</p></div>
+    <img id="s6-b1" class="s6-boss" src="assets/img/boss_compass.webp" alt="" style="left:120px; top:560px;" />
+    <img id="s6-b2" class="s6-boss" src="assets/img/boss_typhoon.webp" alt="" style="left:400px; top:440px;" />
+    <img id="s6-b3" class="s6-boss" src="assets/img/boss_landform.webp" alt="" style="left:680px; top:380px;" />
+    <img id="s6-b4" class="s6-boss" src="assets/img/boss_hydro.webp" alt="" style="left:960px; top:380px;" />
+    <img id="s6-b5" class="s6-boss" src="assets/img/boss_pop.webp" alt="" style="left:1240px; top:440px;" />
+    <img id="s6-b6" class="s6-boss" src="assets/img/boss_industry.webp" alt="" style="left:1520px; top:560px;" />
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#s6-text h2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power2.inOut" }, 0.1);
+    tl.fromTo("#s6-text p", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.55);
+    for (let i = 1; i <= 6; i++) {
+      tl.fromTo(`#s6-b${i}`, { scale: 1.6, opacity: 0, y: -40 }, { scale: 1, opacity: 1, y: 0, duration: 0.33, ease: "back.out(2)" }, 0.8 + (i - 1) * 0.4);
+    }
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 4.7);
+    window.__timelines["s6"] = tl;
+  </script>
+</template>
