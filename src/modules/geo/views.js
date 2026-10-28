@@ -38,7 +38,7 @@
     const rec = S().recycle;
     return cs.map(c => ({ c, acc: conceptAcc(st, c), pending: !!rec[c] }))
       .filter(x => x.pending || (x.acc != null && x.acc < 0.8))
-      .sort((a, b) => (b.pending - a.pending) || ((a.acc ?? 1) - (b.acc ?? 1)))
+      .sort((a, b) => (b.pending - a.pending) || ((a.acc == null ? 1 : a.acc) - (b.acc == null ? 1 : b.acc)))
       .slice(0, n);
   }
   function unitProgress(u) {
