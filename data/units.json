@@ -915,13 +915,13 @@
    "island": "歸鄉島",
    "volume": "第六冊",
    "no": 7,
-   "cover": "exp_ship",
+   "cover": "cover_home",
    "stage": 4,
    "levels": [
     {
      "id": "home-1",
      "name": "地名裡的故事",
-     "banner": "exp_ship",
+     "banner": "cover_home",
      "concepts": [
       "pn-taiwan",
       "pn-origin",
@@ -931,7 +931,7 @@
     {
      "id": "home-2",
      "name": "從田裡到餐桌",
-     "banner": "exp_ship",
+     "banner": "cover_home",
      "concepts": [
       "agri-chain",
       "food-mile",
@@ -943,7 +943,8 @@
    "boss": {
     "id": "home-boss",
     "name": "魔王試煉：迷霧中的路牌",
-    "intro": "市集上的攤販把產地標籤弄混了，路牌上的地名也被霧氣擦掉一半。把地名和食物的線索拼回去，才能通過試煉。"
+    "intro": "市集上的攤販把產地標籤弄混了，路牌上的地名也被霧氣擦掉一半。把地名和食物的線索拼回去，才能通過試煉。",
+    "image": "boss_home"
    }
   }
  ]
