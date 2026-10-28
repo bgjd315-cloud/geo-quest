@@ -14,17 +14,19 @@
     .s7-verb h2 { font-size: 100px; font-weight: 700; letter-spacing: .03em; }
     .s7-verb p { font-size: 48px; margin-top: 40px; line-height: 1.55; color: #6B5844; }
     .s7-verb b { color: #94631A; }
-    #s7-b, #s7-c, #s7-d, #s7-v2, #s7-v3, #s7-tap, #s7-x, #s7-box { opacity: 0; }
+    #s7-b, #s7-c, #s7-d, #s7-e, #s7-v2, #s7-v3, #s7-v4, #s7-tap, #s7-x, #s7-box { opacity: 0; }
   </style>
   <div id="root" data-composition-id="s7" data-width="1920" data-height="1080">
     <div id="s7-v1" class="s7-verb"><h2>一個時代，<b>一個櫃子</b></h2><p>整理櫃子裡的檔案：<br>每次 10 題，練習或模擬</p></div>
-    <div id="s7-v2" class="s7-verb"><h2>放錯了？<b>先看解析</b></h2><p>弄懂為什麼錯，<br>這份檔案收進「待修復」</p></div>
-    <div id="s7-v3" class="s7-verb"><h2>換個樣子<b>再出現</b></h2><p>同一件事換一題再考，<br>修好兩次才歸檔</p></div>
+    <div id="s7-v2" class="s7-verb"><h2>放錯了？<b>先看解析</b></h2><p>解析下面還標著<br>這個觀念的會考出題率</p></div>
+    <div id="s7-v3" class="s7-verb"><h2>阿斑拿出<b>館藏卡</b></h2><p>先讀懂這件事的背景和影響，<br>再整理下一份</p></div>
+    <div id="s7-v4" class="s7-verb"><h2>換一題<b>再考</b></h2><p>同一件事換個樣子再出現，<br>修好兩次才歸檔</p></div>
     <div id="s7-phone">
       <div id="s7-screen">
         <img id="s7-a" class="s7-shot" src="assets/screens/05_wing_eras.png" alt="" />
         <img id="s7-b" class="s7-shot" src="assets/screens/10_play_q.png" alt="" />
         <img id="s7-c" class="s7-shot" src="assets/screens/11_play_wrong.png" alt="" />
+        <img id="s7-e" class="s7-shot" src="assets/screens/11b_play_card.png" alt="" />
         <img id="s7-d" class="s7-shot" src="assets/screens/12_play_recycle.png" alt="" />
       </div>
     </div>
@@ -47,21 +49,26 @@
     // 點「整理這個櫃子」→ 題目
     tap(1310, 304, 1.6);
     shot("#s7-b", 1.95);
-    // 點錯的選項 → 解析
+    // 點錯的選項 → 解析＋出題率
     verbOut("#s7-v1", 3.2);
-    tap(1365, 590, 3.2);
+    tap(1365, 652, 3.2);
     shot("#s7-c", 3.55);
     tl.fromTo("#s7-x", { scale: 2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.33, ease: "back.out(2)" }, 3.6);
     tl.to("#s7-x", { opacity: 0, duration: 0.25 }, 4.5);
     tl.set("#s7-v2", { opacity: 1 }, 3.4);
     verbIn("#s7-v2", 3.4);
-    tl.fromTo("#s7-box", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(1.8)" }, 4.8);
-    // 錯題回收：換一題同一事件的題目
-    verbOut("#s7-v2", 5.6);
-    shot("#s7-d", 5.65);
-    tl.set("#s7-v3", { opacity: 1 }, 5.8);
-    verbIn("#s7-v3", 5.8);
-    tl.to("#root", { opacity: 0, duration: 0.25 }, 7.72);
+    // 下一題：阿斑先拿出這件事的館藏卡
+    verbOut("#s7-v2", 5.2);
+    shot("#s7-e", 5.25);
+    tl.set("#s7-v3", { opacity: 1 }, 5.4);
+    verbIn("#s7-v3", 5.4);
+    // 幾題後：錯題回收，同一事件換一題
+    verbOut("#s7-v3", 7.0);
+    shot("#s7-d", 7.05);
+    tl.set("#s7-v4", { opacity: 1 }, 7.2);
+    verbIn("#s7-v4", 7.2);
+    tl.fromTo("#s7-box", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(1.8)" }, 7.6);
+    tl.to("#root", { opacity: 0, duration: 0.25 }, 8.72);
     window.__timelines["s7"] = tl;
   </script>
 </template>

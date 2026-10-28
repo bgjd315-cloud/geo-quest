@@ -7,7 +7,7 @@ from scipy import signal
 from scipy.io import wavfile
 
 SR = 44100
-DUR = 89.0
+DUR = 90.0
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "audio")
 rng = np.random.default_rng(31)
 BEAT = 60 / 90
@@ -25,7 +25,13 @@ def buf():
     return np.zeros(int(SR * DUR) + SR * 2)
 
 
+# S7 加長 1 秒（7dd738e 起答錯先看館藏卡）：45 秒以後的事件一律往後 1 秒
+SHIFT = {"on": True}
+
+
 def add(b, x, t, g=1.0):
+    if SHIFT["on"] and t >= 45:
+        t += 1.0
     i = int(t * SR)
     if i >= len(b) or i < 0:
         return
@@ -155,7 +161,9 @@ def music():
     groove(m, 12.5, 18.0, ["D", "Bm"], 0.22, dens=4)
     groove(m, 18.0, 29.5, ["D", "Bm", "G", "A"], 0.24)
     groove(m, 29.5, 37.0, ["G", "D", "Em", "A"], 0.24)
-    groove(m, 37.0, 45.0, ["Bm", "G", "D", "A"], 0.24)
+    SHIFT["on"] = False
+    groove(m, 37.0, 46.0, ["Bm", "G", "D", "A"], 0.24)
+    SHIFT["on"] = True
     # 45–62 故事：換成較抒情的進行，琶音稀一點
     add(m, strings(["E3", "G3", "B3", "D4"], 4.6, 0.5), 45.0, 0.45)
     for t, n in [(45.1, "B4"), (45.75, "D5"), (46.4, "E5"), (47.05, "G5"), (47.7, "F#5"), (48.35, "E5"), (49.0, "D5")]:
@@ -310,14 +318,16 @@ def sfx():
     add(s, page(), 33.25, 0.4)
     add(s, click(), 34.2, 0.7)
     add(s, page(), 34.55, 0.45)
-    # S7 整理櫃子、答錯、錯題回收
+    # S7 整理櫃子、答錯、館藏卡、錯題回收（37–46）
     add(s, whoosh(0.5, 2), 37.0, 0.4)
     add(s, click(), 38.6, 0.7)
     add(s, page(), 38.95, 0.45)
     add(s, click(), 40.2, 0.7)
     add(s, thud(), 40.6, 0.55)
-    add(s, pat(), 41.8, 0.5)
-    add(s, page(), 42.65, 0.45)
+    add(s, page(), 42.25, 0.45)
+    add(s, ding(1319), 42.35, 0.25)
+    add(s, page(), 44.05, 0.45)
+    add(s, pat(), 44.6, 0.5)
     # S8 故事三線
     add(s, whoosh(0.5, 1), 45.0, 0.35)
     for t in (45.3, 45.6, 45.9):
