@@ -110,6 +110,7 @@ geo-quest/
 - 打包單一檔：`node scripts/build.js` → `dist/index.html`（先跑檢查，沒過就停止；插畫取自 `assets/web/*.webp`）
 - 寫回家長審題結果：`node scripts/apply-review.js <審題結果.json>`
 - 開發版要用本機伺服器開 `index.html`（讀 `data/` 用 fetch）；`dist/index.html` 可直接雙擊。
+- 部署：GitHub Pages https://bgjd315-cloud.github.io/geo-quest/ （repo bgjd315-cloud/geo-quest，main 分支根目錄）。改完先 build、commit，再 git push 就會自動更新。repo 是公開的，`_課本/` 絕對不能進 git。
 
 ## 程式結構
 - `src/geo.js`：共用運算（虛構地形高度與等高線、剖面、方位、時區、氣候統計），網頁與 validate 共用
