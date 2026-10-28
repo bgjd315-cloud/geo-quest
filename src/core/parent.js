@@ -1,0 +1,125 @@
+// 家長頁（兩科共用）：進度、弱點矩陣、近期錯題、審題。各科的內容由 Subjects.<科>.parent 提供。
+(function () {
+  const { esc, app, download, pickFile, today } = window.UI;
+  const S = () => window.Store.get();
+  const SUBJ = window.Subjects;
+  const subjName = k => SUBJ[k].name;
+
+  let parentOK = false;
+  function view(tab, topbar) {
+    if (!parentOK) return login(topbar);
+    tab = tab || 'progress';
+    const tabs = { progress: '進度', matrix: '弱點矩陣', wrong: '近期錯題', review: '審題' };
+    app().innerHTML = `${topbar('#/settings')}<div class="page parent"><h1>家長頁</h1>
+      <nav class="tabs">${Object.entries(tabs).map(([k, v]) => `<a class="${k === tab ? 'on' : ''}" href="#/parent/${k}">${v}</a>`).join('')}</nav><div class="pbody"></div></div>`;
+    const body = app().querySelector('.pbody');
+    if (tab === 'progress') progress(body);
+    if (tab === 'matrix') body.innerHTML = Object.keys(SUBJ).filter(k => SUBJ[k].parent.matrixHTML).map(k => `<h2>${subjName(k)}</h2>${SUBJ[k].parent.matrixHTML()}`).join('');
+    if (tab === 'wrong') wrong(body);
+    if (tab === 'review') review(body);
+  }
+
+  function login(topbar) {
+    const has = !!S().parentHash;
+    app().innerHTML = `${topbar('#/settings')}<div class="page parent"><h1>家長頁</h1>
+      <p>${has ? '請輸入家長密碼。' : '第一次使用，請設定一組家長密碼（只存在這台裝置）。'}</p>
+      <input type="password" id="pw" inputmode="numeric" autocomplete="off" placeholder="密碼">
+      ${has ? '' : '<input type="password" id="pw2" autocomplete="off" placeholder="再輸入一次">'}
+      <div class="row"><button class="primary" id="go">${has ? '進入' : '設定並進入'}</button></div><p class="msg"></p></div>`;
+    app().querySelector('#go').onclick = () => {
+      const v = app().querySelector('#pw').value;
+      const msg = app().querySelector('.msg');
+      if (!v) { msg.textContent = '請輸入密碼'; return; }
+      if (!has) {
+        if (v !== app().querySelector('#pw2').value) { msg.textContent = '兩次輸入不一樣'; return; }
+        window.Store.set({ parentHash: window.Store.hash(v) });
+      } else if (window.Store.hash(v) !== S().parentHash) { msg.textContent = '密碼不對'; return; }
+      parentOK = true; view(null, topbar);
+    };
+  }
+
+  function progress(body) {
+    body.innerHTML = Object.keys(SUBJ).map(k => {
+      const P = SUBJ[k].parent, log = P.log();
+      const days = [...new Set(log.map(e => new Date(e.ts).toISOString().slice(0, 10)))];
+      return `<h2>${subjName(k)}《${esc(SUBJ[k].title)}》</h2>
+        <p>累計作答 ${log.length} 次，練習天數 ${days.length} 天，最近一次 ${log.length ? new Date(log[log.length - 1].ts).toLocaleString('zh-TW') : '—'}。</p>${P.progressHTML()}`;
+    }).join('');
+  }
+
+  // 兩科的錯題混在一起，依時間由新到舊
+  function wrong(body) {
+    const rows = Object.keys(SUBJ).flatMap(k => SUBJ[k].parent.log().filter(e => !e.ok).slice(-30).map(e => ({ k, e })))
+      .sort((a, b) => b.e.ts - a.e.ts).slice(0, 30);
+    if (!rows.length) { body.innerHTML = '<p class="empty">最近沒有錯題。</p>'; return; }
+    body.innerHTML = rows.map(({ k, e }) => {
+      const P = SUBJ[k].parent, q = P.questions().find(x => x.id === e.q);
+      if (!q) return '';
+      const stem = e.part != null ? q.parts[e.part].stem : q.stem;
+      return `<div class="wrong-row"><small><span class="tag">${subjName(k)}</span> ${new Date(e.ts).toLocaleString('zh-TW')}・${esc(q.id)}${e.part != null ? ` 第${e.part + 1}小題` : ''}・${esc(P.tagsOf(e))}</small><div>${esc(stem)}</div></div>`;
+    }).join('');
+  }
+
+  // 審題：先選科目，再依單元（地理）或時代（歷史）篩選
+  let filter = { subj: 'geo', status: '待審', group: '' };
+  function review(body) {
+    const st = q => window.Loader.status(q);
+    const draw = () => {
+      const P = SUBJ[filter.subj].parent;
+      const qs = P.questions();
+      const groups = [...new Set(qs.map(P.groupOf))];
+      const list = qs.filter(q => (!filter.status || st(q) === filter.status) && (!filter.group || P.groupOf(q) === filter.group));
+      const n = s => qs.filter(q => st(q) === s).length;
+      const pending = k => SUBJ[k].parent.questions().filter(q => st(q) === '待審').length;
+      body.innerHTML = `<nav class="tabs subj-tabs">${Object.keys(SUBJ).map(k => `<a href="javascript:void 0" data-k="${k}" class="${k === filter.subj ? 'on' : ''}">${subjName(k)}（${SUBJ[k].parent.questions().length} 題・待審 ${pending(k)}）</a>`).join('')}</nav>
+        <div class="rfilter">
+          <select id="fs"><option value="">全部狀態</option>${['待審', '確認', '退回'].map(s => `<option ${filter.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
+          <select id="fu"><option value="">${filter.subj === 'history' ? '全部時代' : '全部單元'}</option>${groups.map(u => `<option ${filter.group === u ? 'selected' : ''}>${esc(u)}</option>`).join('')}</select>
+          <span>待審 ${n('待審')}・確認 ${n('確認')}・退回 ${n('退回')}</span></div>
+        <div class="row batch"><label><input type="checkbox" id="all"> 全選這頁</label><button class="primary" id="bok">勾選的確認</button><button class="ghost" id="bno">勾選的退回</button></div>
+        <div class="row"><button class="ghost" id="rexp">匯出審題結果</button><button class="ghost" id="rimp">匯入審題結果</button></div>
+        <p class="hint">審題結果存在這台裝置（地理、歷史都在同一個檔案）。若孩子用別台裝置，請匯出後在那台匯入，或把檔案交給 Claude 寫回題庫。</p>
+        <div class="rlist">${list.map(q => `<details class="rq s-${st(q)}"><summary><input type="checkbox" class="sel" data-id="${q.id}"> <b>${esc(q.id)}</b> <span class="tag">${esc(st(q))}</span>${S().review[q.id] && S().review[q.id].flag ? '<span class="tag flag">已標記問題</span>' : ''} ${esc(q.stem.slice(0, 40))}…</summary>
+          <div class="rmeta">${P.metaHTML(q)}<br>題型：${esc(window.Quiz.typeName(q.type))}｜依據：${esc(q.source)}</div>
+          <div class="rpreview" data-id="${q.id}"></div>
+          <div class="row"><button class="primary one" data-id="${q.id}" data-s="確認">確認</button><button class="ghost one" data-id="${q.id}" data-s="退回">退回</button><button class="ghost flagbtn" data-id="${q.id}">標記問題（立即下架）</button></div>
+          ${S().review[q.id] && S().review[q.id].note ? `<p class="note">備註：${esc(S().review[q.id].note)}</p>` : ''}</details>`).join('') || `<p class="empty">${qs.length ? '沒有符合的題目。' : `${subjName(filter.subj)}目前還沒有題目。`}</p>`}</div>`;
+      body.querySelectorAll('.subj-tabs a').forEach(a => a.onclick = () => { filter = { subj: a.dataset.k, status: '待審', group: '' }; draw(); });
+      body.querySelector('#fs').onchange = e => { filter.status = e.target.value; draw(); };
+      body.querySelector('#fu').onchange = e => { filter.group = e.target.value; draw(); };
+      body.querySelector('#all').onchange = e => body.querySelectorAll('.sel').forEach(c => c.checked = e.target.checked);
+      const batch = s => { body.querySelectorAll('.sel:checked').forEach(c => window.Store.setReview(c.dataset.id, { status: s })); draw(); };
+      body.querySelector('#bok').onclick = () => batch('確認');
+      body.querySelector('#bno').onclick = () => batch('退回');
+      body.querySelector('#rexp').onclick = () => download(`社會科闖關審題結果_${today()}.json`, window.Store.exportReview());
+      body.querySelector('#rimp').onclick = () => pickFile(o => { try { alert(window.Store.importFile(o)); draw(); } catch (e) { alert(e.message); } });
+      body.querySelectorAll('.one').forEach(b => b.onclick = () => { window.Store.setReview(b.dataset.id, { status: b.dataset.s }); draw(); });
+      body.querySelectorAll('.flagbtn').forEach(b => b.onclick = () => {
+        const note = prompt('這題有什麼問題？（會一起存下來，方便修正）', '');
+        if (note === null) return;
+        window.Store.setReview(b.dataset.id, { status: '退回', flag: true, note });
+        draw();
+      });
+      // 展開時才預覽題目（含答案與解析）
+      body.querySelectorAll('details').forEach(d => d.addEventListener('toggle', () => {
+        const box = d.querySelector('.rpreview');
+        if (!d.open || box.dataset.done) return;
+        box.dataset.done = '1';
+        const q = qs.find(x => x.id === box.dataset.id);
+        window.Quiz.renderItem(box, q, { mode: 'practice' }, () => { });
+        box.insertAdjacentHTML('beforeend', `<div class="answer-key">${answerKey(q)}</div>`);
+      }));
+    };
+    draw();
+  }
+
+  function answerKey(q) {
+    const opt = o => typeof o === 'string' ? o : (o.text || '（圖）');
+    if (q.parts) return q.parts.map((p, k) => `<p><b>第${k + 1}小題答案：</b>${esc(opt(p.options[p.answer]))}<br>${esc(p.explain)}</p>`).join('');
+    if (q.type === 'order') return `<p><b>答案：</b>${esc(q.answer.map(i => q.items[i]).join(' → '))}<br>${esc(q.explain)}</p>`;
+    if (q.type === 'match') return `<p><b>答案：</b>${esc(q.left.map((l, i) => `${l} → ${q.right[q.answer[i]]}`).join('；'))}<br>${esc(q.explain)}</p>`;
+    return `<p><b>答案：</b>${esc(opt(q.options[q.answer]))}<br>${esc(q.explain)}</p>`;
+  }
+
+  window.Parent = { view };
+})();

@@ -1,0 +1,72 @@
+/* 歷史《時光檔案館》：舊紙、琥珀檯燈、深色木頭書架。只在 body.subj-history 生效，不影響地理。 */
+body.subj-history {
+  --paper: #f1e6cf; --card: #fbf5e8; --ink: #3a2c20; --muted: #7d6a55; --line: #e0cfae;
+  --teal: #7a4e2d; --teal-soft: #f0e0c4; --amber: #c48a2c; --amber-soft: #f5e2bd;
+  --sea: #ead9bb; --shadow: 0 2px 10px rgba(70, 40, 10, .12);
+  background: var(--paper);
+  background-image: radial-gradient(ellipse at top, rgba(196, 138, 44, .12), transparent 60%);
+}
+body.subj-history .brand { color: #5a3a1e; font-family: "Noto Serif TC", "PMingLiU", serif; }
+body.subj-history h1, body.subj-history h2.sec { font-family: "Noto Serif TC", "PMingLiU", serif; }
+body.subj-history .banner.plain { background: #5a3a1e; }
+
+/* 大廳 */
+.hall-cover { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); max-width: 440px; margin: 0 auto; }
+.hall-cover img { width: 100%; }
+.wing-list { display: grid; gap: .8em; }
+.wing-card { display: flex; gap: .8em; background: var(--card); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: var(--ink); box-shadow: var(--shadow); min-width: 0; border-left: 5px solid #5a3a1e; }
+.wing-card img { width: 42%; aspect-ratio: 16 / 9; object-fit: cover; flex: none; }
+.wing-card > div { padding: .5em .5em .5em 0; display: flex; flex-direction: column; min-width: 0; }
+.wing-card b { font-size: 1.1rem; }
+.wing-card span { color: var(--muted); font-size: .85rem; }
+.wing-card small { color: var(--teal); font-weight: 700; font-size: .85rem; }
+.corridor-card { display: block; position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); text-decoration: none; }
+.corridor-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.corridor-card span { position: absolute; left: 0; right: 0; bottom: 0; padding: .6em .8em; color: #fff; font-size: .9rem; background: linear-gradient(transparent, rgba(40, 22, 8, .85)); }
+
+/* 館區 */
+.era-list { display: grid; gap: .6em; }
+.era { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: .6em .8em; }
+.era summary { cursor: pointer; display: flex; flex-wrap: wrap; gap: .2em .5em; align-items: center; }
+.era summary b { font-size: 1.02rem; }
+.era-time { color: var(--muted); font-size: .85rem; }
+.tag.wait { background: #ece3d2; color: #8a7a62; }
+.ev-list { list-style: none; padding: 0; margin: .5em 0 0; }
+.ev-list li { display: grid; grid-template-columns: 5.6em minmax(0, 1fr) auto; gap: 0 .5em; align-items: baseline; border-top: 1px dashed var(--line); padding: .35em 0; }
+.ev-time { color: var(--teal); font-size: .78rem; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.ev-name { font-size: .95rem; }
+.ev-list .tag { white-space: nowrap; }
+body.subj-history .cover::after { content: ""; position: absolute; inset: 40% 0 0 0; background: linear-gradient(transparent, rgba(40, 22, 8, .75)); }
+body.subj-history .cover h1 { z-index: 1; }
+
+/* 時間長廊 */
+.tl-tools { display: flex; gap: .5em; align-items: center; margin: .4em 0 .6em; }
+.tl-tools button { padding: .1em .8em; font-size: 1.1rem; line-height: 1.4; }
+.tl-zoom { flex: 1; min-width: 0; accent-color: var(--teal); }
+.tl-wrap { position: relative; }
+.tl-scroll { overflow-x: auto; overflow-y: hidden; touch-action: pan-x pan-y; border-radius: var(--radius); background: #fffaf0; box-shadow: var(--shadow); overscroll-behavior-x: contain; }
+.tl-canvas { position: relative; }
+.tl-band { position: absolute; top: 0; bottom: 0; border-left: 1px solid rgba(90, 58, 30, .25); }
+.tl-band b { position: absolute; top: 3px; left: 6px; font-size: .75rem; color: #5a3a1e; white-space: nowrap; }
+.tl-band.b0 { background: #e9dcc4; } .tl-band.b1 { background: #f3e7cf; } .tl-band.b2 { background: #ece0c9; }
+.tl-band.b3 { background: #f5ead4; } .tl-band.b4 { background: #fbf3e2; }
+.tl-tick { position: absolute; top: 22px; bottom: 0; border-left: 1px dashed rgba(90, 58, 30, .14); }
+.tl-tick span { position: absolute; top: 0; left: 3px; font-size: 10px; color: #8a7358; white-space: nowrap; }
+.tl-lane { position: absolute; left: 0; right: 0; border-top: 2px solid rgba(90, 58, 30, .35); }
+.tl-lane.l-tw { background: rgba(109, 138, 74, .07); } .tl-lane.l-ea { background: rgba(165, 83, 58, .06); } .tl-lane.l-w { background: rgba(74, 106, 138, .07); }
+.tl-span { position: absolute; height: 4px; border-radius: 2px; opacity: .55; }
+.tl-span.l-tw { background: #6d8a4a; } .tl-span.l-ea { background: #a5533a; } .tl-span.l-w { background: #4a6a8a; }
+.tl-ev { position: absolute; display: flex; align-items: center; gap: 3px; height: 20px; padding: 0 4px 0 0; border: none; border-radius: 0; background: transparent; color: var(--ink); font-size: 12px; line-height: 20px; white-space: nowrap; }
+.tl-ev:hover, .tl-ev:focus-visible { color: #5a3a1e; text-decoration: underline; }
+.tl-ev i, .tl-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex: none; box-sizing: border-box; }
+.s-none i { background: #fff; border: 2px solid #9a8566; }
+.s-doing i { background: var(--amber); border: 2px solid #8a5a10; }
+.s-done i { background: #f2c14e; border: 2px solid #a8761a; box-shadow: 0 0 6px 2px rgba(242, 193, 78, .8); }
+.guess i { border-style: dashed; }
+.tl-legend span { border: none; display: inline-flex; align-items: center; gap: .3em; }
+.tl-names { position: absolute; inset: 0; pointer-events: none; }
+.tl-names span { position: absolute; left: 6px; font-size: .72rem; font-weight: 700; color: #fff; background: rgba(90, 58, 30, .82); border-radius: 999px; padding: 0 .55em; }
+.tl-sheet { position: fixed; left: 0; right: 0; bottom: 0; max-width: 760px; margin: 0 auto; max-height: 60vh; overflow: auto; background: var(--card); border-radius: 18px 18px 0 0; box-shadow: 0 -4px 20px rgba(60, 30, 5, .2); padding: 1em 1.2em 1.4em; z-index: 30; }
+.tl-sheet h3 { margin: .2em 2em .4em 0; }
+.tl-close { position: absolute; top: .6em; right: .8em; padding: 0 .6em; font-size: 1.2rem; }
+.tl-meta b { display: inline-block; min-width: 3em; color: var(--teal); }

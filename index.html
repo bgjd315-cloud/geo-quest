@@ -3,17 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>萬象地圖冊：國中地理闖關</title>
+<title>社會科闖關：萬象地圖冊・時光檔案館</title>
 <meta name="theme-color" content="#3d7a80">
 <link rel="stylesheet" href="src/styles.css">
+<link rel="stylesheet" href="src/modules/history/history.css">
 </head>
 <body>
 <div id="app"><p style="padding:2em;text-align:center">載入中…</p></div>
 <!--DATA-->
-<script src="src/geo.js"></script>
-<script src="src/charts.js"></script>
-<script src="src/store.js"></script>
-<script src="src/quiz.js"></script>
-<script src="src/app.js"></script>
+<!-- 共用核心：src/core；各科：src/modules/geo、src/modules/history -->
+<script src="src/modules/geo/geo.js"></script>
+<script src="src/modules/geo/charts.js"></script>
+<script src="src/core/ui.js"></script>
+<script src="src/core/store.js"></script>
+<script src="src/core/quiz.js"></script>
+<script src="src/modules/geo/data.js"></script>
+<script src="src/modules/geo/views.js"></script>
+<script src="src/modules/history/data.js"></script>
+<script src="src/modules/history/timeline.js"></script>
+<script src="src/modules/history/views.js"></script>
+<script src="src/core/parent.js"></script>
+<script src="src/core/app.js"></script>
 </body>
 </html>

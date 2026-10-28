@@ -3,7 +3,7 @@
 // 用法：node scripts/validate.js
 const fs = require('fs');
 const path = require('path');
-const G = require('../src/geo.js');
+const G = require('../src/modules/geo/geo.js');
 
 const ROOT = path.join(__dirname, '..');
 const DATA = path.join(ROOT, 'data');
@@ -160,6 +160,11 @@ function validate() {
     if (seenStem.has(key)) err(id, `與 ${seenStem.get(key)} 重複`);
     seenStem.set(key, id);
 
+    checkBody(id, q);
+  }
+
+  // 題型相關的檢查（地理、歷史共用）
+  function checkBody(id, q) {
     const PARTS = new Set(['chain', 'transfer', 'compare']);
     if (Array.isArray(q.parts) && !PARTS.has(q.type)) err(id, `只有 chain／transfer／compare 可以有小題 parts`);
     if (CHOICE.has(q.type) && !q.parts) checkChoice(id, q);
@@ -195,12 +200,71 @@ function validate() {
     if (q.check) runCheck(id, q, q.figure, files);
   }
 
+
   // 錯題回收需要的變化題：每個概念至少 2 題；區域題的概念要有通論題可補救
   const byConcept = {};
   for (const q of all) for (const c of q.concepts || []) (byConcept[c] = byConcept[c] || []).push(q);
   for (const [c, qs] of Object.entries(byConcept)) {
     if (qs.length < 2) warn(c, `概念只有 ${qs.length} 題，錯題回收時沒有題目可替換`);
     if (qs.some(q => q.region !== '通論') && !qs.some(q => q.region === '通論' && q.type !== 'chain')) warn(c, '有區域題但沒有通論基本題，答錯時無法補救');
+  }
+
+  // ---------- 歷史：data/history/ ----------
+  const hman = readJSON('history/manifest.json');
+  const hev = hman && readJSON('history/' + hman.events);
+  if (hev) {
+    const THEMES = ['統治與政權', '經濟與貿易', '社會與文化', '思想與宗教', '對外交流與衝突', '近代化'];
+    const lineIds = new Set((hev.lines || []).map(l => l.id));
+    const eras = new Map(), events = new Map();
+    for (const t of hev.themes || []) if (!THEMES.includes(t)) err('history/events', `主題「${t}」不在六大主題內`);
+    for (const e of hev.eras || []) {
+      if (eras.has(e.id)) err('history/events', `分期 id 重複：${e.id}`);
+      eras.set(e.id, e);
+      if (!lineIds.has(e.line)) err('history/events', `分期 ${e.id} 的 line「${e.line}」不存在`);
+    }
+    for (const e of hev.events || []) {
+      const id = 'history/' + (e.id || '(沒有 id)');
+      if (!e.id) err(id, '事件沒有 id');
+      if (events.has(e.id)) err(id, '事件 id 重複');
+      else if (eras.has(e.id)) warn(id, '事件 id 和分期 id 相同（可用，但建議改名以免混淆）');
+      events.set(e.id, e);
+      for (const k of ['name', 'time', 'line', 'era']) if (!e[k]) err(id, `事件缺少欄位 ${k}`);
+      const era = eras.get(e.era);
+      if (!era) err(id, `分期「${e.era}」不在 eras`);
+      else if (era.line !== e.line) err(id, `事件屬於 ${e.line}，分期 ${e.era} 卻屬於 ${era.line}`);
+      if (!Array.isArray(e.themes) || !e.themes.length) err(id, 'themes 不可為空');
+      for (const t of e.themes || []) if (!THEMES.includes(t)) err(id, `主題「${t}」不在六大主題內`);
+    }
+    for (const e of hev.events || []) for (const r of e.related || []) if (!events.has(r)) err('history/' + e.id, `相關事件「${r}」不存在`);
+    for (const rel of [].concat(hman.cards || [], hman.stories || [])) readJSON('history/' + rel);
+    // 歷史題目：欄位比照地理（不用 unit、region、concepts），另外必須標 theme、era、skill
+    const skills = new Set(hev.skills || []);
+    const list = v => [].concat(v || []);
+    let hn = 0;
+    for (const rel of hman.questions || []) {
+      const f = readJSON('history/' + rel);
+      for (const q of (f && f.questions) || []) {
+        hn++;
+        const id = q.id || '(沒有 id)';
+        if (!q.id) err('history/' + rel, '有題目沒有 id');
+        if (seenId.has(q.id)) err(id, 'id 重複（地理、歷史題目 id 都不可重複）');
+        seenId.add(q.id);
+        for (const k of ['level', 'type', 'status', 'source', 'stem', 'theme', 'era', 'skill']) if (!list(q[k]).length) err(id, `缺少欄位 ${k}`);
+        if (!String(q.source || '').trim()) err(id, 'source 未填寫');
+        if (!STATUS.has(q.status)) err(id, `status 必須是 待審／確認／退回，目前是「${q.status}」`);
+        if (!TYPES.has(q.type)) err(id, `未知題型 ${q.type}`);
+        for (const t of list(q.theme)) if (!THEMES.includes(t)) err(id, `theme「${t}」不在六大主題內`);
+        if (!eras.has(q.era)) err(id, `era「${q.era}」不在 events.json 的分期`);
+        for (const s of list(q.skill)) if (!skills.has(s)) err(id, `skill「${s}」不在 events.json 的能力清單`);
+        for (const e of q.eventIds || []) if (!events.has(e)) err(id, `事件「${e}」不在 events.json`);
+        checkFigure(id, q.figure);
+        const key = (q.stem || '').replace(/\s/g, '') + JSON.stringify(q.figure || null) + JSON.stringify(q.parts ? q.parts.map(p => p.stem) : null);
+        if (seenStem.has(key)) err(id, `與 ${seenStem.get(key)} 重複`);
+        seenStem.set(key, id);
+        checkBody(id, q);
+      }
+    }
+    console.log(`歷史：${eras.size} 個分期、${events.size} 件事件、${hn} 題`);
   }
 
   return report(all);

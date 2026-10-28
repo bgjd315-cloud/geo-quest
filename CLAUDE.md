@@ -107,18 +107,21 @@ geo-quest/
 **任何一項未通過，不得建置或發布。**
 
 ## 常用指令
-- 題庫檢查：`node scripts/validate.js`（除了規範的五項，還會用 `src/geo.js` 重算方位、距離、時差、地形高低、氣象數值，題目寫的數字和答案必須與資料一致）
+- 題庫檢查：`node scripts/validate.js`（除了規範的五項，還會用 `src/modules/geo/geo.js` 重算方位、距離、時差、地形高低、氣象數值，題目寫的數字和答案必須與資料一致）
 - 打包單一檔：`node scripts/build.js` → `dist/index.html`（先跑檢查，沒過就停止；插畫取自 `assets/web/*.webp`）
 - 寫回家長審題結果：`node scripts/apply-review.js <審題結果.json>`
 - 開發版要用本機伺服器開 `index.html`（讀 `data/` 用 fetch）；`dist/index.html` 可直接雙擊。
 - 部署：GitHub Pages https://bgjd315-cloud.github.io/geo-quest/ （repo bgjd315-cloud/geo-quest，main 分支根目錄）。改完先 build、commit，再 git push 就會自動更新。repo 是公開的，`_課本/` 絕對不能進 git。
 
 ## 程式結構
-- `src/geo.js`：共用運算（虛構地形高度與等高線、剖面、方位、時區、氣候統計），網頁與 validate 共用
-- `src/charts.js`：SVG 繪圖（溫雨圖、臺灣測站圖、等高線、剖面、街道網格、經緯網、原理示意圖）
-- `src/store.js`：localStorage 進度、匯出匯入、資料載入；家長審題結果存在 `review` 覆寫題目 status
-- `src/quiz.js`：題型元件與一場闖關（錯題回收、區域題補救：原理卡→通論基本題→同區域變化題）
-- `src/app.js`：首頁單元地圖、單元頁、弱點地圖、設定、家長頁
+- 兩科共用核心 `src/core/`：
+  - `ui.js`：跳脫、嚮導對話泡泡、下載／選檔、科目註冊表 `Subjects`
+  - `store.js`：localStorage 進度（key `geoquest.v1`；地理沿用最上層欄位，歷史在 `history`，最後選的科目在 `subject`）、匯出匯入（舊版只有地理的進度檔可匯入，會保留裝置上的歷史進度）、`Loader` 讀資料與插畫；家長審題結果存在 `review` 覆寫題目 status（兩科共用）
+  - `quiz.js`：題型元件與一場闖關（錯題回收、區域題補救：原理卡→通論基本題→同區域變化題）；`run()` 可傳 track／live／guide／card 換成歷史的
+  - `parent.js`：家長頁（進度、弱點矩陣、近期錯題、審題；審題先選科目）
+  - `app.js`：社會科闖關首頁 `#/hub`、設定、路由。地理網址不變（`#/`、`#/unit/…`、`#/play/…`、`#/weak`）；歷史在 `#/h`、`#/h/wing/<tw|ea|w>`、`#/h/timeline`、`#/h/play/<分期id>/<practice|sim>`
+- 地理 `src/modules/geo/`：`geo.js` 共用運算（網頁與 validate 共用）、`charts.js` SVG 繪圖、`data.js`（window.Data）、`views.js` 首頁單元地圖、單元頁、弱點地圖
+- 歷史 `src/modules/history/`：`data.js`（window.HData，事件時間粗略換算年份）、`timeline.js` 時間長廊、`views.js` 選角、大廳、館區、作答、`history.css`（只在 body.subj-history 生效的暖色配色）
 - 題目 `check` 欄位＝自動驗算設定（種類見 validate.js 的 runCheck）。新增圖表題盡量加上 check。
 - 資料檔一律列在 `data/manifest.json`，否則不會被載入，也不會被檢查。
 - 出題細節（題型、圖表欄位、check 種類、可用測站與國家清單）：`docs/出題規範.md`、`docs/_data_lists.md`。

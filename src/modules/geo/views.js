@@ -1,7 +1,6 @@
-// 主程式：路由與各頁面。
+// 地理模組《萬象地圖冊》：首頁單元地圖、單元頁、作答、弱點地圖，以及家長頁的地理部分。
 (function () {
-  const esc = window.Charts.esc;
-  const app = () => document.getElementById('app');
+  const { esc, app } = window.UI;
   const S = () => window.Store.get();
   const D = () => window.Data;
 
@@ -49,25 +48,12 @@
   }
 
   // ---------- 共用 ----------
-  function bird(text, pose) {
-    return `<div class="talk"><img src="${D().img('bird_' + (pose || 'idle'))}" alt="阿鵲"><div class="bubble">${text}</div></div>`;
-  }
+  const bird = (text, pose) => window.UI.talk(D().img('bird_' + (pose || 'idle')), '阿鵲', text);
   function heroImg(pose) { const h = S().hero || 'boy'; return D().img(`hero_${h}_${pose || 'idle'}`); }
   function topbar(back) {
     return `<header class="top">${back ? `<a class="back" href="${back}">‹ 返回</a>` : '<span class="brand">萬象地圖冊</span>'}
-      <nav><a href="#/weak">弱點地圖</a><a href="#/settings">設定</a></nav></header>`;
+      <nav><a href="#/hub">社會科</a><a href="#/weak">弱點地圖</a><a href="#/settings">設定</a></nav></header>`;
   }
-  function download(name, obj) {
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([JSON.stringify(obj, null, 1)], { type: 'application/json' }));
-    a.download = name; document.body.appendChild(a); a.click(); a.remove();
-  }
-  function pickFile(cb) {
-    const i = document.createElement('input'); i.type = 'file'; i.accept = '.json,application/json';
-    i.onchange = () => { const f = i.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { cb(JSON.parse(r.result)); } catch (e) { alert('讀檔失敗：' + e.message); } }; r.readAsText(f); };
-    i.click();
-  }
-  const today = () => new Date().toISOString().slice(0, 10);
 
   // 區域遠征沒有插畫，用程式畫的迷你地圖當封面（反白該區域）
   const mapCache = {};
@@ -100,7 +86,7 @@
         ${bird('我是阿鵲，會一路陪你。先選一位測繪員吧！', 'happy')}
         <div class="heroes">${['boy', 'girl'].map(h => `<button class="hero-pick" data-h="${h}"><img src="${D().img(`hero_${h}_idle`)}" alt=""><span>${h === 'boy' ? '測繪員・男' : '測繪員・女'}</span></button>`).join('')}</div>
       </div></div>`;
-    app().querySelectorAll('.hero-pick').forEach(b => b.onclick = () => { window.Store.set({ hero: b.dataset.h, introSeen: true }); location.hash = '#/'; });
+    app().querySelectorAll('.hero-pick').forEach(b => b.onclick = () => { window.Store.set({ hero: b.dataset.h, introSeen: true }); if (location.hash === '#/') views.home(); else location.hash = '#/'; });
   };
 
   views.home = () => {
@@ -236,145 +222,40 @@
       <p class="hint">點任何一格，就能直接練習那個組合。</p>${matrixHTML(true)}</div>`;
   };
 
-  views.settings = () => {
-    app().innerHTML = `${topbar('#/')}<div class="page settings"><h1>設定</h1>
-      <section><h2>測繪員</h2><div class="heroes small">${['boy', 'girl'].map(h => `<button class="hero-pick ${S().hero === h ? 'on' : ''}" data-h="${h}"><img src="${D().img(`hero_${h}_idle`)}" alt=""></button>`).join('')}</div></section>
-      <section><h2>換裝置時帶走進度</h2><p>匯出一個進度檔（JSON），到新裝置按「匯入」選這個檔案即可。</p>
-        <div class="row"><button class="primary" id="exp">匯出進度檔</button><button class="ghost" id="imp">匯入進度或審題檔</button></div><p class="msg"></p></section>
-      <section><h2>家長</h2><a class="ghost btn" href="#/parent">進入家長頁</a></section>
-      <section class="about"><h2>關於資料</h2><p>溫雨圖：交通部中央氣象署氣候平年值 1991–2020。臺灣與世界底圖：Natural Earth。等高線圖為練習用虛構地形。插畫為故事用原創圖。</p></section></div>`;
-    app().querySelectorAll('.hero-pick').forEach(b => b.onclick = () => { window.Store.set({ hero: b.dataset.h }); views.settings(); });
-    app().querySelector('#exp').onclick = () => download(`地理闖關進度_${today()}.json`, window.Store.exportProgress());
-    app().querySelector('#imp').onclick = () => pickFile(o => { try { app().querySelector('.msg').textContent = window.Store.importFile(o); } catch (e) { app().querySelector('.msg').textContent = e.message; } });
+  // ---------- 家長頁的地理部分（core/parent.js 呼叫） ----------
+  const parent = {
+    progressHTML() {
+      const live = D().live();
+      return `<table class="plist"><thead><tr><th>單元／關卡</th><th>可用題數</th><th>最佳</th><th>最近</th></tr></thead><tbody>
+        ${D().units.filter(u => u.levels.length).map(u => `<tr class="uh"><th colspan="4">${esc(u.island)}・${esc(u.name)}</th></tr>` + u.levels.concat(u.boss ? [{ id: u.boss.id, name: u.boss.name }] : []).map(l => { const r = S().levels[l.id]; return `<tr><td>${esc(l.name)}</td><td>${live.filter(q => q.level === l.id).length}</td><td>${r ? Math.round(r.best * 100) + '%' : '—'}</td><td>${r ? new Date(r.ts).toLocaleDateString('zh-TW') : '—'}</td></tr>`; }).join('')).join('')}
+        </tbody></table>
+        <h3>錯題回收中的概念</h3><p>${Object.keys(S().recycle).map(c => esc(D().conceptName[c] || c)).join('、') || '沒有'}</p>`;
+    },
+    matrixHTML: () => matrixHTML(false),
+    log: () => S().log,
+    tagsOf: e => (e.c || []).map(c => D().conceptName[c]).join('、'),
+    // 審題清單：依單元分組
+    questions: () => D().questions,
+    groupOf: q => q.unit,
+    metaHTML: q => `單元：${esc(q.unit)}｜關卡：${esc(q.level)}｜區域：${esc(q.region)}｜概念：${q.concepts.map(c => esc(D().conceptName[c] || c)).join('、')}`
   };
 
-  // ---------- 家長頁 ----------
-  let parentOK = false;
-  views.parent = (tab) => {
-    if (!parentOK) return parentLogin();
-    tab = tab || 'progress';
-    const tabs = { progress: '進度', matrix: '弱點矩陣', wrong: '近期錯題', review: '審題' };
-    app().innerHTML = `${topbar('#/settings')}<div class="page parent"><h1>家長頁</h1>
-      <nav class="tabs">${Object.entries(tabs).map(([k, v]) => `<a class="${k === tab ? 'on' : ''}" href="#/parent/${k}">${v}</a>`).join('')}</nav><div class="pbody"></div></div>`;
-    const body = app().querySelector('.pbody');
-    if (tab === 'progress') parentProgress(body);
-    if (tab === 'matrix') body.innerHTML = matrixHTML(false);
-    if (tab === 'wrong') parentWrong(body);
-    if (tab === 'review') parentReview(body);
-  };
-
-  function parentLogin() {
-    const has = !!S().parentHash;
-    app().innerHTML = `${topbar('#/settings')}<div class="page parent"><h1>家長頁</h1>
-      <p>${has ? '請輸入家長密碼。' : '第一次使用，請設定一組家長密碼（只存在這台裝置）。'}</p>
-      <input type="password" id="pw" inputmode="numeric" autocomplete="off" placeholder="密碼">
-      ${has ? '' : '<input type="password" id="pw2" autocomplete="off" placeholder="再輸入一次">'}
-      <div class="row"><button class="primary" id="go">${has ? '進入' : '設定並進入'}</button></div><p class="msg"></p></div>`;
-    app().querySelector('#go').onclick = () => {
-      const v = app().querySelector('#pw').value;
-      const msg = app().querySelector('.msg');
-      if (!v) { msg.textContent = '請輸入密碼'; return; }
-      if (!has) {
-        if (v !== app().querySelector('#pw2').value) { msg.textContent = '兩次輸入不一樣'; return; }
-        window.Store.set({ parentHash: window.Store.hash(v) });
-      } else if (window.Store.hash(v) !== S().parentHash) { msg.textContent = '密碼不對'; return; }
-      parentOK = true; views.parent();
-    };
-  }
-
-  function parentProgress(body) {
-    const live = D().live();
-    const log = S().log;
-    const days = [...new Set(log.map(e => new Date(e.ts).toISOString().slice(0, 10)))];
-    body.innerHTML = `<p>累計作答 ${log.length} 次，練習天數 ${days.length} 天，最近一次 ${log.length ? new Date(log[log.length - 1].ts).toLocaleString('zh-TW') : '—'}。</p>
-      <table class="plist"><thead><tr><th>單元／關卡</th><th>可用題數</th><th>最佳</th><th>最近</th></tr></thead><tbody>
-      ${D().units.filter(u => u.levels.length).map(u => `<tr class="uh"><th colspan="4">${esc(u.island)}・${esc(u.name)}</th></tr>` + u.levels.concat(u.boss ? [{ id: u.boss.id, name: u.boss.name }] : []).map(l => { const r = S().levels[l.id]; return `<tr><td>${esc(l.name)}</td><td>${live.filter(q => q.level === l.id).length}</td><td>${r ? Math.round(r.best * 100) + '%' : '—'}</td><td>${r ? new Date(r.ts).toLocaleDateString('zh-TW') : '—'}</td></tr>`; }).join('')).join('')}
-      </tbody></table>
-      <h3>錯題回收中的概念</h3><p>${Object.keys(S().recycle).map(c => esc(D().conceptName[c] || c)).join('、') || '沒有'}</p>`;
-  }
-
-  function parentWrong(body) {
-    const wrong = S().log.filter(e => !e.ok).slice(-30).reverse();
-    if (!wrong.length) { body.innerHTML = '<p class="empty">最近沒有錯題。</p>'; return; }
-    body.innerHTML = wrong.map(e => { const q = D().byId[e.q]; if (!q) return ''; const stem = e.part != null ? q.parts[e.part].stem : q.stem; return `<div class="wrong-row"><small>${new Date(e.ts).toLocaleString('zh-TW')}・${esc(q.id)}${e.part != null ? ` 第${e.part + 1}小題` : ''}・${esc((e.c || []).map(c => D().conceptName[c]).join('、'))}</small><div>${esc(stem)}</div></div>`; }).join('');
-  }
-
-  function parentReview(body) {
-    const qs = D().questions;
-    const st = q => D().status(q);
-    const units = [...new Set(qs.map(q => q.unit))];
-    let filter = { status: '待審', unit: '' };
-    const draw = () => {
-      const list = qs.filter(q => (!filter.status || st(q) === filter.status) && (!filter.unit || q.unit === filter.unit));
-      const n = s => qs.filter(q => st(q) === s).length;
-      body.innerHTML = `<div class="rfilter">
-          <select id="fs"><option value="">全部狀態</option>${['待審', '確認', '退回'].map(s => `<option ${filter.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
-          <select id="fu"><option value="">全部單元</option>${units.map(u => `<option ${filter.unit === u ? 'selected' : ''}>${esc(u)}</option>`).join('')}</select>
-          <span>待審 ${n('待審')}・確認 ${n('確認')}・退回 ${n('退回')}</span></div>
-        <div class="row batch"><label><input type="checkbox" id="all"> 全選這頁</label><button class="primary" id="bok">勾選的確認</button><button class="ghost" id="bno">勾選的退回</button></div>
-        <div class="row"><button class="ghost" id="rexp">匯出審題結果</button><button class="ghost" id="rimp">匯入審題結果</button></div>
-        <p class="hint">審題結果存在這台裝置。若孩子用別台裝置，請匯出後在那台匯入，或把檔案交給 Claude 寫回題庫。</p>
-        <div class="rlist">${list.map(q => `<details class="rq s-${st(q)}"><summary><input type="checkbox" class="sel" data-id="${q.id}"> <b>${esc(q.id)}</b> <span class="tag">${esc(st(q))}</span>${S().review[q.id] && S().review[q.id].flag ? '<span class="tag flag">已標記問題</span>' : ''} ${esc(q.stem.slice(0, 40))}…</summary>
-          <div class="rmeta">單元：${esc(q.unit)}｜關卡：${esc(q.level)}｜區域：${esc(q.region)}｜概念：${q.concepts.map(c => esc(D().conceptName[c] || c)).join('、')}<br>題型：${esc(window.Quiz.typeName(q.type))}｜依據：${esc(q.source)}</div>
-          <div class="rpreview" data-id="${q.id}"></div>
-          <div class="row"><button class="primary one" data-id="${q.id}" data-s="確認">確認</button><button class="ghost one" data-id="${q.id}" data-s="退回">退回</button><button class="ghost flagbtn" data-id="${q.id}">標記問題（立即下架）</button></div>
-          ${S().review[q.id] && S().review[q.id].note ? `<p class="note">備註：${esc(S().review[q.id].note)}</p>` : ''}</details>`).join('') || '<p class="empty">沒有符合的題目。</p>'}</div>`;
-      body.querySelector('#fs').onchange = e => { filter.status = e.target.value; draw(); };
-      body.querySelector('#fu').onchange = e => { filter.unit = e.target.value; draw(); };
-      body.querySelector('#all').onchange = e => body.querySelectorAll('.sel').forEach(c => c.checked = e.target.checked);
-      const batch = s => { body.querySelectorAll('.sel:checked').forEach(c => window.Store.setReview(c.dataset.id, { status: s })); draw(); };
-      body.querySelector('#bok').onclick = () => batch('確認');
-      body.querySelector('#bno').onclick = () => batch('退回');
-      body.querySelector('#rexp').onclick = () => download(`地理闖關審題結果_${today()}.json`, window.Store.exportReview());
-      body.querySelector('#rimp').onclick = () => pickFile(o => { try { alert(window.Store.importFile(o)); draw(); } catch (e) { alert(e.message); } });
-      body.querySelectorAll('.one').forEach(b => b.onclick = () => { window.Store.setReview(b.dataset.id, { status: b.dataset.s }); draw(); });
-      body.querySelectorAll('.flagbtn').forEach(b => b.onclick = () => {
-        const note = prompt('這題有什麼問題？（會一起存下來，方便修正）', '');
-        if (note === null) return;
-        window.Store.setReview(b.dataset.id, { status: '退回', flag: true, note });
-        draw();
-      });
-      // 展開時才預覽題目（含答案與解析）
-      body.querySelectorAll('details').forEach(d => d.addEventListener('toggle', () => {
-        const box = d.querySelector('.rpreview');
-        if (!d.open || box.dataset.done) return;
-        box.dataset.done = '1';
-        const q = D().byId[box.dataset.id];
-        window.Quiz.renderItem(box, q, { mode: 'practice' }, () => { });
-        box.insertAdjacentHTML('beforeend', `<div class="answer-key">${answerKey(q)}</div>`);
-      }));
-    };
-    draw();
-  }
-
-  function answerKey(q) {
-    const M = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ', 'Ⓔ', 'Ⓕ'];
-    const opt = o => typeof o === 'string' ? o : (o.text || '（圖）');
-    if (q.parts) return q.parts.map((p, k) => `<p><b>第${k + 1}小題答案：</b>${esc(opt(p.options[p.answer]))}<br>${esc(p.explain)}</p>`).join('');
-    if (q.type === 'order') return `<p><b>答案：</b>${esc(q.answer.map(i => q.items[i]).join(' → '))}<br>${esc(q.explain)}</p>`;
-    if (q.type === 'match') return `<p><b>答案：</b>${esc(q.left.map((l, i) => `${l} → ${q.right[q.answer[i]]}`).join('；'))}<br>${esc(q.explain)}</p>`;
-    return `<p><b>答案：</b>${esc(opt(q.options[q.answer]))}<br>${esc(q.explain)}</p>`;
-  }
-
-  // ---------- 路由 ----------
-  function route() {
-    const h = location.hash.replace(/^#\/?/, '');
-    const [a, b, c] = h.split('/').map(decodeURIComponent);
-    window.scrollTo(0, 0);
-    if (!S().hero && a !== 'parent' && a !== 'settings') return views.hero();
+  // ---------- 路由（網址沿用舊版：#/、#/unit/…、#/play/…） ----------
+  function route(a, b, c) {
+    if (!S().hero) return views.hero();
     if (a === 'unit') return views.unit(b);
     if (a === 'play') return views.play(b, c === 'sim' ? 'sim' : 'practice');
     if (a === 'weakplay') return views.weakplay();
     if (a === 'cell') return views.cell(b, c);
     if (a === 'weak') return views.weak();
-    if (a === 'settings') return views.settings();
-    if (a === 'parent') return views.parent(b);
     return views.home();
   }
 
-  window.addEventListener('hashchange', route);
-  window.addEventListener('DOMContentLoaded', async () => {
-    try { await window.Data.load(); route(); }
-    catch (e) { app().innerHTML = `<div class="page"><h1>載入失敗</h1><p>${esc(e.message)}</p><p class="hint">開發版要用本機伺服器開啟；或直接開 dist/ 裡的單一 HTML 檔。</p></div>`; }
-  });
+  window.Subjects.geo = {
+    name: '地理', title: '萬象地圖冊', home: '#/', cover: () => D().img('home_atlas'),
+    blurb: '見習測繪員和臺灣藍鵲阿鵲，讀懂圖表、想通原理，讓七座島與世界航線重新浮現。',
+    load: () => D().load(), route, parent,
+    hero: { label: '測繪員', img: h => D().img(`hero_${h}_idle`), get: () => S().hero, set: h => window.Store.set({ hero: h }) },
+    about: '溫雨圖：交通部中央氣象署氣候平年值 1991–2020、WMO 1991–2020。人口金字塔：聯合國 WPP 2024。底圖：Natural Earth。等高線圖為練習用虛構地形。'
+  };
 })();

@@ -1,4 +1,5 @@
-// 答題引擎：題型元件、練習／模擬模式、錯題回收、區域題答錯的補救流程。
+// 答題引擎（兩科共用）：題型元件、練習／模擬模式、錯題回收、區域題答錯的補救流程。
+// 預設用地理的資料與進度；歷史在 run() 傳入 track、live、guide、card 換成自己的。
 (function () {
   const C = window.Charts, esc = C.esc;
   const $ = (sel, el) => (el || document).querySelector(sel);
@@ -90,7 +91,7 @@
   // done(result) 會帶回 {ok, score, parts?}
   function renderItem(el, q, ctx, done) {
     const sim = ctx.mode === 'sim';
-    const head = `<div class="qmeta"><span class="tag">${esc(q.unit)}</span>${q.region !== '通論' ? `<span class="tag region">${esc(q.region)}</span>` : ''}<span class="tag soft">${esc(typeName(q.type))}</span></div>`;
+    const head = `<div class="qmeta"><span class="tag">${esc(q.unit)}</span>${q.region && q.region !== '通論' ? `<span class="tag region">${esc(q.region)}</span>` : ''}<span class="tag soft">${esc(typeName(q.type))}</span></div>`;
     if (Array.isArray(q.parts)) return renderChain(el, q, ctx, done, head);
     if (q.type === 'order') return renderOrder(el, q, ctx, done, head);
     if (q.type === 'match') return renderMatch(el, q, ctx, done, head);
@@ -241,9 +242,10 @@
   }
 
   // ---------- 一場闖關 ----------
-  // opts: {title, pool:[題目], size, mode:'practice'|'sim', timeLimit(秒), onEnd(summary)}
-  function pick(pool, size) {
-    const s = window.Store.get();
+  // opts: {title, pool:[題目], size, mode:'practice'|'sim', timeLimit(秒), onEnd(summary),
+  //        track（該科進度，預設地理 Store）, live（可補救的已確認題）, guide（補救時的嚮導圖）, card(概念) → 原理卡 HTML}
+  function pick(pool, size, track) {
+    const s = track.get();
     const seen = {};
     for (const e of s.log) seen[e.q] = (seen[e.q] || 0) + (e.ok ? 1 : -2);
     // 沒做過、或做錯過的題目優先
@@ -252,11 +254,13 @@
 
   function run(root, opts) {
     const mode = opts.mode || 'practice';
-    const queue = pick(opts.pool, opts.size || 10).map(q => ({ kind: 'q', q }));
+    const track = opts.track || window.Store;
+    const card = opts.card || cardHTML;
+    const queue = pick(opts.pool, opts.size || 10, track).map(q => ({ kind: 'q', q }));
     const used = new Set(queue.map(x => x.q.id));
     const results = [];
     let idx = 0, t0 = Date.now(), timer = null;
-    const live = window.Data.live();
+    const live = opts.live || window.Data.live();
 
     root.innerHTML = `<div class="run">
       <div class="runbar"><button class="ghost quit">離開</button><div class="progress"><div class="fill"></div></div><div class="count"></div>${mode === 'sim' ? '<div class="clock"></div>' : ''}</div>
@@ -279,7 +283,7 @@
     function remedy(q) {
       const later = [];
       for (const c of q.concepts) {
-        if (q.region !== '通論') {
+        if (q.region && q.region !== '通論') {
           // 區域題答錯：原理卡 → 通論基本題 → 同區域另一題變化題
           later.push({ kind: 'card', concept: c });
           // 通論基本題：優先沒出過的；都出過了就重出一題，原理比新鮮感重要
@@ -310,7 +314,7 @@
       next.textContent = idx === queue.length - 1 ? (mode === 'sim' ? '交卷' : '完成') : '下一題';
       stage.scrollTop = 0; window.scrollTo(0, 0);
       if (item.kind === 'card') {
-        stage.innerHTML = `<div class="remedy"><img class="bird" src="${window.Data.img('bird_hint')}" alt=""><p>先看一下這張原理卡，再試一題。</p></div>${cardHTML(item.concept)}`;
+        stage.innerHTML = `<div class="remedy"><img class="bird" src="${opts.guide || window.Data.img('bird_hint')}" alt=""><p>先看一下這張原理卡，再試一題。</p></div>${card(item.concept)}`;
         next.disabled = false;
         return;
       }
@@ -321,8 +325,8 @@
       renderItem(box, item.q, { mode }, r => {
         results.push({ q: item.q, r });
         const q = item.q;
-        if (q.parts) r.parts.forEach((ok, k) => window.Store.record({ q: q.id, part: k, ok, c: q.parts[k].concepts || q.concepts, r: q.region, m: mode }));
-        else window.Store.record({ q: q.id, ok: r.ok, c: q.concepts, r: q.region, m: mode });
+        if (q.parts) r.parts.forEach((ok, k) => track.record({ q: q.id, part: k, ok, c: q.parts[k].concepts || q.concepts, r: q.region, m: mode }));
+        else track.record({ q: q.id, ok: r.ok, c: q.concepts, r: q.region, m: mode });
         if (!r.ok && mode === 'practice') remedy(q);
         next.disabled = false;
         if (mode === 'sim') { idx === queue.length - 1 ? finish() : (idx++, show()); }
