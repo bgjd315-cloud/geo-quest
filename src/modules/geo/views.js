@@ -270,7 +270,7 @@
 
   window.Subjects.geo = {
     name: '地理', title: '萬象地圖冊', home: '#/', cover: () => D().img('home_atlas'),
-    blurb: '見習測繪員和臺灣藍鵲阿鵲，讀懂圖表、想通原理，讓七座島與世界航線重新浮現。',
+    blurb: '和臺灣藍鵲阿鵲一起，從見習測繪員出發，讀懂地圖與圖表，解開地形、氣候與人文的線索，讓七座島嶼與世界航線逐一浮現。',
     load: () => D().load(), route, parent,
     hero: { label: '測繪員', img: h => D().img(`hero_${h}_idle`), get: () => S().hero, set: h => window.Store.set({ hero: h }) },
     about: '溫雨圖：交通部中央氣象署氣候平年值 1991–2020、WMO 1991–2020。人口金字塔：聯合國 WPP 2024。底圖：Natural Earth。等高線圖為練習用虛構地形。'

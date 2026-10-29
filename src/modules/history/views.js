@@ -385,7 +385,7 @@
 
   window.Subjects.history = {
     name: '歷史', title: '時光檔案館', home: '#/h', cover: () => H().img('hist_hall'),
-    blurb: '見習檔案員和石虎阿斑，把被時間蛀蟲咬亂的檔案歸回正確的年代，讓時間長廊重新亮燈。',
+    blurb: '和石虎阿斑一起，化身見習檔案員，循著史料尋找線索，釐清事件的先後與因果，把被時間蛀蟲打亂的檔案歸位，重新點亮時間長廊。',
     load: () => H().load().catch(e => { H().error = e.message; console.warn('歷史資料載入失敗', e); }),
     route, parent, card: cardHTML,
     hero: { label: '檔案員', img: h => H().img(`arch_${h}_idle`), get: () => P().hero, set: h => window.Store.H.set({ hero: h }) },

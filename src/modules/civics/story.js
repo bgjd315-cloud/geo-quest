@@ -333,7 +333,7 @@
     name: '公民', title: '青禾里', home: '#/c',
     cover: () => C().imgSrc('civ_hub') || '',
     coverHTML: () => `<span class="hub-cv">${U().pic('civ_hub', 'hub-cvimg', HUB_SVG)}</span>`,
-    blurb: '跟著阿晴在虛構社區青禾里生活：讀故事、判斷規範、分清容易混淆的概念。故事人物為虛構。',
+    blurb: '跟著阿晴走進青禾里，從鄰里日常到公共議題，讀懂故事中的不同立場，分清權利、責任與規範，在每一次選擇中練習思考與判斷。',
     load: () => C().load().catch(e => { C().error = e.message; console.warn('公民資料載入失敗', e); }),
     route, parent, card: id => U().cardHTML(id),
     about: '公民內容依康軒國中公民第一至六冊（1上、1下 113 年版，2上、2下、3下 114 年版，3上 115 年版）；與現行法規不同處一律依課本。青禾里與故事人物皆為虛構；經濟題的數字為情境數值。'
