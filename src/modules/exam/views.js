@@ -17,7 +17,7 @@
 
   function topbar(back) {
     return `<header class="top">${back ? `<a class="back" href="${back}">‹ 返回</a>` : '<span class="brand">會考真題</span>'}
-      <nav><a href="#/hub">社會科</a><a href="#/x/stats">考點</a><a href="#/x/diag">診斷</a></nav></header>`;
+      <nav><a href="#/hub">首頁</a><a href="#/x/stats">考點</a><a href="#/x/diag">診斷</a></nav></header>`;
   }
 
   // ---------- 題目圖片與放大檢視 ----------

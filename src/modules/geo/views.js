@@ -52,7 +52,7 @@
   function heroImg(pose) { const h = S().hero || 'boy'; return D().img(`hero_${h}_${pose || 'idle'}`); }
   function topbar(back) {
     return `<header class="top">${back ? `<a class="back" href="${back}">‹ 返回</a>` : '<span class="brand">萬象地圖冊</span>'}
-      <nav><a href="#/hub">社會科</a><a href="#/weak">弱點地圖</a><a href="#/settings">設定</a></nav></header>`;
+      <nav><a href="#/hub">首頁</a><a href="#/weak">弱點地圖</a><a href="#/settings">設定</a></nav></header>`;
   }
 
   // 區域遠征沒有插畫，用程式畫的迷你地圖當封面（反白該區域）

@@ -11,7 +11,7 @@
   const heroImg = pose => H().img(`arch_${P().hero || 'boy'}_${pose || 'idle'}`);
   function topbar(back) {
     return `<header class="top">${back ? `<a class="back" href="${back}">‹ 返回</a>` : '<span class="brand">時光檔案館</span>'}
-      <nav><a href="#/hub">社會科</a><a href="#/h/timeline">時間長廊</a><a href="#/settings">設定</a></nav></header>`;
+      <nav><a href="#/hub">首頁</a><a href="#/h/timeline">時間長廊</a><a href="#/settings">設定</a></nav></header>`;
   }
   const eventsOfEra = id => H().events.filter(e => e.era === id);
   const erasOfLine = id => H().eras.filter(e => e.line === id);

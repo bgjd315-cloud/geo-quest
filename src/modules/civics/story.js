@@ -253,7 +253,7 @@
       const keyOf = x => isQ ? x.id : C().storyKey(x.id);
       const items = qs.filter(x => (!pf.unit || unitOf(x) === pf.unit) && (!pf.status || (pf.status === '上架' ? C().isLive(stOf(x)) : !C().isLive(stOf(x)))));
       const rv = x => S().review[keyOf(x)] || {};
-      body.innerHTML = `<h2>公民《青禾里》</h2>
+      body.innerHTML = `<h2>公民《青禾里的故事》</h2>
         <h3>各冊完成度</h3>${progressHTML()}
         <h3>領域 × 能力</h3>${U().matrixHTML(false)}
         <h3>最常混淆的三組概念</h3>${U().topPairsHTML()}
@@ -328,9 +328,9 @@
   }
 
   // 首頁卡片封面：有插畫 civ_hub 就用，沒有就用程式畫的社區
-  const HUB_SVG = `<svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="chub" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe3f5"/><stop offset="1" stop-color="#f1f9f3"/></linearGradient></defs><rect width="300" height="400" fill="url(#chub)"/><circle cx="230" cy="80" r="26" fill="#fff4c9"/><path d="M0 260 Q80 200 160 250 T300 236 V400 H0Z" fill="#9fd1a9"/><path d="M0 300 Q120 260 300 296 V400 H0Z" fill="#6fb487"/><rect x="40" y="236" width="70" height="60" fill="#fffaf0" stroke="#5c8a70"/><path d="M34 236 L75 210 L116 236Z" fill="#2e8f5b"/><rect x="150" y="246" width="56" height="50" fill="#e9f2fb" stroke="#5c8a70"/><path d="M144 246 L178 224 L212 246Z" fill="#3a7bc4"/><circle cx="240" cy="270" r="18" fill="#3f9a63"/><rect x="238" y="284" width="4" height="16" fill="#7a5a3a"/><text x="150" y="150" font-size="56" text-anchor="middle" fill="#2e7d5b" font-family="'Noto Serif TC',serif" font-weight="700" letter-spacing="8">青禾里</text></svg>`;
+  const HUB_SVG = `<svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="chub" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe3f5"/><stop offset="1" stop-color="#f1f9f3"/></linearGradient></defs><rect width="300" height="400" fill="url(#chub)"/><circle cx="230" cy="80" r="26" fill="#fff4c9"/><path d="M0 260 Q80 200 160 250 T300 236 V400 H0Z" fill="#9fd1a9"/><path d="M0 300 Q120 260 300 296 V400 H0Z" fill="#6fb487"/><rect x="40" y="236" width="70" height="60" fill="#fffaf0" stroke="#5c8a70"/><path d="M34 236 L75 210 L116 236Z" fill="#2e8f5b"/><rect x="150" y="246" width="56" height="50" fill="#e9f2fb" stroke="#5c8a70"/><path d="M144 246 L178 224 L212 246Z" fill="#3a7bc4"/><circle cx="240" cy="270" r="18" fill="#3f9a63"/><rect x="238" y="284" width="4" height="16" fill="#7a5a3a"/><text x="150" y="150" font-size="40" text-anchor="middle" fill="#2e7d5b" font-family="'Noto Serif TC',serif" font-weight="700" letter-spacing="4">青禾里的故事</text></svg>`;
   window.Subjects.civics = {
-    name: '公民', title: '青禾里', home: '#/c',
+    name: '公民', title: '青禾里的故事', home: '#/c',
     cover: () => C().imgSrc('civ_hub') || '',
     coverHTML: () => `<span class="hub-cv">${U().pic('civ_hub', 'hub-cvimg', HUB_SVG)}</span>`,
     blurb: '跟著阿晴走進青禾里，從鄰里日常到公共議題，讀懂故事中的不同立場，分清權利、責任與規範，在每一次選擇中練習思考與判斷。',

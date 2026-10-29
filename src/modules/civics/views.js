@@ -44,8 +44,8 @@
   const chapterImg = u => 'ch_' + String(u || '').replace(/-/g, '_');
 
   function topbar(back) {
-    return `<header class="top">${back ? `<a class="back" href="${back}">‹ 返回</a>` : '<span class="brand">青禾里</span>'}
-      <nav><a href="#/hub">社會科</a><a href="#/c/notes">筆記</a><a href="#/c/weak">弱點</a><a href="#/settings">設定</a></nav></header>`;
+    return `<header class="top">${back ? `<a class="back" href="${back}">‹ 返回</a>` : '<span class="brand">青禾里的故事</span>'}
+      <nav><a href="#/hub">首頁</a><a href="#/c/notes">筆記</a><a href="#/c/weak">弱點</a><a href="#/settings">設定</a></nav></header>`;
   }
 
   // ---------- 進度 ----------
@@ -107,7 +107,7 @@
     const open = ST().openPairs(), weak = ST().weakConcepts(3);
     const nCh = C().chapters.filter(C().chapterPlayable).length;
     app().innerHTML = `${topbar()}<div class="page c-home">
-      <div class="c-banner">${pic('civ_home', 'c-banner-img', bannerSVG())}<div class="c-banner-t"><h1>青禾里</h1><p>${esc(C().setting || '虛構社區')}</p></div></div>
+      <div class="c-banner">${pic('civ_home', 'c-banner-img', bannerSVG())}<div class="c-banner-t"><h1>青禾里的故事</h1><p>${esc(C().setting || '虛構社區')}</p></div></div>
       ${notice()}
       ${guide(live.length || nCh ? `我是阿晴，住在青禾里二鄰。巷口早餐店、里辦公處、法律服務站……每天都有和公民課有關的事。${open.length ? `你有 ${open.length} 組容易混淆的概念還沒分清楚，要不要先去並排辨析？` : '想從哪個領域開始？'}` : '我是阿晴。青禾里的故事和題目還在整理中，整理好就會出現在這裡。', open.length ? 'think' : 'idle')}
       <h2 class="sec">五個領域</h2>
