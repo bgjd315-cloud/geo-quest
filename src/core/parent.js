@@ -147,7 +147,7 @@
       const batch = s => { body.querySelectorAll('.sel:checked').forEach(c => window.Store.setReview(c.dataset.id, { status: s })); draw(); };
       body.querySelector('#bok').onclick = () => batch('確認');
       body.querySelector('#bno').onclick = () => batch('退回');
-      body.querySelector('#rexp').onclick = () => download(`社會科闖關審題結果_${today()}.json`, window.Store.exportReview());
+      body.querySelector('#rexp').onclick = () => download(`世界解鎖中審題結果_${today()}.json`, window.Store.exportReview());
       body.querySelector('#rimp').onclick = () => pickFile(o => { try { alert(window.Store.importFile(o)); draw(); } catch (e) { alert(e.message); } });
       body.querySelectorAll('.one').forEach(b => b.onclick = () => { window.Store.setReview(b.dataset.id, { status: b.dataset.s }); draw(); });
       body.querySelectorAll('.flagbtn').forEach(b => b.onclick = () => {

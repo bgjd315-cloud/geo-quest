@@ -1,4 +1,4 @@
-// 主程式：社會科闖關首頁（選科目）、設定、家長頁入口與路由。
+// 主程式：「世界解鎖中」首頁（選科目）、設定、家長頁入口與路由。
 // 網址：#/hub 選科目；地理沿用舊網址（#/、#/unit/…、#/play/…）；歷史在 #/h/…；公民在 #/c/…；#/settings、#/parent 各科共用。
 (function () {
   const { esc, app, download, pickFile, today } = window.UI;
@@ -18,16 +18,30 @@
 
   // 共用頁面（設定、家長頁）的頂端列：返回鍵＋科目切換
   function topbar(back) {
-    return `<header class="top">${back ? `<a class="back" href="${back}">‹ 返回</a>` : '<span class="brand">社會科闖關</span>'}
-      <nav><a href="#/hub">社會科</a><a href="${SUBJ[current()].home}">${SUBJ[current()].name}</a></nav></header>`;
+    return `<header class="top">${back ? `<a class="back" href="${back}">‹ 返回</a>` : '<span class="brand">世界解鎖中</span>'}
+      <nav><a href="#/hub">首頁</a><a href="${SUBJ[current()].home}">${SUBJ[current()].name}</a></nav></header>`;
   }
 
+  // 首頁「世界解鎖中」：三個學科世界並排，會考真題與工具放在下面
+  const WORLDS = ['geo', 'history', 'civics'];
+  function hubCard(k) {
+    const s = SUBJ[k];
+    return `<a class="hub-card hub-${k} ${S().subject === k ? 'last' : ''}" href="${s.home}" data-k="${k}">
+        ${s.coverHTML ? s.coverHTML() : `<img src="${s.cover()}" alt="${esc(s.title)}">`}<div><span class="hub-subj">${s.name}</span><b>${s.book === false ? esc(s.title) : `《${esc(s.title)}》`}</b><small>${esc(s.blurb)}</small>${S().subject === k ? '<i>上次練到這裡</i>' : ''}</div></a>`;
+  }
   function hub() {
     setTheme('hub');
+    const worlds = WORLDS.filter(k => SUBJ[k]), more = Object.keys(SUBJ).filter(k => !worlds.includes(k));
     app().innerHTML = `<div class="page hub">
-      <header class="hub-head"><h1>社會科闖關</h1><p>今天想練哪一科？</p></header>
-      <section class="hub-list">${Object.entries(SUBJ).map(([k, s]) => `<a class="hub-card hub-${k} ${S().subject === k ? 'last' : ''}" href="${s.home}" data-k="${k}">
-        ${s.coverHTML ? s.coverHTML() : `<img src="${s.cover()}" alt="${esc(s.title)}">`}<div><span class="hub-subj">${s.name}</span><b>${s.book === false ? esc(s.title) : `《${esc(s.title)}》`}</b><small>${esc(s.blurb)}</small>${S().subject === k ? '<i>上次練到這裡</i>' : ''}</div></a>`).join('')}</section>
+      <header class="hub-hero">
+        <svg class="hub-mark" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" fill="none" stroke="#3d7a80" stroke-width="5" stroke-dasharray="52 113" stroke-linecap="round" transform="rotate(-90 32 32)"/><circle cx="32" cy="32" r="27" fill="none" stroke="#a8743f" stroke-width="5" stroke-dasharray="52 113" stroke-dashoffset="-56.5" stroke-linecap="round" transform="rotate(-90 32 32)"/><circle cx="32" cy="32" r="27" fill="none" stroke="#2e7d5b" stroke-width="5" stroke-dasharray="52 113" stroke-dashoffset="-113" stroke-linecap="round" transform="rotate(-90 32 32)"/><circle cx="32" cy="27" r="7" fill="#2f3a40"/><path d="M28 30h8l2.5 15h-13z" fill="#2f3a40"/></svg>
+        <h1>世界解鎖中</h1>
+        <p class="hub-sub"><span>國中社會科</span><b class="w-geo">地理</b><em>×</em><b class="w-his">歷史</b><em>×</em><b class="w-civ">公民</b></p>
+        <p class="hub-tag">走進地圖、穿越時光，<br>在生活裡解開每一道問題。</p>
+      </header>
+      <h2 class="hub-sec">選一個世界</h2>
+      <section class="hub-list">${worlds.map(hubCard).join('')}</section>
+      ${more.length ? `<h2 class="hub-sec">會考衝刺</h2><section class="hub-more">${more.map(hubCard).join('')}</section>` : ''}
       <div class="row hub-foot"><a class="ghost btn" href="#/x/diag">學習診斷</a><a class="ghost btn" href="#/settings">設定與進度檔</a></div></div>`;
     app().querySelectorAll('.hub-card').forEach(a => a.addEventListener('click', () => remember(a.dataset.k)));
   }
@@ -42,7 +56,7 @@
       <section><h2>家長</h2><a class="ghost btn" href="#/parent">進入家長頁</a></section>
       <section class="about"><h2>關於資料</h2>${Object.values(SUBJ).filter(s => s.about).map(s => `<p><b>${s.name}</b>：${esc(s.about)}</p>`).join('')}</section></div>`;
     app().querySelectorAll('.hero-pick').forEach(b => b.onclick = () => { SUBJ[b.dataset.k].hero.set(b.dataset.h); settings(); });
-    app().querySelector('#exp').onclick = () => download(`社會科闖關進度_${today()}.json`, window.Store.exportProgress());
+    app().querySelector('#exp').onclick = () => download(`世界解鎖中進度_${today()}.json`, window.Store.exportProgress());
     app().querySelector('#imp').onclick = () => pickFile(o => { try { app().querySelector('.msg').textContent = window.Store.importFile(o); } catch (e) { app().querySelector('.msg').textContent = e.message; } });
   }
 
