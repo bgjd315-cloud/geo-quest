@@ -1,5 +1,5 @@
 // 主程式：「世界解鎖中」首頁（選科目）、設定、家長頁入口與路由。
-// 網址：#/hub 選科目；地理沿用舊網址（#/、#/unit/…、#/play/…）；歷史在 #/h/…；公民在 #/c/…；#/settings、#/parent 各科共用。
+// 網址：#/hub 選科目；地理沿用舊網址（#/、#/unit/…、#/play/…）；歷史在 #/h/…；公民在 #/c/…；#/settings、#/parent 各科共用（家長頁不放入口，只用網址進入）。
 (function () {
   const { esc, app, download, pickFile, today } = window.UI;
   const SUBJ = window.Subjects;
@@ -53,7 +53,6 @@
       <section><h2>換裝置時帶走進度</h2><p>匯出一個進度檔（JSON，地理、歷史、公民和會考真題都在裡面），到新裝置按「匯入」選這個檔案即可。舊版只有地理的進度檔也可以匯入。</p>
         <div class="row"><button class="primary" id="exp">匯出進度檔</button><button class="ghost" id="imp">匯入進度或審題檔</button></div><p class="msg"></p></section>
       ${window.XData && window.XData.legendHTML && window.XData.items.length ? `<section><h2>標籤說明：會考出題率</h2>${window.XData.legendHTML()}<a class="ghost btn" href="#/x/stats">看考點分布</a></section>` : ''}
-      <section><h2>家長</h2><a class="ghost btn" href="#/parent">進入家長頁</a></section>
       <section class="about"><h2>關於資料</h2>${Object.values(SUBJ).filter(s => s.about).map(s => `<p><b>${s.name}</b>：${esc(s.about)}</p>`).join('')}</section></div>`;
     app().querySelectorAll('.hero-pick').forEach(b => b.onclick = () => { SUBJ[b.dataset.k].hero.set(b.dataset.h); settings(); });
     app().querySelector('#exp').onclick = () => download(`世界解鎖中進度_${today()}.json`, window.Store.exportProgress());
