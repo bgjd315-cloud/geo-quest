@@ -18,7 +18,7 @@
     // 各小情境的選項相同時，用同一個順序，方便對照
     const same = q.parts.every(p => JSON.stringify(p.options) === JSON.stringify(q.parts[0].options));
     const ord0 = Q.shuffle(q.parts[0].options.map((_, i) => i));
-    const fixed = q.parts[0].options.every(o => typeof o === 'string' && o.length <= 2);
+    const fixed = Q.keepOrder(q.parts[0].options);
     const ordOf = p => same ? (fixed ? p.options.map((_, i) => i) : ord0) : Q.shuffle(p.options.map((_, i) => i));
     const pair = q.confusablePair && C().pairById[q.confusablePair];
     el.innerHTML = `${head}<div class="stem">${fmt(q.stem || '同一個情境，每次只改一個條件，判斷答案會不會跟著改變。')}</div>
