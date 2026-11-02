@@ -71,12 +71,14 @@
   }
 
   // 選項顯示順序：每次隨機排列，避免正解總在同一個位置；
-  // 甲乙丙丁這類標記、數字開頭（月份、距離、經緯度）的選項保持原順序
+  // 只有甲乙丙丁這類代號（甲、甲地、甲乙、甲、丙）與數字開頭（月份、距離、經緯度）的選項保持原順序。
+  // （以前「兩個字以內」也不打亂，結果「德國／英國／俄國／法國」這類題目的正解常固定在 A。）
+  const keepOrder = options => options.every(o => typeof o === 'string' &&
+    (/^(?:[甲乙丙丁戊己庚辛壬癸ⅠⅡⅢⅣⅤ][地國城港島市區線站點]?[、，,與和及→\s]*)+$/.test(o) || /^[\d０-９\-−+.]/.test(o)));
   function order(options, type) {
     const idx = options.map((_, i) => i);
     if (type === 'click') return idx;
-    const fixed = options.every(o => typeof o === 'string' && (o.length <= 2 || /^[\d０-９\-−+.]/.test(o)));
-    return fixed ? idx : shuffle(idx);
+    return keepOrder(options) ? idx : shuffle(idx);
   }
   function optsHTML(options, type) {
     return order(options, type).map((i, k) => `<button class="opt" data-i="${i}"><b>${MARK[k]}</b> ${optionHTML(options[i])}</button>`).join('');
@@ -379,5 +381,5 @@
     }).join('');
   }
 
-  window.Quiz = { run, figure, cardHTML, reviewList, renderItem, typeName, shuffle, RENDERERS, ANSWER_TEXT, TYPE_NAME, fmt, optsHTML, showExplain, freqLine };
+  window.Quiz = { run, figure, cardHTML, reviewList, renderItem, typeName, shuffle, keepOrder, RENDERERS, ANSWER_TEXT, TYPE_NAME, fmt, optsHTML, showExplain, freqLine };
 })();
