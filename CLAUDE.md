@@ -123,6 +123,8 @@ geo-quest/
   - `parent.js`：家長頁（進度、弱點矩陣、近期錯題、審題；審題先選科目）
   - `app.js`：社會科闖關首頁 `#/hub`、設定、路由。地理網址不變（`#/`、`#/unit/…`、`#/play/…`、`#/weak`）；歷史在 `#/h`、`#/h/wing/<tw|ea|w>`、`#/h/timeline`、`#/h/play/<分期id>/<practice|sim>`
   - `diagnosis.js`：學習診斷（合併會考真題＋地理原創題＋歷史原創題作答；#/x/diag 與家長頁「學習診斷」分頁，可列印）；年度模擬交卷後的簡版診斷
+  - `game.js`：成長系統（115/11/09 新增）。每次作答（Store.onAnswer 通知，地理／歷史／公民／會考都算）答對 +10、答錯 +2 經驗值；等級與稱號、每日目標（預設 20 題，可改）、連續練習天數（一天滿 10 題才算）、23 個徽章、升級與徽章的提示泡泡（不發聲）；首頁戰績卡、「我的戰績」頁 #/me。進度在 store 的 `game`（xp、days 每日題數、subj 各科題數、badges、name 挑戰暱稱、goal、arena）；第一次載入從各科 log 補算（seeded）。匯入沒有 game 的舊進度檔會保留裝置上的戰績。
+- 競技場 `src/modules/arena/`（#/arena、#/arena/play/<T|S>-<mix|geo|his|civ>-<種子5碼>、#/arena/vs/<連結碼>）：**全站唯一計時的地方**（家長 115/11/09 決定：原本闖關維持不計時、即時解析）。限時挑戰 90 秒（答對 100＋連對加分最多 +100）、生存挑戰 3 條命每題 20 秒。題目＝三科已上線單選題（無圖表、無題組、題幹 ≤160 字）。七位故事角色當對手階梯（小安、阿鵲、阿晴、阿斑、林姐、吳律師、葛老師）。同學挑戰：同一個種子＝同一組題目與選項順序，分享連結（含暱稱與分數，連結一律指向 GitHub Pages）或短挑戰碼 T-MIX-3K9F2；沒有後端、不上傳。競技場作答不影響掌握度與錯題回收，只算經驗值與當日題數；結束後列出答錯題目與解析。
 - 會考真題 `src/modules/exam/`（#/x/…）：`data.js`（window.XData，讀 `data/exam/manifest.json` 列的年度檔，讀不到的略過並顯示「資料準備中」；也讀 `data/history/kp.json`；統計各知識點 5 年出現次數；**會考出題率**也只在這裡算：`chip`／`chipKey`（高 ≥5、中 2–4、低 1、未考 0）、`questionCount`（原創題取各觀念最高）、`eventCount`（歷史事件取所屬 kp 最高）、`unitShare`／`levelShare`／`eraShare`／`wingShare`＋`shareHTML`（181 題中落在該島／關卡／時代／館區的比例，同類前幾名標「高頻」）、`legendHTML`）、`views.js`（首頁、年度模擬 #/x/sim/<年>、知識點練習 #/x/kp/<概念或kp id>、能力練習 #/x/skill/<能力>、錯題重做 #/x/redo、考點分布 #/x/stats、觀念卡 #/x/card/<id>；圖片點了可放大）、`exam.css`。進度在 store 的 `exam`（log、sims、recycle；真題錯題連對兩次移出）。題目格式見 `docs/會考真題檢測設計.md`。
   - build.js：會考截圖全部內嵌後若 dist 不超過 25 MB 就內嵌，否則改從 `../assets/exam/` 讀（可用 `--embed-exam`／`--link-exam` 強制）；GitHub Pages 根目錄的開發版直接讀 `assets/exam/`，所以 `assets/exam/` 和 `data/exam/` 都要進 git。
 - 地理 `src/modules/geo/`：`geo.js` 共用運算（網頁與 validate 共用）、`charts.js` SVG 繪圖、`data.js`（window.Data）、`views.js` 首頁單元地圖、單元頁、弱點地圖
@@ -141,6 +143,7 @@ geo-quest/
 - 故事《萬象地圖冊》：見習測繪員＋臺灣藍鵲「阿鵲」，六單元＝六座島。詳見 `故事與美術規劃.md`。
 - 插畫只用於故事與裝飾，使用者在 Gemini App／ChatGPT 生圖（gemini-app-images 技能，清單 `生圖清單.json`，存 `assets/img/`）。題目圖表仍一律程式繪製。
 - 插畫放進網站前轉 WebP 縮小；沒有圖時介面要能正常顯示（用色塊替代）。
+- 競技場插畫（115/11/09 起）：使用者指定**用 Canva AI 生圖**，要吸引國中生並配合網站水彩色鉛筆風格。存 `assets/arena/web/`（網站用 WebP）、`assets/arena/raw/`（Canva 匯出原圖）：arena_hero（大廳主視覺）、rival_ge（葛老師去背立繪）。其他對手沿用三科故事的角色插畫。Canva 只回傳縮圖，全解析度要把圖放進 Canva 設計再匯出 PNG（環境已允許 media.canva.com、export-download.canva.com）。
 
 ## 介面
 繁體中文，安靜、不催促；無刺耳音效；計時只在模擬模式。首頁是單元地圖：各單元進度＋「今天建議練習」（從弱點概念挑）。
