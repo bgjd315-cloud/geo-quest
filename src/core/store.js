@@ -10,7 +10,9 @@
   // 公民《青禾里》：log／levels／recycle 同歷史；stories 讀完的章；cards 收進公民筆記的概念 id；
   // confusions 混淆紀錄 {混淆對id: {n 次數, since, last, cleared, clearedAt}}；sprint 衝刺模式 {date, ids, done}
   const blankCivics = () => ({ log: [], levels: {}, recycle: {}, introSeen: false, stories: {}, cards: [], confusions: {}, sprint: null });
-  const blank = () => ({ v: 1, hero: null, log: [], levels: {}, recycle: {}, review: {}, parentHash: null, introSeen: false, subject: null, history: blankHistory(), exam: blankExam(), civics: blankCivics() });
+  // 成長與競技場（src/core/game.js、src/modules/arena/）：經驗值、每日題數、徽章、競技場紀錄；seeded＝已從舊作答紀錄補算過
+  const blankGame = () => ({ seeded: false, xp: 0, days: {}, subj: {}, badges: {}, name: '', goal: 20, arena: { best: {}, beat: {}, runs: 0, maxCombo: 0, sent: 0, won: 0 } });
+  const blank = () => ({ v: 1, hero: null, log: [], levels: {}, recycle: {}, review: {}, parentHash: null, introSeen: false, subject: null, history: blankHistory(), exam: blankExam(), civics: blankCivics(), game: blankGame() });
   // 缺的欄位補上預設值（舊版存檔沒有 history、subject、exam）
   const normalize = o => {
     const s = Object.assign(blank(), o);
@@ -21,6 +23,12 @@
     s.civics = cv;
     const x = (o && o.exam) || {};
     s.exam = { log: Array.isArray(x.log) ? x.log : [], sims: x.sims && typeof x.sims === 'object' ? x.sims : {}, recycle: x.recycle && typeof x.recycle === 'object' ? x.recycle : {} };
+    const g = Object.assign(blankGame(), o && o.game);
+    for (const k of ['days', 'subj', 'badges']) if (!g[k] || typeof g[k] !== 'object') g[k] = {};
+    g.arena = Object.assign(blankGame().arena, g.arena);
+    for (const k of ['best', 'beat']) if (!g.arena[k] || typeof g.arena[k] !== 'object') g.arena[k] = {};
+    if (!(g.xp >= 0)) g.xp = 0;
+    s.game = g;
     return s;
   };
   let mem = null;
@@ -53,11 +61,14 @@
     const prev = p.levels[id] || {};
     p.levels[id] = { done: true, best: Math.max(prev.best || 0, score / total), last: score / total, total, mode, ts: Date.now() };
   }
+  // 每次作答後通知成長系統（src/core/game.js 登記）：subj＝geo／history／civics／exam
+  const listeners = [];
+  const notify = (subj, ok) => { for (const fn of listeners) { try { fn(subj, !!ok); } catch (e) { console.warn(e); } } };
   // 給答題引擎用的介面：get() 取得該科進度，record／finishLevel 寫入
-  const track = get => ({
+  const track = (get, subj) => ({
     get,
     set(patch) { Object.assign(get(), patch); save(); },
-    record(entry) { recordIn(get(), entry); save(); },
+    record(entry) { recordIn(get(), entry); save(); notify(subj, entry.ok); },
     finishLevel(id, score, total, mode) { finishIn(get(), id, score, total, mode); save(); }
   });
 
@@ -72,6 +83,7 @@
       if (!e.ok) x.recycle[e.id] = { streak: 0, since: e.ts };
       else if (x.recycle[e.id]) { x.recycle[e.id].streak += 1; if (x.recycle[e.id].streak >= 2) delete x.recycle[e.id]; }
       save();
+      notify('exam', e.ok);
     },
     finishSim(year, score, total, secs) {
       const x = load().exam;
@@ -80,13 +92,16 @@
     }
   };
 
-  const Store = Object.assign(track(load), {
+  const Store = Object.assign(track(load, 'geo'), {
     save,
     X,
+    onAnswer(fn) { listeners.push(fn); },
+    // 成長與競技場紀錄
+    G: () => load().game,
     // 歷史進度
-    H: track(() => load().history),
+    H: track(() => load().history, 'history'),
     // 公民進度
-    C: track(() => load().civics),
+    C: track(() => load().civics, 'civics'),
     // 家長審題：覆寫題目狀態（兩科共用，題目 id 不重複；只存在這台裝置，可匯出給 Claude 寫回題庫）
     setReview(id, patch) {
       const s = load();
@@ -111,6 +126,8 @@
         if (!inc.exam) mem.exam = cur.exam;
         // 沒有公民紀錄的舊進度檔：保留這台裝置原本的公民進度
         if (!inc.civics) mem.civics = cur.civics;
+        // 沒有成長紀錄的舊進度檔：保留這台裝置原本的等級、徽章與競技場紀錄
+        if (!inc.game) mem.game = cur.game;
         save();
         const kept = [!inc.history && '歷史', !inc.civics && '公民', !inc.exam && '會考真題'].filter(Boolean);
         return kept.length ? `進度已匯入（舊版進度檔沒有${kept.join('、')}的紀錄，這部分維持不變）` : '進度已匯入（地理＋歷史＋公民＋會考真題）';
