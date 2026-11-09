@@ -38,9 +38,9 @@ for (const rel of xman.files || []) {
   data['exam/' + rel] = JSON.parse(read('data/exam/' + rel));
 }
 
-// 插畫：地理 assets/web、歷史 assets/history/web、公民 assets/civics/web（還沒有圖就略過）；檔名不可重複
+// 插畫：地理 assets/web、歷史 assets/history/web、公民 assets/civics/web、競技場 assets/arena/web（還沒有圖就略過）；檔名不可重複
 const images = {}, civicsImgs = [];
-for (const dir of ['assets/web', 'assets/history/web', 'assets/civics/web']) {
+for (const dir of ['assets/web', 'assets/history/web', 'assets/civics/web', 'assets/arena/web']) {
   if (!fs.existsSync(path.join(ROOT, dir))) continue;
   for (const f of fs.readdirSync(path.join(ROOT, dir)).filter(f => f.endsWith('.webp'))) {
     if (dir === 'assets/civics/web') civicsImgs.push(f.replace(/\.webp$/, ''));

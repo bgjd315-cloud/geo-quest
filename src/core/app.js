@@ -1,10 +1,10 @@
 // 主程式：「世界解鎖中」首頁（選科目）、設定、家長頁入口與路由。
-// 網址：#/hub 選科目；地理沿用舊網址（#/、#/unit/…、#/play/…）；歷史在 #/h/…；公民在 #/c/…；#/settings、#/parent 各科共用（家長頁不放入口，只用網址進入）。
+// 網址：#/hub 選科目；#/me 我的戰績；#/arena/… 競技場；地理沿用舊網址（#/、#/unit/…、#/play/…）；歷史在 #/h/…；公民在 #/c/…；#/settings、#/parent 各科共用（家長頁不放入口，只用網址進入）。
 (function () {
   const { esc, app, download, pickFile, today } = window.UI;
   const SUBJ = window.Subjects;
   const S = () => window.Store.get();
-  const THEME = { geo: '#3d7a80', history: '#7a4e2d', civics: '#2e7d5b', exam: '#4a5a6a', hub: '#5b5a4a' };
+  const THEME = { geo: '#3d7a80', history: '#7a4e2d', civics: '#2e7d5b', exam: '#4a5a6a', hub: '#5b5a4a', arena: '#5b3a8a' };
 
   // 依科目換配色（body 的 class）與瀏覽器上方的顏色
   function setTheme(k) {
@@ -39,6 +39,7 @@
         <p class="hub-sub"><span>國中社會科</span><b class="w-geo">地理</b><em>×</em><b class="w-his">歷史</b><em>×</em><b class="w-civ">公民</b></p>
         <p class="hub-tag">走進地圖、穿越時光，<br>在生活裡解開每一道問題。</p>
       </header>
+      ${window.Game ? window.Game.hubHTML() : ''}
       <h2 class="hub-sec">選一個世界</h2>
       <section class="hub-list">${worlds.map(hubCard).join('')}</section>
       ${more.length ? `<h2 class="hub-sec">會考衝刺</h2><section class="hub-more">${more.map(hubCard).join('')}</section>` : ''}
@@ -71,6 +72,9 @@
     }
     if (a === 'hub') return hub();
     if (a === 'settings') return settings();
+    // 成長系統與競技場（各科共用，配色用首頁的）
+    if (a === 'me') { setTheme('hub'); return window.Game.mePage(topbar); }
+    if (a === 'arena') { setTheme('arena'); return window.Arena.route(b, c); }
     if (a === 'parent') { setTheme(current()); return window.Parent.view(b, topbar); }
     if (a === 'h') { remember('history'); setTheme('history'); return SUBJ.history.route(b, c, d); }
     if (a === 'c') { remember('civics'); setTheme('civics'); return SUBJ.civics.route(b, c, d); }
@@ -84,7 +88,7 @@
   let ready = false;
   window.addEventListener('hashchange', () => { if (ready) route(); });
   window.addEventListener('DOMContentLoaded', async () => {
-    try { await Promise.all(Object.values(SUBJ).map(s => s.load())); ready = true; route(); }
+    try { await Promise.all(Object.values(SUBJ).map(s => s.load())); if (window.Game) window.Game.init(); ready = true; route(); }
     catch (e) { app().innerHTML = `<div class="page"><h1>載入失敗</h1><p>${esc(e.message)}</p><p class="hint">開發版要用本機伺服器開啟；或直接開 dist/ 裡的單一 HTML 檔。</p></div>`; }
   });
 })();
