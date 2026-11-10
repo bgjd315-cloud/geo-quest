@@ -114,6 +114,7 @@ geo-quest/
 - 寫回家長審題結果：`node scripts/apply-review.js <審題結果.json>`
 - 開發時用本機伺服器開 `dev.html`（逐檔讀 src/ 與 data/）；`index.html` 與 `dist/index.html` 是打包結果。手機相容性用 Playwright WebKit（iPhone 13 模擬）測。
 - 部署：GitHub Pages https://bgjd315-cloud.github.io/geo-quest/ （repo bgjd315-cloud/geo-quest，main 分支根目錄）。改完先 build、commit，再 git push 就會自動更新。repo 是公開的，`_課本/` 絕對不能進 git。
+  - 部署偶爾在 GitHub 端卡在「syncing_files」，10 分鐘後逾時失敗（115/11/09 發生過一次）；網站會停在上一版。到 Actions 看 pages build and deployment，失敗就重跑；重跑若一直卡在 queued，取消後讓 main 有新的提交即可重新部署。
 
 ## 程式結構
 - 兩科共用核心 `src/core/`：
