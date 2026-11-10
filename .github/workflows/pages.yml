@@ -1,0 +1,36 @@
+# 部署到 GitHub Pages：只發布網站真正用到的檔案（約 57 MB），
+# 不上傳影片、說明文件與插畫原圖（整個 repo 超過 500 MB，全部上傳會讓部署逾時）。
+# 需要在 repo 的 Settings → Pages → Build and deployment 把 Source 設為「GitHub Actions」。
+name: 部署網站
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: 整理要發布的檔案
+        run: |
+          mkdir -p _site/assets
+          cp -r index.html dev.html .nojekyll src data dist _site/
+          for d in web history/web civics/web arena/web exam; do
+            if [ -d "assets/$d" ]; then mkdir -p "_site/assets/$d" && cp -r "assets/$d/." "_site/assets/$d/"; fi
+          done
+          du -sh _site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
